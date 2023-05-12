@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Favoris;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FavorisController extends AbstractController
 {
     #[Route('/favoris', name: 'app_favoris')]
-    public function index(): Response
+    public function index(ManagerRegistry $doctrine): Response
     {
+        $favoris = $doctrine->getRepository(Favoris::class)->findAll();
+
         return $this->render('favoris/index.html.twig', [
-            'favori1' => 'favori 1 - Ligne D de Kehl Rath. 8h15 -> Poterie 8h45',
+            'favoris' => $favoris,
         ]);
     }
 }

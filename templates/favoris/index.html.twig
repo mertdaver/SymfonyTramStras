@@ -20,9 +20,13 @@
 
  <h1> La liste des trajets favoris </h1>
 
-<p> {{ favori1 }}</p>
 
 
+<ul>
+    {% for favori in favoris %}
+        {{ favori.arret }} sur la ligne {{ favori.ligne }} vers {{ favori.sens }} <br>
+    {% endfor %}
+</ul>
 
 
 

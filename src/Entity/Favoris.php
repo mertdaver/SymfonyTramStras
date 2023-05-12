@@ -19,6 +19,9 @@ class Favoris
     #[ORM\Column(length: 255)]
     private ?string $sens = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $ligne = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +47,18 @@ class Favoris
     public function setSens(string $sens): self
     {
         $this->sens = $sens;
+
+        return $this;
+    }
+
+    public function getLigne(): ?string
+    {
+        return $this->ligne;
+    }
+
+    public function setLigne(string $ligne): self
+    {
+        $this->ligne = $ligne;
 
         return $this;
     }
