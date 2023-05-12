@@ -20,6 +20,9 @@ class Post
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $datePost = null;
 
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    private ?Topic $topic = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class Post
     public function setDatePost(\DateTimeInterface $datePost): self
     {
         $this->datePost = $datePost;
+
+        return $this;
+    }
+
+    public function getTopic(): ?Topic
+    {
+        return $this->topic;
+    }
+
+    public function setTopic(?Topic $topic): self
+    {
+        $this->topic = $topic;
 
         return $this;
     }

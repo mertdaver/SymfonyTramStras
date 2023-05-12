@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TopicRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,18 @@ class Topic
 
     #[ORM\ManyToOne(inversedBy: 'topics')]
     private ?Categorie $categorie = null;
+
+    #[ORM\OneToMany(mappedBy: 'topic', targetEntity: Post::class)]
+    private Collection $posts;
+
+    #[ORM\OneToMany(mappedBy: 'topic', targetEntity: Alerte::class)]
+    private Collection $alertes;
+
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+        $this->alertes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +74,66 @@ class Topic
     public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->setTopic($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getTopic() === $this) {
+                $post->setTopic(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Alerte>
+     */
+    public function getAlertes(): Collection
+    {
+        return $this->alertes;
+    }
+
+    public function addAlerte(Alerte $alerte): self
+    {
+        if (!$this->alertes->contains($alerte)) {
+            $this->alertes->add($alerte);
+            $alerte->setTopic($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlerte(Alerte $alerte): self
+    {
+        if ($this->alertes->removeElement($alerte)) {
+            // set the owning side to null (unless already changed)
+            if ($alerte->getTopic() === $this) {
+                $alerte->setTopic(null);
+            }
+        }
 
         return $this;
     }

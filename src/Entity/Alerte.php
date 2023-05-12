@@ -26,6 +26,9 @@ class Alerte
     #[ORM\Column(length: 255)]
     private ?string $sens = null;
 
+    #[ORM\ManyToOne(inversedBy: 'alertes')]
+    private ?Topic $topic = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,18 @@ class Alerte
     public function setSens(string $sens): self
     {
         $this->sens = $sens;
+
+        return $this;
+    }
+
+    public function getTopic(): ?Topic
+    {
+        return $this->topic;
+    }
+
+    public function setTopic(?Topic $topic): self
+    {
+        $this->topic = $topic;
 
         return $this;
     }
