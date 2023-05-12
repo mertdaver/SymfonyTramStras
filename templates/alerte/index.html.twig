@@ -30,8 +30,8 @@
     <h1>{{ Alerte1 }}</h1>
 
 <ul>
-    {% for alertes in tableauAlertes %}
-        {{ alertes }} <br>
+    {% for alerte in alertes %}
+        Alerte incident sur l'arret : {{ alerte.arret }} {{ alerte.ligne }} {{ alerte.sens }} <br>
     {% endfor %}
 </ul>
 
