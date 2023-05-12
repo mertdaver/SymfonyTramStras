@@ -32,9 +32,23 @@
 
  <h1> La liste des alertes perturbation</h1>
 
-<p> {{ AlertePerturbation1 }}</p>
 
 
+
+<ul>
+{% for alertePerturbation in alertePerturbations %}
+    Alerte incident sur l'arrêt : {{ alertePerturbation.arret }} {{ alertePerturbation.ligne }} <br>
+        
+    {% if alertePerturbation.deuxSens == 1 %}
+        Sens 1 <br>
+        {# Penser à trouver un système pour que le nom du sens soit récupéré ici... #}
+    {% elseif alertePerturbation.deuxSens == 0 %}
+        Sens 0 <br>
+    {% else %}
+        Sens inconnu <br>
+    {% endif %}
+{% endfor %}
+</ul>
 
 
 

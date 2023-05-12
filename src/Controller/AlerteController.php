@@ -14,6 +14,7 @@ class AlerteController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $alertes = $doctrine->getRepository(Alerte::class)->findAll();
+{# Ca affiche toutes la liste des alertes mais elles ne doivent s'afficher qu'une fois et en pop-up -> finOne($id) #}
         
         return $this->render('alerte/index.html.twig', [
             
@@ -23,4 +24,5 @@ class AlerteController extends AbstractController
         
         ]);
     }
+}
 }
