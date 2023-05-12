@@ -21,11 +21,16 @@
 
  <h1> La liste des posts </h1>
 
-<p> {{ post1 }}</p>
 
 
 
-
+<ul>
+    {% for post in posts %}
+        Message de {{ post.user }} : <br>
+        {{ post.text }} <br>
+        posté le : {{ post.datePost }} <br>
+    {% endfor %}
+</ul>
 
 
 
