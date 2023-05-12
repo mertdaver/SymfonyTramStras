@@ -20,10 +20,12 @@
 
  <h1> La liste des topics </h1>
 
-<p> {{ topic1 }}</p>
 
-
-
+<ul>
+    {% for topic in topic %}
+        {{ topic }} <br><br>
+    {% endfor %}
+</ul>
 
 
 

@@ -18,7 +18,6 @@ class AlerteController extends AbstractController
         
         return $this->render('alerte/index.html.twig', [
             
-            'Alerte1' => 'Alice à émit une Alerte dans le tram D direction Kelh',
             'alertes' => $alertes,
             
         
