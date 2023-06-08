@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -34,6 +36,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
+    private Collection $Post;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Topic::class)]
+    private Collection $Topic;
+
+    public function __construct()
+    {
+        $this->Post = new ArrayCollection();
+        $this->Topic = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -132,5 +146,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->email.' '.$this->pseudo.' '.$this->roles.' '.$this->is_verified;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPost(): Collection
+    {
+        return $this->Post;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->Post->contains($post)) {
+            $this->Post->add($post);
+            $post->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->Post->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Topic>
+     */
+    public function getTopic(): Collection
+    {
+        return $this->Topic;
+    }
+
+    public function addTopic(Topic $topic): self
+    {
+        if (!$this->Topic->contains($topic)) {
+            $this->Topic->add($topic);
+            $topic->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopic(Topic $topic): self
+    {
+        if ($this->Topic->removeElement($topic)) {
+            // set the owning side to null (unless already changed)
+            if ($topic->getUser() === $this) {
+                $topic->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

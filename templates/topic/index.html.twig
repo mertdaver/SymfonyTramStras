@@ -1,38 +1,16 @@
+{# templates/topic/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TopicController!{% endblock %}
+{% block title %}Liste des topics{% endblock %}
 
 {% block body %}
-{# <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
+    <h1>Liste des topics</h1>
     <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/src/Controller/TopicController.php'|file_link(0) }}">src/Controller/TopicController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/templates/topic/index.html.twig'|file_link(0) }}">templates/topic/index.html.twig</a></code></li>
+        {% for topic in topics %}
+            <li>
+                <a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic.titre }}</a>
+            </li>
+        {% endfor %}
     </ul>
-</div> #}
-
- <h1> La liste des topics </h1>
-
-
-<ul>
-    {% for topic in topic %}
-        <a href="{{ path('show_topic', {'id': topic.id}) }}"> {{ topic }} </a><br><br>
-    {% endfor %}
-</ul>
-
-
-
-
-
-
-
-
-
 {% endblock %}

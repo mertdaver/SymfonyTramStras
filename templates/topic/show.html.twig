@@ -1,18 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Topics  {% endblock %}
+{% block title %}{{ topic.getTitre() }}{% endblock %}
 
 {% block body %}
+    <h1>{{ topic.getTitre() }}</h1>
 
 
- <h1> La liste des topics </h1>
+    <p>Posté le {{ topic.getCreationDate()|date('Y-m-d') }}</p>
 
-
-<ul>
-    {% for topic in topic %}
-        {{ topic }} <br><br>
-    {% endfor %}
-</ul>
-
-
+    <h2>Liste des posts :</h2>
+    <ul>
+        {% for post in topic.getPosts() %}
+            <li>
+                Pseudo : {{ post.getUser().getPseudo() }}<br>
+                Date de création : {{ post.getDatePost()|date('Y-m-d') }}<br>
+                Contenu : {{ post.getText() }}
+            </li>
+            <br>
+        {% endfor %}
+    </ul>
 {% endblock %}

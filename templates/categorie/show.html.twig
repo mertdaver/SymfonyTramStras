@@ -5,8 +5,9 @@
 {% block body %}
     <h1> <a href="{{ path('app_categorie') }}">La liste des topics de {{ categorie }}</a></h1>
 
-    {% for topic in categorie.topics %}
-         <br>
-        <p><a href="{{ path('show_topic', {'id': topic.id}) }}">{{ topic }}</a></p><br>
-    {% endfor %}
+{% for topic in categorie.topics %}
+    <br>
+    <p><a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a></p><br>
+{% endfor %}
+
 {% endblock %}

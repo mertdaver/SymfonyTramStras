@@ -23,6 +23,10 @@ class Post
     #[ORM\ManyToOne(inversedBy: 'posts')]
     private ?Topic $topic = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Post')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +64,18 @@ class Post
     public function setTopic(?Topic $topic): self
     {
         $this->topic = $topic;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

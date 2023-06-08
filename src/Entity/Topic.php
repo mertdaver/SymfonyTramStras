@@ -31,6 +31,9 @@ class Topic
     #[ORM\OneToMany(mappedBy: 'topic', targetEntity: Alerte::class)]
     private Collection $alertes;
 
+    #[ORM\ManyToOne(inversedBy: 'Topic')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -140,6 +143,18 @@ class Topic
 
     public function __toString()
     {
-        return $this->titre." Posté le ".$this->creationDate->format('Y-m-d');
+        return $this->titre . " Posté le " . $this->creationDate->format('Y-m-d');
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
