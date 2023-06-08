@@ -3,12 +3,10 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-
-
- <h1> La liste des topics de {{ categorie }}</h1>
-
+    <h1> <a href="{{ path('app_categorie') }}">La liste des topics de {{ categorie }}</a></h1>
 
     {% for topic in categorie.topics %}
-        {{ topic }} <br>
+         <br>
+        <p><a href="{{ path('show_topic', {'id': topic.id}) }}">{{ topic }}</a></p><br>
     {% endfor %}
 {% endblock %}
