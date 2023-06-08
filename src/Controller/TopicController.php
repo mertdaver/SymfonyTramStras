@@ -19,4 +19,13 @@ class TopicController extends AbstractController
             'topic' => $topic ,
         ]);
     }
+
+    #[Route('/topic/{id}', name: 'show_topic')]
+
+    public function show(Topic $topic): Response
+    {
+        return $this->render('topic/show.html.twig', [
+            'topic' => $topic
+        ]);
+    }
 }

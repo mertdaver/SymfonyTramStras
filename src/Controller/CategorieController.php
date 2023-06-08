@@ -2,24 +2,44 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Categorie;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CategorieController extends AbstractController
 {
+    private $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     #[Route('/categorie', name: 'app_categorie')]
     public function index(): Response
     {
+        $entityManager = $this->doctrine->getManager();
+        $categories = $entityManager->getRepository(Categorie::class)->findAll();
+    
         return $this->render('categorie/index.html.twig', [
-            'categorie_generale' => 'Generale',
-            'categorie_alerte' => 'Alertes',
-            'categorie_LigneA' => 'Ligne A',
-            'categorie_LigneB' => 'Ligne B',
-            'categorie_LigneC' => 'Ligne C',
-            'categorie_LigneD' => 'Ligne D',
-            'categorie_LigneE' => 'Ligne E',
-            'categorie_LigneF' => 'Ligne F',
+            'categories' => $categories
         ]);
     }
+    
+    
+
+    #[Route('/categorie/{id}', name: 'show_categorie')]
+    public function show(Categorie $categorie, int $id): Response
+    {
+        $categorie = $entityManager->getRepository(Categorie::class)->find($id);
+
+        if (!$categorie) {
+            throw $this->createNotFoundException(
+                "Pas de catégorie troubée pour l'id ".$id
+            );
+        }
+}
 }

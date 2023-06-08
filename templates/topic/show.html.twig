@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Topics  {% endblock %}
+
+{% block body %}
+
+
+ <h1> La liste des topics </h1>
+
+
+<ul>
+    {% for topic in topic %}
+        {{ topic }} <br><br>
+    {% endfor %}
+</ul>
+
+
+
+
+
+
+
+
+
+{% endblock %}

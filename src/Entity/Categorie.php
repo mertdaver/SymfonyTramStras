@@ -16,7 +16,7 @@ class Categorie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom_categorie = null;
+    public ?string $nom_categorie = null;
 
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Topic::class)]
     private Collection $topics;
