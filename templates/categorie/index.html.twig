@@ -3,7 +3,8 @@
 {% block body %}
     <h1>La liste des catégories</h1>
 {% for categorie in categories %}
-    <p><a href="{{ path('show_categorie', {'id': categorie.id}) }}">{{ categorie.nom_categorie }}</a></p><br>
+    <p><a href="{{ path('show_categorie', {'id': categorie.id}) }}">{{ categorie }}</a></p><br>
+    {# juste catégorie car __toString dans entity #}
 {% endfor %}
 
 {% endblock %}

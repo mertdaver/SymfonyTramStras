@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Categorie;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 class CategorieController extends AbstractController
 {
@@ -22,24 +24,25 @@ class CategorieController extends AbstractController
     public function index(): Response
     {
         $entityManager = $this->doctrine->getManager();
-        $categories = $entityManager->getRepository(Categorie::class)->findAll();
-    
+        $categories = $entityManager->getRepository(Categorie::class)->findBy([], ["nom_categorie" => "ASC"]);
+    // findBy pour trier par nom_categorie dans l'ordre
         return $this->render('categorie/index.html.twig', [
             'categories' => $categories
         ]);
     }
     
     
-
     #[Route('/categorie/{id}', name: 'show_categorie')]
-    public function show(Categorie $categorie, int $id): Response
+    public function show(int $id): Response
     {
+        $entityManager = $this->doctrine->getManager();
         $categorie = $entityManager->getRepository(Categorie::class)->find($id);
 
-        if (!$categorie) {
-            throw $this->createNotFoundException(
-                "Pas de catégorie troubée pour l'id ".$id
-            );
-        }
-}
+        return $this->render('categorie/show.html.twig', [
+            'categorie' => $categorie
+        ]);
+    }
+    
+    
+    
 }
