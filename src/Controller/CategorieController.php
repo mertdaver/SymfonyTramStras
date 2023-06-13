@@ -2,13 +2,17 @@
 
 namespace App\Controller;
 
-
+use App\Entity\Topic;
+use App\Form\TopicType;
 use App\Entity\Categorie;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 class CategorieController extends AbstractController
@@ -33,16 +37,39 @@ class CategorieController extends AbstractController
     
     
     #[Route('/categorie/{id}', name: 'show_categorie')]
-    public function show(int $id): Response
+    public function show(int $id, Request $request, TokenStorageInterface $tokenStorage): Response
     {
         $entityManager = $this->doctrine->getManager();
         $categorie = $entityManager->getRepository(Categorie::class)->find($id);
-
+    
+        $topic = new Topic();
+        $form = $this->createForm(TopicType::class, $topic);
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $topic->setCategorie($categorie);
+    
+            // Vérifier si l'utilisateur est connecté
+            if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                throw new AccessDeniedException('Accès refusé. Vous devez être connecté.');
+            }
+    
+            // Récupérer l'utilisateur connecté
+            $user = $tokenStorage->getToken()->getUser();
+            $topic->setUser($user);
+    
+            // Récupérer la date de création
+            $creationDate = new \DateTime();
+            $topic->setCreationDate($creationDate);
+    
+            $entityManager->persist($topic);
+            $entityManager->flush();
+        }
+    
         return $this->render('categorie/show.html.twig', [
-            'categorie' => $categorie
+            'categorie' => $categorie,
+            'form' => $form->createView(),
         ]);
     }
-    
-    
-    
 }

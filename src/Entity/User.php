@@ -145,7 +145,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->email.' '.$this->pseudo.' '.$this->roles.' '.$this->is_verified;
+        return $this->email.' '.$this->pseudo.' '.implode(', ', $this->roles).' '.$this->isVerified;
     }
 
     /**

@@ -5,9 +5,16 @@
 {% block body %}
     <h1> <a href="{{ path('app_categorie') }}">La liste des topics de {{ categorie }}</a></h1>
 
-{% for topic in categorie.topics %}
-    <br>
-    <p><a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a></p><br>
-{% endfor %}
+    {% for topic in categorie.topics %}
+        <br>
+        <p><a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a> - Créé par {{ topic.user.pseudo }}</p><br>
+    {% endfor %}
 
+    <hr>
+
+    <h2>Ajouter un nouveau topic</h2>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+    {{ form_end(form) }}
 {% endblock %}
