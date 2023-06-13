@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TopicController extends AbstractController
 {
@@ -30,28 +31,39 @@ class TopicController extends AbstractController
     {
         $topic = new Topic();
         $form = $this->createForm(TopicType::class, $topic);
-    
+
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($topic);
             $entityManager->flush();
-    
+
             // Redirection vers la page d'affichage du topic nouvellement créé
             return $this->redirectToRoute('app_topic_show', ['id' => $topic->getId()]);
         }
-    
+
         return $this->render('topic/add.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-    
+
     #[Route('/topic/{id}', name: 'app_topic_show')]
     public function show(Topic $topic): Response
     {
         return $this->render('topic/show.html.twig', [
             'topic' => $topic,
         ]);
+    }
+
+    #[Route('/topic/{id}/delete', name: 'delete_topic')]
+    public function delete(ManagerRegistry $doctrine, Topic $topic): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($topic);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_categorie');
+
     }
 }

@@ -3,18 +3,32 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-    <h1> <a href="{{ path('app_categorie') }}">La liste des topics de {{ categorie }}</a></h1>
+	<h1>
+		<a href="{{ path('app_categorie') }}">La liste des topics de
+			{{ categorie.getNomCategorie() }}</a>
+	</h1>
 
-    {% for topic in categorie.topics %}
-        <br>
-        <p><a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a> - Créé par {{ topic.user.pseudo }}</p><br>
-    {% endfor %}
+	{% for topic in categorie.topics %}
+		<br>
+		<p>
+			<a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
+		</p>
+		<p>Créé par :
+			{{ topic.user.pseudo }}</p>
 
-    <hr>
+		{% if topic.user == app.user %}
+			<a class="btn btn-warning" href="{{ path('delete_topic', {'id': topic.id}) }}">Delete</a>
+		{% endif %}
 
-    <h2>Ajouter un nouveau topic</h2>
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit" class="btn btn-primary">Ajouter</button>
-    {{ form_end(form) }}
+
+		<br>
+	{% endfor %}
+
+	<hr>
+
+	<h2>Ajouter un nouveau topic</h2>
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button type="submit" class="btn btn-primary">Ajouter</button>
+	{{ form_end(form) }}
 {% endblock %}
