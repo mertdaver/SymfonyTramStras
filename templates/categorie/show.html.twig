@@ -17,9 +17,8 @@
 			{{ topic.user.pseudo }}</p>
 
 		{% if topic.user == app.user %}
-			<a class="btn btn-warning" href="{{ path('delete_topic', {'id': topic.id}) }}">Delete</a>
+			<a class="btn btn-warning" href="{{ path('delete_topic', {'id': topic.id}) }}" onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Delete</a>
 		{% endif %}
-
 
 		<br>
 	{% endfor %}
@@ -31,4 +30,13 @@
 	{{ form_widget(form) }}
 	<button type="submit" class="btn btn-primary">Ajouter</button>
 	{{ form_end(form) }}
+
+	<script>
+		function confirmDelete(url) {
+			if (confirm('Êtes-vous sûr de vouloir supprimer ce topic et tous ses posts associés ?')) {
+				window.location.href = url;
+			}
+			return false;
+		}
+	</script>
 {% endblock %}

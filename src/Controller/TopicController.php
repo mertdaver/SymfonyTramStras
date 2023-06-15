@@ -64,10 +64,20 @@ class TopicController extends AbstractController
     public function delete(ManagerRegistry $doctrine, Topic $topic): Response
     {
         $entityManager = $doctrine->getManager();
+    
+        // Récupérer tous les posts associés au topic
+        $posts = $topic->getPosts();
+    
+        // Supprimer les posts un par un
+        foreach ($posts as $post) {
+            $entityManager->remove($post);
+        }
+    
+        // Supprimer le topic
         $entityManager->remove($topic);
         $entityManager->flush();
-
+    
         return $this->redirectToRoute('app_categorie');
-
     }
+    
 }
