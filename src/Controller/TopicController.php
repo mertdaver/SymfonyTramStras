@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\Topic;
 use App\Form\TopicType;
-use App\Form\PostType;
 use App\Entity\Categorie;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,49 +49,25 @@ class TopicController extends AbstractController
         ]);
     }
 
-    #[Route('/topic/{id}', name: 'app_topic_show')]
-    public function show(Request $request, Topic $topic, EntityManagerInterface $entityManager): Response
+    public function show(Topic $topic, ManagerRegistry $doctrine): Response
     {
-        $posts = $topic->getPosts(); // Supposons que vous avez une relation entre Topic et Post (One-to-Many)
-    
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
-    
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post->setTopic($topic);
-            $post->setUser($this->getUser());
-            $post->setDatePost(new \DateTime());
-    
-            $entityManager->persist($post);
-            $entityManager->flush();
-    
-            // Redirection vers la page d'affichage du topic
-            return $this->redirectToRoute('app_topic_show', ['id' => $topic->getId()]);
-        }
+        $posts = $doctrine->getRepository(Post::class)->findBy(['topic' => $topic]);
     
         return $this->render('topic/show.html.twig', [
             'topic' => $topic,
             'posts' => $posts,
-            'form' => $form->createView(),
         ]);
     }
     
-    
 
-    #[Route('/post/{id}/delete', name: 'delete_post')]
-    public function deletePost(EntityManagerInterface $entityManager, Post $post): Response
+    #[Route('/topic/{id}/delete', name: 'delete_topic')]
+    public function delete(ManagerRegistry $doctrine, Topic $topic): Response
     {
-        // Vérifier si l'utilisateur actuel est l'auteur du post
-        if ($post->getUser() !== $this->getUser()) {
-            throw new AccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce post.');
-        }
-    
-        $entityManager->remove($post);
+        $entityManager = $doctrine->getManager();
+        $entityManager->remove($topic);
         $entityManager->flush();
-    
-        // Redirection vers la page d'affichage du topic
-        return $this->redirectToRoute('app_topic_show', ['id' => $post->getTopic()->getId()]);
+
+        return $this->redirectToRoute('app_categorie');
+
     }
 }
