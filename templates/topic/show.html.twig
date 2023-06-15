@@ -11,7 +11,7 @@
 	</h1>
 
 <ul>
-    {% for post in posts %}
+    {% for post in topic.posts %}
         Message de {{ post.user }} : <br>
         {{ post.text }} <br>
         posté le : {{ post.datePost|date('Y-m-d H:i:s') }} <br><br><br>
