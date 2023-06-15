@@ -13,9 +13,6 @@ class PostType extends AbstractType
     {
         $builder
             ->add('text')
-            ->add('datePost')
-            ->add('topic')
-            ->add('user')
         ;
     }
 
