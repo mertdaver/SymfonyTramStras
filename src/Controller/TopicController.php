@@ -82,14 +82,18 @@ class TopicController extends AbstractController
     
     
 
-    #[Route('/topic/{id}/delete', name: 'delete_topic')]
-    public function delete(ManagerRegistry $doctrine, Topic $topic): Response
+    #[Route('/post/{id}/delete', name: 'delete_post')]
+    public function deletePost(EntityManagerInterface $entityManager, Post $post): Response
     {
-        $entityManager = $doctrine->getManager();
-        $entityManager->remove($topic);
+        // Vérifier si l'utilisateur actuel est l'auteur du post
+        if ($post->getUser() !== $this->getUser()) {
+            throw new AccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce post.');
+        }
+    
+        $entityManager->remove($post);
         $entityManager->flush();
-
-        return $this->redirectToRoute('app_categorie');
-
+    
+        // Redirection vers la page d'affichage du topic
+        return $this->redirectToRoute('app_topic_show', ['id' => $post->getTopic()->getId()]);
     }
 }
