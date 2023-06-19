@@ -8,26 +8,30 @@
 			{{ categorie.getNomCategorie() }}</a>
 	</h1>
 
-	{% for topic in categorie.topics %}
-		<br>
-		<p>
-			<a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
-		</p>
-		<p>
-			Créé par :
-			{% if topic.user %}
-				{{ topic.user.pseudo }}
-			{% else %}
-				Utilisateur inconnu
+	{% if categorie.topics|length > 0 %}
+		{% for topic in categorie.topics %}
+			<br>
+			<p>
+				<a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
+			</p>
+			<p>
+				Créé par :
+				{% if topic.user %}
+					{{ topic.user.pseudo }}
+				{% else %}
+					Utilisateur inconnu
+				{% endif %}
+			</p>
+
+			{% if is_authenticated and topic.user == user %}
+				<a class="btn btn-warning" href="{{ path('delete_topic', {'id': topic.id}) }}" onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Clôturer le Sujet</a>
 			{% endif %}
-		</p>
 
-		{% if is_authenticated and topic.user == user %}
-			<a class="btn btn-warning" href="{{ path('delete_topic', {'id': topic.id}) }}" onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Clôturer le Sujet</a>
-		{% endif %}
-
-		<br>
-	{% endfor %}
+			<br>
+		{% endfor %}
+	{% else %}
+		<p>Aucun topic disponible pour cette catégorie. Soyez le premier à en ouvrir un avec le formulaire ci-dessous.</p>
+	{% endif %}
 
 	<hr>
 
