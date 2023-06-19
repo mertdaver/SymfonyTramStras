@@ -13,10 +13,16 @@
 		<p>
 			<a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
 		</p>
-		<p>Créé par :
-			{{ topic.user.pseudo }}</p>
+		<p>
+			Créé par :
+			{% if topic.user %}
+				{{ topic.user.pseudo }}
+			{% else %}
+				Utilisateur inconnu
+			{% endif %}
+		</p>
 
-		{% if topic.user == app.user %}
+		{% if is_authenticated and topic.user == user %}
 			<a class="btn btn-warning" href="{{ path('delete_topic', {'id': topic.id}) }}" onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Delete</a>
 		{% endif %}
 
@@ -33,10 +39,10 @@
 
 	<script>
 		function confirmDelete(url) {
-			if (confirm('Êtes-vous sûr de vouloir supprimer ce topic et tous ses posts associés ?')) {
-				window.location.href = url;
-			}
-			return false;
-		}
+if (confirm('Êtes-vous sûr de vouloir supprimer ce topic et tous ses posts associés ?')) {
+window.location.href = url;
+}
+return false;
+}
 	</script>
 {% endblock %}

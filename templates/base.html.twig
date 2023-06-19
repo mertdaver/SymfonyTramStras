@@ -1,38 +1,248 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {# {{ encore_entry_link_tags('app') }} #}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    {% block stylesheets %}
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-        {% block javascripts %}
-            {# {{ encore_entry_script_tags('app') }} #}
-        {% endblock %}
-    </head>
-    <body>
+            body {
+                font-family: 'Poppins', Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #292929;
+            }
 
-{% if app.user %}
-    <a href="{{ path('app_logout') }}">Se déconnecter</a>
-    <a href=""{{ app.user.pseudo }}></a>
-{% else %}
-    <a href="{{ path('app_login') }}">Se déconnecter</a>
-    <a href="{{ path('app_register') }}">S'enregistrer</a>
-{% endif %}
+            header {
+                background-color: #8B0000;
+                padding: 10px;
+                color: #FFFFFF;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            }
 
-<nav>
-    <ul>
-        {# <li><a href="{{ path('app_home') }}">Home</a></li> 
-        <li><a href="{{ path('app_plan') }}">Plan</a></li>
-        <li><a href="{{ path('app_horaires') }}">Horaires</a></li> #}
-        <li><a href="{{ path('app_categorie') }}">Forum</a></li>
-        {# <li><a href="{{ path('app_alerte') }}">Alerte</a></li> #}
-    </ul>
-</nav>
+            .navbar {
+                background-color: #8B0000;
+                padding: 10px;
+                color: #FFFFFF;
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 999;
+                transition: top 0.3s;
+            }
 
-        {% block body %}{% endblock %}
-    </body>
+            .navbar ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .navbar ul li a {
+                color: #FFFFFF;
+                text-decoration: none;
+                padding: 10px;
+                font-weight: bold;
+                transition: background-color 0.3s;
+                background-color: #1A1A1A;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            }
+
+            .navbar ul li a:hover {
+                background-color: #FF4500;
+            }
+
+            .logout-link {
+                float: right;
+                margin-left: 10px;
+                color: #1A1A1A;
+                text-decoration: none;
+            }
+
+            .register-link {
+                float: right;
+                color: #1A1A1A;
+                text-decoration: none;
+            }
+
+            h1 {
+                margin-top: 0;
+                color: #8B0000;
+                font-size: 32px;
+                font-weight: bold;
+            }
+
+            p {
+                margin-bottom: 0;
+                color: white;
+                font-size: 16px;
+            }
+
+            /* Mobile menu styles */
+            .navbar .menu-icon {
+                display: none;
+                cursor: pointer;
+            }
+
+            .navbar .menu-icon span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: #FFFFFF;
+                margin-bottom: 5px;
+                transition: background-color 0.3s;
+            }
+
+            .navbar .menu-icon.open span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .topic-link {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #8B0000;
+                color: #FFFFFF;
+                text-decoration: none;
+                border-radius: 8px;
+                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .topic-link:hover {
+                transform: translateY(-2px);
+                box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            .topic-link:active {
+                transform: translateY(0);
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+
+            a {
+                display: inline-block;
+                color: #FFFFFF;
+                text-decoration: none;
+                background-color: #8B0000;
+                padding: 15px 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s, box-shadow 0.3s;
+                text-align: center;
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            a:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            a:active {
+                transform: translateY(0);
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Additional styles for responsive navbar */
+            .navbar.responsive {
+                position: relative;
+            }
+
+            .navbar.responsive .menu-icon {
+                display: block;
+            }
+
+            .navbar.responsive ul {
+                display: none;
+            }
+
+            .navbar.responsive.open ul {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #8B0000;
+                width: 100%;
+                padding: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+            }
+
+            .navbar.responsive.open ul li {
+                margin-bottom: 10px;
+            }
+
+            .navbar.responsive.open ul li:last-child {
+                margin-bottom: 0;
+            }
+
+            .navbar.responsive.open ul li a {
+                padding: 10px;
+            }
+
+            /* Hide the navbar when scrolling down */
+            .navbar.hide {
+                top: -100px;
+            }
+        </style>
+    {% endblock %}
+
+    {% block javascripts %}
+        {# {{ encore_entry_script_tags('app') }} #}
+        <script>
+            window.addEventListener("scroll", function() {
+                var navbar = document.querySelector(".navbar");
+                if (window.pageYOffset > 100) {
+                    navbar.classList.add("hide");
+                } else {
+                    navbar.classList.remove("hide");
+                }
+            });
+
+            function toggleMenu() {
+                var navbar = document.querySelector(".navbar");
+                navbar.classList.toggle("responsive");
+                var menuIcon = document.querySelector(".menu-icon");
+                menuIcon.classList.toggle("open");
+            }
+        </script>
+    {% endblock %}
+</head>
+<body>
+
+                
+                <header>
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    <a href=""{{ app.user.pseudo }}"></a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Se déconnecter</a>
+                    <a href="{{ path('app_register') }}">S'enregistrer</a>
+                {% endif %}
+                
+                    <div class="navbar">
+                        <div class="menu-icon" onclick="toggleMenu()">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <ul>
+                            {% if app.user %}
+                                <li><a href="{{ path('app_logout') }}" class="logout-link">Se déconnecter</a></li>
+                                <li><a href=""{{ app.user.pseudo }}"></a></li>
+                            {% else %}
+                                <li><a href="{{ path('app_login') }}" class="logout-link">Se déconnecter</a></li>
+                                <li><a href="{{ path('app_register') }}" class="register-link">S'enregistrer</a></li>
+                            {% endif %}
+                            <li><a href="{{ path('app_categorie') }}">Forum</a></li>
+                        </ul>
+                    </div>
+                </header>
+{% block body %}{% endblock %}
+</body>
 </html>
