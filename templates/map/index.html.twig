@@ -1,27 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block head %}
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          crossorigin=""/>
     <style>
         #map {
             height: 450px;
             border: 2px solid red;
         }
-
-/* Vérifiez que la bibliothèque Leaflet est chargée avant votre code JavaScript. Dans votre template Twig, vous avez déjà inclus la bibliothèque Leaflet avant d'écrire votre code JavaScript, ce qui est correct. Cependant, assurez-vous qu'il n'y a pas d'autres scripts intermédiaires qui pourraient écraser ou modifier la variable "L" avant l'exécution de votre code. */
-
-/* Si vous utilisez un gestionnaire de packages comme npm pour installer Leaflet, assurez-vous d'inclure les dépendances et les fichiers nécessaires dans votre projet. */
-
-/* Veuillez vérifier ces points et assurez-vous que la bibliothèque Leaflet est correctement chargée avant de déclarer des objets ou des variables dépendant de cette bibliothèque. */
-
-
-
     </style>
 {% endblock %}
 
@@ -33,18 +21,24 @@
     <ul>
         {% for line in lines %}
             {% if line.Extension == 'tram' %}
-                <li>{{ line.LineName }} - {{ line.LineRef }} - {{ line.RouteColor }}</li>
+                <li>{{ line.LineName }}
+                    -
+                    {{ line.LineRef }}
+                    -
+                    {{ line.RouteColor }}</li>
             {% endif %}
         {% endfor %}
     </ul>
 
-    {% block javascript %}
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+                integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+                crossorigin=""></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 // Récupérer les données des lignes passées depuis le contrôleur
                 var lines = {{ lines | json_encode | raw }};
-
-                // Utiliser les données pour générer la carte Leaflet
 
                 // Initialiser la carte Leaflet
                 var map = L.map('map').setView([48.5734053, 7.7521113], 13);
@@ -59,9 +53,13 @@
                     // Boucle pour parcourir le tableau de points et générer un marqueur pour chaque point
                     for (var i = 0; i < lines.length; i++) {
                         var line = lines[i];
-                        // Créer un marqueur pour chaque ligne
-                        var marker = L.marker([line.lat, line.lng]).addTo(map);
-                        marker.bindPopup(line.name);
+
+                        // Vérifier si les coordonnées sont définies
+                        if (line.lat !== undefined && line.lng !== undefined) {
+                            // Créer un marqueur pour chaque ligne
+                            var marker = L.marker([line.lat, line.lng]).addTo(map);
+                            marker.bindPopup(line.name);
+                        }
                     }
                 }
 
