@@ -37,8 +37,8 @@
                 crossorigin=""></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Récupérer les données des lignes passées depuis le contrôleur
-                var lines = {{ lines | json_encode | raw }};
+                // Récupérer les données des marqueurs passées depuis le contrôleur
+                var markers = {{ markers | json_encode | raw }};
 
                 // Initialiser la carte Leaflet
                 var map = L.map('map').setView([48.5734053, 7.7521113], 13);
@@ -50,15 +50,15 @@
                 // JavaScript pour manipuler la carte Leaflet
 
                 function init() {
-                    // Boucle pour parcourir le tableau de points et générer un marqueur pour chaque point
-                    for (var i = 0; i < lines.length; i++) {
-                        var line = lines[i];
+                    // Boucle pour parcourir le tableau de marqueurs et générer un marqueur pour chaque point
+                    for (var i = 0; i < markers.length; i++) {
+                        var markerData = markers[i];
 
                         // Vérifier si les coordonnées sont définies
-                        if (line.lat !== undefined && line.lng !== undefined) {
-                            // Créer un marqueur pour chaque ligne
-                            var marker = L.marker([line.lat, line.lng]).addTo(map);
-                            marker.bindPopup(line.name);
+                        if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                            // Créer un marqueur pour chaque point
+                            var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
+                            marker.bindPopup(markerData.stopName);
                         }
                     }
                 }
