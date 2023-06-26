@@ -20,51 +20,58 @@
 
     <ul>
         {% for line in lines %}
-            {% if line.Extension == 'tram' %}
-                <li>{{ line.LineName }}
-                    -
-                    {{ line.LineRef }}
-                    -
-                    {{ line.RouteColor }}</li>
-            {% endif %}
+            <li>{{ line.LineName }}
+                -
+                {{ line.LineRef }}
+                -
+                {{ line.RouteColor }}</li>
         {% endfor %}
     </ul>
+    {% for marker in markers %}
+        <a href="{{ path('horaires_map', {'stopCode': marker.stopCode}) }}" class="btn btn-primary">Voir les horaires pour {{ marker.stopName }}</a>
+    {% endfor %}
 
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-                integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-                crossorigin=""></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                // Récupérer les données des marqueurs passées depuis le contrôleur
-                var markers = {{ markers | json_encode | raw }};
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+            crossorigin=""></script>
+    <script>
+        var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
 
-                // Initialiser la carte Leaflet
-                var map = L.map('map').setView([48.5734053, 7.7521113], 13);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-                    maxZoom: 18
-                }).addTo(map);
+        document.addEventListener('DOMContentLoaded', function () {
+            // Récupérer les données des marqueurs passées depuis le contrôleur
+            var markers = {{ markers | json_encode | raw }};
 
-                // JavaScript pour manipuler la carte Leaflet
+            // Initialiser la carte Leaflet
+            var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                maxZoom: 18
+            }).addTo(map);
 
-                function init() {
-                    // Boucle pour parcourir le tableau de marqueurs et générer un marqueur pour chaque point
-                    for (var i = 0; i < markers.length; i++) {
-                        var markerData = markers[i];
+            // JavaScript pour manipuler la carte Leaflet
 
-                        // Vérifier si les coordonnées sont définies
-                        if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                            // Créer un marqueur pour chaque point
-                            var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
-                            marker.bindPopup(markerData.stopName);
-                        }
+            function init() {
+                // Boucle pour parcourir le tableau de marqueurs et générer un marqueur pour chaque point
+                for (var i = 0; i < markers.length; i++) {
+                    var markerData = markers[i];
+
+                    // Vérifier si les coordonnées sont définies
+                    if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                        // Créer un marqueur pour chaque point
+                        var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
+
+                        // Using the url template to generate the link
+                        var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                        marker.bindPopup('<a href="' + stopTimesUrl + '">' + markerData.stopName + '</a>');
                     }
                 }
+            }
 
-                init();
-            });
-        </script>
-    {% endblock %}
+            init();
+        });
+    </script>
+{% endblock %}
+
 {% endblock %}
