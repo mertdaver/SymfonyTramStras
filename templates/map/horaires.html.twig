@@ -1,15 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Horaires{% endblock %}
+{% block title %}Timetable{% endblock %}
 
 {% block body %}
-    <h1>Horaires</h1>
-
+    <h1>Timetable for Stop Code: {{ stopCode }}</h1>
     <table>
         <thead>
             <tr>
-                <th>Arrêt</th>
-                <th>Heure de départ estimée</th>
+                <th>Stop Point Name</th>
+                <th>Expected Departure Time</th>
             </tr>
         </thead>
         <tbody>
@@ -18,9 +17,11 @@
                     <td>{{ stopTime.stopPointName }}</td>
                     <td>{{ stopTime.expectedDepartureTime }}</td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">No upcoming departures</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('points_map') }}" class="btn btn-primary">Retour à la carte</a>
 {% endblock %}
