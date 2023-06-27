@@ -69,11 +69,11 @@ class MapController extends AbstractController
                 ]);
             } else {
                 var_dump($response);
-                // Gérer le cas d'erreur
+                
                 return new Response('Failed to retrieve data from the API', 500);
             }
         } else {
-            // Gérer le cas d'erreur
+            
             return new Response('Failed to retrieve data from the API', 500);
         }
     }
@@ -83,8 +83,8 @@ class MapController extends AbstractController
     {
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
         $requestorRef = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
-        $previewInterval = 'PT2H'; // 30 minutes
-        $includeGeneralMessage = 'true'; // or true if you want to include GeneralMessageDelivery
+        $previewInterval = 'PT2H';
+        $includeGeneralMessage = 'true';
         $includeFLUO67 = 'false';
         $removeCheckOut = 'false';
         $getStopIdInsteadOfStopCode = 'false';
@@ -114,11 +114,11 @@ class MapController extends AbstractController
             $timetableDelivery = $data['ServiceDelivery']['EstimatedTimetableDelivery'];
     
             foreach ($timetableDelivery as $versionFrame) {
-                // Process the response data and extract the required information
+                // Traite les données de la réponse et extrait les informations requises
                 if (isset($versionFrame['EstimatedJourneyVersionFrame'])) {
                     $journeyFrames = $versionFrame['EstimatedJourneyVersionFrame'];
     
-                    // Extract the estimated journeys for each journey frame
+                    // Extraire les horaire estimés pour chaque véhicule
                     $estimatedJourneys = [];
                     foreach ($journeyFrames as $journeyFrame) {
                         if (isset($journeyFrame['EstimatedVehicleJourney'])) {
@@ -126,7 +126,7 @@ class MapController extends AbstractController
                         }
                     }
     
-                    // Extract the relevant information from the estimated journeys
+                    // Extrait les informations pertinentes des trajets estimés
                     $stopTimes = [];
                     foreach ($estimatedJourneys as $estimatedJourney) {
                         if (isset($estimatedJourney['EstimatedCalls'])) {
@@ -137,7 +137,7 @@ class MapController extends AbstractController
                                     $stopPointName = $estimatedCall['StopPointName'];
                                     $expectedDepartureTime = new \DateTime($estimatedCall['ExpectedDepartureTime']);
                     
-                                    // Add the stop time to the array only if it's in the future
+                                    // Ajoute l'heure d'arrêt au tableau uniquement si elle se situe dans le futur
                                     if ($expectedDepartureTime > new \DateTime()) {
                                         $stopTimes[] = [
                                             'stopPointName' => $stopPointName,
