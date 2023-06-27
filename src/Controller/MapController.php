@@ -114,11 +114,9 @@ class MapController extends AbstractController
             $timetableDelivery = $data['ServiceDelivery']['EstimatedTimetableDelivery'];
     
             foreach ($timetableDelivery as $versionFrame) {
-                // Traite les données de la réponse et extrait les informations requises
                 if (isset($versionFrame['EstimatedJourneyVersionFrame'])) {
                     $journeyFrames = $versionFrame['EstimatedJourneyVersionFrame'];
     
-                    // Extraire les horaire estimés pour chaque véhicule
                     $estimatedJourneys = [];
                     foreach ($journeyFrames as $journeyFrame) {
                         if (isset($journeyFrame['EstimatedVehicleJourney'])) {
@@ -126,29 +124,31 @@ class MapController extends AbstractController
                         }
                     }
     
-                    // Extrait les informations pertinentes des trajets estimés
                     $stopTimes = [];
                     foreach ($estimatedJourneys as $estimatedJourney) {
                         if (isset($estimatedJourney['EstimatedCalls'])) {
                             $estimatedCalls = $estimatedJourney['EstimatedCalls'];
     
                             foreach ($estimatedCalls as $estimatedCall) {
-                                if (isset($estimatedCall['StopPointRef']) && isset($estimatedCall['StopPointName']) && isset($estimatedCall['ExpectedDepartureTime']) && $estimatedCall['StopPointRef'] == $stopCode) {
+                                if ($estimatedCall['StopPointRef'] == $stopCode) {
                                     $stopPointName = $estimatedCall['StopPointName'];
                                     $expectedDepartureTime = new \DateTime($estimatedCall['ExpectedDepartureTime']);
-                    
+                                    $destinationName = $estimatedCall['DestinationName']; 
+    
                                     // Ajoute l'heure d'arrêt au tableau uniquement si elle se situe dans le futur
                                     if ($expectedDepartureTime > new \DateTime()) {
                                         $stopTimes[] = [
                                             'stopPointName' => $stopPointName,
                                             'expectedDepartureTime' => $expectedDepartureTime->format('H:i:s'),
+                                            'destinationName' => $destinationName, 
                                         ];
                                     }
                                 }
                             }
                         }
                     }
-                    // Transmet les heures d'arrêt et le code d'arrêt à la vue
+    
+
                     return $this->render('map/horaires.html.twig', [
                         'stopTimes' => $stopTimes,
                         'stopCode' => $stopCode,
@@ -157,5 +157,4 @@ class MapController extends AbstractController
             }
         }
     }
-}
-    
+}    
