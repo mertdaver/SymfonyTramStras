@@ -18,15 +18,13 @@
 
     <div id="map"></div>
 
+    <h2>Lignes de tram</h2>
     <ul>
-        {% for line in lines %}
-            <li>{{ line.LineName }}
-                -
-                {{ line.LineRef }}
-                -
-                {{ line.RouteColor }}</li>
+        {% for polyline in polylines %}
+            <li style="color: {{ polyline.color }}">{{ polyline.lineName }}</li>
         {% endfor %}
     </ul>
+
     {% for marker in markers %}
         <a href="{{ path('horaires_map', {'stopCode': marker.stopCode}) }}" class="btn btn-primary">Voir les horaires pour {{ marker.stopName }}</a>
     {% endfor %}
@@ -37,40 +35,51 @@
             integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
             crossorigin=""></script>
     <script>
-        var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
+    var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
 
-        document.addEventListener('DOMContentLoaded', function () {
-            // Récupérer les données des marqueurs passées depuis le contrôleur
-            var markers = {{ markers | json_encode | raw }};
+    document.addEventListener('DOMContentLoaded', function () {
+        var markers = {{ markers | json_encode | raw }};
+        var polylines = {{ polylines | json_encode | raw }};
 
-            // Initialiser la carte Leaflet
-            var map = L.map('map').setView([48.5734053, 7.7521113], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-                maxZoom: 18
-            }).addTo(map);
+        var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
 
-            // JavaScript pour manipuler la carte Leaflet
+        function init() {
+            for (var i = 0; i < markers.length; i++) {
+                var markerData = markers[i];
 
-            function init() {
-                // Boucle pour parcourir le tableau de marqueurs et générer un marqueur pour chaque point
-                for (var i = 0; i < markers.length; i++) {
-                    var markerData = markers[i];
+                if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                    var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
 
-                    // Vérifier si les coordonnées sont définies
-                    if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                        // Créer un marqueur pour chaque point
-                        var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
-
-                        // Using the url template to generate the link
-                        var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                        marker.bindPopup('<a href="' + stopTimesUrl + '">' + markerData.stopName + '</a>');
+                    var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+                    popupContent += '<strong>Destinations de lignes :</strong><br>';
+                    for (var j = 0; j < markerData.linesDestinations.length; j++) {
+                        popupContent += markerData.linesDestinations[j] + '<br>';
                     }
+
+                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+
+                    marker.bindPopup(popupContent);
                 }
             }
 
-            init();
-        });
+            for (var k = 0; k < polylines.length; k++) {
+                var polylineData = polylines[k];
+                var lineCoordinates = polylineData.coordinates;
+
+                if (lineCoordinates.length >= 2) {
+                    var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
+                    polyline.bindPopup(polylineData.lineName);
+                }
+            }
+        }
+
+        init();
+    });
     </script>
 {% endblock %}
 
