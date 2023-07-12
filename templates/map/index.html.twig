@@ -1,34 +1,3 @@
-{% extends 'base.html.twig' %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-          crossorigin=""/>
-    <style>
-        #map {
-            height: 450px;
-            border: 2px solid red;
-        }
-    </style>
-{% endblock %}
-
-{% block body %}
-    <h1>La Carte du Réseau CTS</h1>
-
-    <div id="map"></div>
-
-    <h2>Lignes de tram</h2>
-    <ul>
-        {% for polyline in polylines %}
-            <li style="color: {{ polyline.color }}">{{ polyline.lineName }}</li>
-        {% endfor %}
-    </ul>
-
-    {% for marker in markers %}
-        <a href="{{ path('horaires_map', {'stopCode': marker.stopCode}) }}" class="btn btn-primary">Voir les horaires pour {{ marker.stopName }}</a>
-    {% endfor %}
-
 {% block javascripts %}
     {{ parent() }}
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
@@ -42,45 +11,44 @@
         var polylines = {{ polylines | json_encode | raw }};
 
         var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+
+        // Couche de tuiles OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
             maxZoom: 18
         }).addTo(map);
 
-        function init() {
-            for (var i = 0; i < markers.length; i++) {
-                var markerData = markers[i];
+        // Votre couche de tuiles personnalisée
+        L.tileLayer('/directory/Mapnik/{z}/{x}/{y}.png', {
+            maxZoom: 18
+        }).addTo(map);
 
-                if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                    var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
+        var customIcon = L.icon({
+            iconUrl: '/path/to/your/icon.png', // Remplacer par le chemin vers votre icône
+            iconSize:     [38, 95], // Taille de l'icône
+            iconAnchor:   [22, 94], // Point de l'icône qui correspondra à la position du marqueur
+            popupAnchor:  [-3, -76] // Point de l'icône où le popup sera ancré
+        });
 
-                    var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-                    popupContent += '<strong>Destinations de lignes :</strong><br>';
-                    for (var j = 0; j < markerData.linesDestinations.length; j++) {
-                        popupContent += markerData.linesDestinations[j] + '<br>';
-                    }
-
-                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
-
-                    marker.bindPopup(popupContent);
+        function fadeMarker(marker) {
+            var opacity = 1;
+            var timer = setInterval(function() {
+                if (opacity <= 0){
+                    clearInterval(timer);
+                    map.removeLayer(marker); // Supprime le marqueur une fois qu'il est complètement transparent
                 }
-            }
-
-            for (var k = 0; k < polylines.length; k++) {
-                var polylineData = polylines[k];
-                var lineCoordinates = polylineData.coordinates;
-
-                if (lineCoordinates.length >= 2) {
-                    var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
-                    polyline.bindPopup(polylineData.lineName);
-                }
-            }
+                marker.setOpacity(opacity);
+                opacity -= 0.02;  // Vitesse de décoloration, augmenter pour un effet plus rapide
+            }, 100); // Intervalle de temps entre chaque décoloration, diminuer pour un effet plus rapide
         }
 
-        init();
+        map.on('click', function(e) {
+            var marker = L.marker(e.latlng, {icon: customIcon}).addTo(map);
+            marker.bindPopup("<b>Hello world!</b><br>I am a custom marker.").openPopup();
+            fadeMarker(marker);  // Ajoute l'appel à la fonction fadeMarker ici
+        });
+
+        //... Reste de votre code ...
     });
     </script>
-{% endblock %}
-
 {% endblock %}

@@ -43,14 +43,7 @@ class MapController extends AbstractController
                 $markers = [];
                 $lines = [];
                 $polylines = [];
-                $lineColors = [
-                    'A' => '#ff0000', 
-                    'B' => '#00ddff', 
-                    'C' => '#ffcc00',
-                    'D' => '#15b700',
-                    'E' => '#000cff',
-                    'F' => '#19ff00',
-                ];
+
 
                 foreach ($stopPoints as $stopPoint) {
                     $latitude = $stopPoint['Location']['Latitude'];
@@ -91,7 +84,6 @@ class MapController extends AbstractController
                     $polyline = [
                         'lineName' => $lineName,
                         'coordinates' => $lineCoordinates,
-                        'color' => $lineColors[$lineName] ?? '#000000', // Couleur par défaut si la correspondance n'est pas trouvée
                     ];
 
                     $polylines[] = $polyline;
