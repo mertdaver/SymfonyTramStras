@@ -40,7 +40,15 @@
                     L.tileLayer('/directory/Mapnik/{z}/{x}/{y}.png', {maxZoom: 18}).addTo(map);
 
                     var customIcon = L.icon({
-                        iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png',
+                        // iconUrl: 'http://localhost/SymfonyTramStras/png/Logo_CTS.svg', // Logo_CTS.svg
+                        iconUrl: 'http://localhost/SymfonyTramStras/png/icons8-tram-30.png', // icon tram
+                        iconSize: [20, 20],
+                        iconAnchor: [24, 48],
+                        popupAnchor: [-3, -76]
+                    });
+
+                    var customMarkerIcon = L.icon({
+                        iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png', // Logo ping rouge marker perso alerte/évènement
                         iconSize: [48, 48],
                         iconAnchor: [24, 48],
                         popupAnchor: [-3, -76]
@@ -65,7 +73,7 @@
                         {% else %}
                         var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
                         if (isConfirmed) {
-                            var marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+                            var marker = L.marker(e.latlng, { icon: customMarkerIcon }).addTo(map);
                             marker.bindPopup("<b>Marqueur d'alerte ajouté ici.</b>").openPopup();
                             fadeMarker(marker);
 
@@ -94,7 +102,12 @@
                                 var markerData = markers[i];
 
                                 if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                                    var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
+                                    var marker;
+                                    if (markerData.isCustom) {
+                                        marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
+                                    } else {
+                                        marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
+                                    }
 
                                     var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
                                     popupContent += '<strong>Destinations de lignes :</strong><br>';

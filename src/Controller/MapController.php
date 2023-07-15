@@ -69,6 +69,7 @@ class MapController extends AbstractController
                         'stopName' => $stopName,
                         'stopCode' => $apiStopPoint['Extension']['StopCode'],
                         'linesDestinations' => $destinations,
+                        'isCustom' => false, // Marqueur de l'API, icône par défaut utilisée
                     ];
 
                     // Récupérer les lignes de tram
@@ -85,8 +86,17 @@ class MapController extends AbstractController
                 // Récupérer les points ajoutés par les utilisateurs depuis la base de données
                 $userMarkers = $markerRepository->findAll();
 
-                // Combinez les deux ensembles de données
-                $markers = array_merge($markers, $userMarkers);
+                // Convertir les marqueurs personnalisés en format compatible
+                foreach ($userMarkers as $userMarker) {
+                    $markers[] = [
+                        'latitude' => $userMarker->getLatitude(),
+                        'longitude' => $userMarker->getLongitude(),
+                        'stopName' => '', // Ajoutez le nom personnalisé si nécessaire
+                        'stopCode' => '', // Ajoutez le code d'arrêt personnalisé si nécessaire
+                        'linesDestinations' => [], // Ajoutez les destinations de lignes personnalisées si nécessaire
+                        'isCustom' => true, // Marqueur personnalisé, icône spécifique utilisée
+                    ];
+                }
 
                 // Créer les objets de polylinéaire pour chaque ligne
                 foreach ($lines as $lineName => $lineCoordinates) {
@@ -112,7 +122,7 @@ class MapController extends AbstractController
             return new Response('Failed to retrieve data from the API', 500);
         }
     }
-
+    
 
 
     #[Route('/horaires/{stopCode}', name: 'horaires_map')]
