@@ -28,7 +28,7 @@ class Marker
     private ?User $User = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Color = null;
+
 
     public function __construct()
     {
@@ -88,15 +88,5 @@ class Marker
         return $this;
     }
 
-    public function getColor(): ?string
-    {
-        return $this->Color;
-    }
 
-    public function setColor(string $Color): self
-    {
-        $this->Color = $Color;
-
-        return $this;
-    }
 }

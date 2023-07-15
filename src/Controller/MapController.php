@@ -201,8 +201,8 @@ class MapController extends AbstractController
     #[Route("/post/create", name: "post_create", methods: ["POST"])]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $latitude = $request->request->get('lat');
-        $longitude = $request->request->get('lng');
+        $latitude = floatval($request->request->get('lat'));
+        $longitude = floatval($request->request->get('lng'));
     
         // Création d'un nouveau marqueur
         $marker = new Marker();
@@ -226,6 +226,7 @@ class MapController extends AbstractController
     
         return new Response(json_encode($data));
     }
+    
     
     
 }

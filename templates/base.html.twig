@@ -221,14 +221,6 @@ p {
 <body>
 
     <header>
-        {% if app.user %}
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
-            <a href=""{{ app.user.pseudo }}"></a>
-        {% else %}
-            <a href="{{ path('app_login') }}">Se déconnecter</a>
-            <a href="{{ path('app_register') }}">S'enregistrer</a>
-        {% endif %}
-
         <div class="navbar">
             <div class="menu-icon" onclick="toggleMenu()">
                 <span></span>
@@ -237,17 +229,18 @@ p {
             </div>
             <ul>
                 {% if app.user %}
-                    <li><a href="{{ path('app_logout') }}" class="logout-link">Se déconnecter</a></li>
+                    <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
                     <li><a href=""{{ app.user.pseudo }}"></a></li>
                 {% else %}
-                    <li><a href="{{ path('app_login') }}" class="logout-link">Se déconnecter</a></li>
-                    <li><a href="{{ path('app_register') }}" class="register-link">S'enregistrer</a></li>
+                    <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                    <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
                 {% endif %}
                 <li><a href="{{ path('app_categorie') }}">Forum</a></li>
                 <li><a href="{{ path('points_map') }}">Carte</a></li> <!-- New map button -->
             </ul>
         </div>
     </header>
+
     {% block body %}{% endblock %}
 </body>
 </html>

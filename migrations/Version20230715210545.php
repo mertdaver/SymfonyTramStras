@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230712212341 extends AbstractMigration
+final class Version20230715210545 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20230712212341 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE marker ADD color VARCHAR(255) NOT NULL, CHANGE latitude latitude DOUBLE PRECISION NOT NULL, CHANGE longitude longitude DOUBLE PRECISION NOT NULL');
+        $this->addSql('ALTER TABLE marker DROP color, CHANGE user_id user_id INT NOT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE marker DROP color, CHANGE latitude latitude DOUBLE PRECISION DEFAULT \'0\' NOT NULL, CHANGE longitude longitude DOUBLE PRECISION DEFAULT \'0\' NOT NULL');
+        $this->addSql('ALTER TABLE marker ADD color VARCHAR(255) DEFAULT NULL, CHANGE user_id user_id INT DEFAULT NULL');
     }
 }
