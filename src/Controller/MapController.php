@@ -24,10 +24,12 @@ class MapController extends AbstractController
     #[Route('/map', name: 'points_map')]
     public function index(MarkerRepository $markerRepository): Response
     {
+        // URL de l'API CTS pour récupérer les points d'arrêt
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery';
         $username = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
         $password = 'Mry78(5kmM_d';
 
+        // Options pour la requête HTTP
         $options = [
             'http' => [
                 'header' => "Authorization: Basic " . base64_encode($username . ':' . $password) . "\r\n",
@@ -35,6 +37,7 @@ class MapController extends AbstractController
             ]
         ];
 
+        // Création du contexte pour la requête HTTP
         $context = stream_context_create($options);
         $response = file_get_contents($url, false, $context);
 
@@ -48,6 +51,7 @@ class MapController extends AbstractController
                 $lines = [];
                 $polylines = [];
 
+                // Parcourir les points d'arrêt de l'API
                 foreach ($apiStopPoints as $apiStopPoint) {
                     $latitude = $apiStopPoint['Location']['Latitude'];
                     $longitude = $apiStopPoint['Location']['Longitude'];
@@ -62,7 +66,7 @@ class MapController extends AbstractController
                         $destinations[] = $destination;
                     }
 
-                    // Créer un marqueur pour chaque point
+                    // Créer un marqueur pour chaque point d'arrêt de l'API
                     $markers[] = [
                         'latitude' => $latitude,
                         'longitude' => $longitude,
@@ -116,18 +120,17 @@ class MapController extends AbstractController
             } else {
                 var_dump($response);
 
-                return new Response('Failed to retrieve data from the API', 500);
+                return new Response('Échec de récupération des données depuis l\'API', 500);
             }
         } else {
-            return new Response('Failed to retrieve data from the API', 500);
+            return new Response('Échec de récupération des données depuis l\'API', 500);
         }
     }
-    
-
 
     #[Route('/horaires/{stopCode}', name: 'horaires_map')]
     public function horaires_map(string $stopCode): Response
     {
+        // URL de l'API CTS pour récupérer les horaires d'un point d'arrêt spécifique
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
         $requestorRef = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
         $previewInterval = 'PT2H';
@@ -195,7 +198,6 @@ class MapController extends AbstractController
                         }
                     }
 
-
                     return $this->render('map/horaires.html.twig', [
                         'stopTimes' => $stopTimes,
                         'stopCode' => $stopCode,
@@ -205,26 +207,24 @@ class MapController extends AbstractController
         }
     }
 
-
-    
     #[Route("/post/create", name: "post_create", methods: ["POST"])]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $latitude = floatval($request->request->get('lat'));
         $longitude = floatval($request->request->get('lng'));
-    
+
         // Création d'un nouveau marqueur
         $marker = new Marker();
         $marker->setLatitude($latitude);
         $marker->setLongitude($longitude);
         $marker->setUser($this->getUser());
-        $marker->setCreationDate(new \DateTime()); // ajout de la date de création
-    
+        $marker->setCreationDate(new \DateTime()); // Ajout de la date de création
+
         // Enregistrement du marqueur dans la base de données
         $entityManager->persist($marker);
         $entityManager->flush();
-    
-        // Retourne les données en format JSON
+
+        // Retourne les données au format JSON
         $data = [
             'id' => $marker->getId(),
             'user_id' => $marker->getUser()->getId(),  // Assurez-vous que la méthode getId() existe dans l'entité User
@@ -232,10 +232,7 @@ class MapController extends AbstractController
             'longitude' => $marker->getLongitude(),
             'creation_date' => $marker->getCreationDate(),
         ];
-    
+
         return new Response(json_encode($data));
     }
-    
-    
-    
 }
