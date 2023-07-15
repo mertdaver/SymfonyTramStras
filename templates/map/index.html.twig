@@ -23,97 +23,108 @@
             var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
 
             document.addEventListener('DOMContentLoaded', function () {
-                var markers = {{ markers | json_encode | raw }};
-                var polylines = {{ polylines | json_encode | raw }};
+                var mapElement = document.getElementById('map');
+                if (mapElement && !mapElement._leaflet_id) {
+                    var markers = {{ markers | json_encode | raw }};
+                    var polylines = {{ polylines | json_encode | raw }};
 
-                var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+                    var map = L.map('map').setView([48.5734053, 7.7521113], 13);
 
-                // Couche de tuiles OpenStreetMap
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-                    maxZoom: 18
-                }).addTo(map);
+                    // Couche de tuiles OpenStreetMap
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                        maxZoom: 18
+                    }).addTo(map);
 
-                // Votre couche de tuiles personnalisée
-                L.tileLayer('/directory/Mapnik/{z}/{x}/{y}.png', {maxZoom: 18}).addTo(map);
+                    // Votre couche de tuiles personnalisée
+                    L.tileLayer('/directory/Mapnik/{z}/{x}/{y}.png', {maxZoom: 18}).addTo(map);
 
-                var customIcon = L.icon({
-                    iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png',
-                    iconSize: [48, 48],
-                    iconAnchor: [24, 48],
-                    popupAnchor: [-3, -76]
-                });
+                    var customIcon = L.icon({
+                        iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png',
+                        iconSize: [48, 48],
+                        iconAnchor: [24, 48],
+                        popupAnchor: [-3, -76]
+                    });
 
-                function fadeMarker(marker) {
-                    var opacity = 1;
-                    var timer = setInterval(function () {
-                        if (opacity <= 0) {
-                            clearInterval(timer);
-                            map.removeLayer(marker);
-                        }
-                        marker.setOpacity(opacity);
-                        opacity -= 0.02;
-                    }, 10000);
-                }
-
-                map.on('click', function (e) {
-                    var isConfirmed = confirm("Etes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
-
-                    if (isConfirmed) {
-                        var marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
-                        marker.bindPopup("<b>Marqueur d'alerte ajouté ici.</b>").openPopup();
-                        fadeMarker(marker);
-
-                        var url = '{{ path('post_create') }}'; // Modifier le chemin selon votre configuration
-                        var formData = new FormData();
-                        formData.append('lat', e.latlng.lat);
-                        formData.append('lng', e.latlng.lng);
-
-                        fetch(url, { method: 'POST', body: formData })
-                            .then(function (response) {
-                                if (!response.ok) {
-            throw new Error('HTTP error ' + response.status);
-        }
-        console.log('Marker enregistré avec succès !');
-    })
-    .catch(function (error) {
-        console.error('Erreur lors de l\'enregistrement du marker :', error);
-    });
+                    function fadeMarker(marker) {
+                        var opacity = 1;
+                        var timer = setInterval(function () {
+                            if (opacity <= 0) {
+                                clearInterval(timer);
+                                map.removeLayer(marker);
+                            }
+                            marker.setOpacity(opacity);
+                            opacity -= 0.02;
+                        }, 10000);
                     }
-                });
 
-                function init() {
-                    for (var i = 0; i < markers.length; i++) {
-                        var markerData = markers[i];
+                    map.on('click', function (e) {
+                        {% if not app.user %}
+                        var modal = document.getElementById("myModal");
+                        modal.style.display = "block";
+                        {% else %}
+                        var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+                        if (isConfirmed) {
+                            var marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+                            marker.bindPopup("<b>Marqueur d'alerte ajouté ici.</b>").openPopup();
+                            fadeMarker(marker);
 
-                        if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                            var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
+                            var url = '{{ path('post_create') }}';
+                            var formData = new FormData();
+                            formData.append('lat', e.latlng.lat);
+                            formData.append('lng', e.latlng.lng);
 
-                            var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-                            popupContent += '<strong>Destinations de lignes :</strong><br>';
-                            for (var j = 0; j < markerData.linesDestinations.length; j++) {
-                                popupContent += markerData.linesDestinations[j] + '<br>';
+                            fetch(url, { method: 'POST', body: formData })
+                                .then(function (response) {
+                                    if (!response.ok) {
+                                        throw new Error('HTTP error ' + response.status);
+                                    }
+                                    console.log('Marker enregistré avec succès !');
+                                })
+                                .catch(function (error) {
+                                    console.error('Erreur lors de l\'enregistrement du marker :', error);
+                                });
+                        }
+                        {% endif %}
+                    });
+
+                    function init() {
+                        if (Array.isArray(markers) && Array.isArray(polylines)) {
+                            for (var i = 0; i < markers.length; i++) {
+                                var markerData = markers[i];
+
+                                if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                                    var marker = L.marker([markerData.latitude, markerData.longitude]).addTo(map);
+
+                                    var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+                                    popupContent += '<strong>Destinations de lignes :</strong><br>';
+                                    for (var j = 0; j < markerData.linesDestinations.length; j++) {
+                                        popupContent += markerData.linesDestinations[j] + '<br>';
+                                    }
+
+                                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+
+                                    marker.bindPopup(popupContent);
+                                }
                             }
 
-                            var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                            popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+                            for (var k = 0; k < polylines.length; k++) {
+                                var polylineData = polylines[k];
+                                var lineCoordinates = polylineData.coordinates;
 
-                            marker.bindPopup(popupContent);
+                                if (Array.isArray(lineCoordinates) && lineCoordinates.length >= 2) {
+                                    var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
+                                    polyline.bindPopup(polylineData.lineName);
+                                }
+                            }
+                        } else {
+                            console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
                         }
                     }
 
-                    for (var k = 0; k < polylines.length; k++) {
-                        var polylineData = polylines[k];
-                        var lineCoordinates = polylineData.coordinates;
-
-                        if (lineCoordinates.length >= 2) {
-                            var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
-                            polyline.bindPopup(polylineData.lineName);
-                        }
-                    }
+                    init();
                 }
-
-                init();
             });
         </script>
     {% endblock %}
