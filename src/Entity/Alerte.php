@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\AlerteRepository;
+use App\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AlerteRepository;
 
 #[ORM\Entity(repositoryClass: AlerteRepository::class)]
 class Alerte
@@ -17,17 +18,15 @@ class Alerte
     #[ORM\Column(length: 255)]
     private ?string $ligne = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $arret = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $alerteDate = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $sens = null;
 
-    #[ORM\ManyToOne(inversedBy: 'alertes')]
-    private ?Topic $topic = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private ?User $user = null;
+
 
     public function getId(): ?int
     {
@@ -42,18 +41,6 @@ class Alerte
     public function setLigne(string $ligne): self
     {
         $this->ligne = $ligne;
-
-        return $this;
-    }
-
-    public function getArret(): ?string
-    {
-        return $this->arret;
-    }
-
-    public function setArret(string $arret): self
-    {
-        $this->arret = $arret;
 
         return $this;
     }
@@ -75,21 +62,21 @@ class Alerte
         return $this->sens;
     }
 
-    public function setSens(string $sens): self
+    public function setSens(?string $sens): self
     {
         $this->sens = $sens;
 
         return $this;
     }
 
-    public function getTopic(): ?Topic
+    public function getUser(): ?User
     {
-        return $this->topic;
+        return $this->user;
     }
 
-    public function setTopic(?Topic $topic): self
+    public function setUser(?User $user): self
     {
-        $this->topic = $topic;
+        $this->user = $user;
 
         return $this;
     }

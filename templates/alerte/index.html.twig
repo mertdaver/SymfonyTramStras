@@ -1,39 +1,63 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AlerteController!{% endblock %}
-
-
-
-
-
-
-
-
-
 {% block body %}
-{# <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="card">
+        <h1>Demander de l'aide</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <form id="alerte-form" method="post">
+            <label for="ligne">Ligne:</label><br>
+            <select id="ligne" name="ligne">
+                <option value="Ligne A">Ligne A : Illkirch-Graffenstaden - Parc des Sports</option>
+                <option value="Ligne B">Ligne B : Lingolsheim Tiergaertel - Hoenheim Gare</option>
+                <option value="Ligne C">Ligne C : Gare centrale - Neuhof Rodolphe Reuss</option>
+                <option value="Ligne D">Ligne D : Kehl Rathaus - Poteries</option>
+                <option value="Ligne E">Ligne E : Campus d'Illkirch - Robertsau L'Escale</option>
+                <option value="Ligne F">Ligne F : Comtes - Place d'Islande</option>
+            </select><br>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/src/Controller/AlerteController.php'|file_link(0) }}">src/Controller/AlerteController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/templates/alerte/index.html.twig'|file_link(0) }}">templates/alerte/index.html.twig</a></code></li>
-    </ul>
-</div> #}
- <h1> La liste des alertes </h1>
+            <label for="sens">Sens:</label><br>
+            <select id="sens" name="sens" disabled>
+                <option value="" selected disabled>Choisissez une ligne d'abord</option>
+            </select><br>
 
-    <h1>{{ Alerte1 }}</h1>
+            <input type="submit" value="Demander de l'aide" class="topic-link">
+        </form>
+    </div>
 
-<ul>
-    {% for alerte in alertes %}
-        Alerte incident sur l'arret : {{ alerte.arret }} {{ alerte.ligne }} {{ alerte.sens }} <br>
-    {% endfor %}
-</ul>
-{# Ca affiche toutes la liste des alertes mais elles ne doivent s'afficher qu'une fois et en pop-up #}
+    <script>
+        // Options spécifiques pour chaque ligne
+        var optionsParLigne = {
+            'Ligne A': ['Illkirch-Graffenstaden', 'Parc des Sports'],
+            'Ligne B': ['Lingolsheim Tiergaertel', 'Hoenheim Gare'],
+            'Ligne C': ['Gare centrale', 'Neuhof Rodolphe Reuss'],
+            'Ligne D': ['Kehl Rathaus', 'Poteries'],
+            'Ligne E': ['Campus d\'Illkirch', 'Robertsau L\'Escale'],
+            'Ligne F': ['Comtes', 'Place d\'Islande']
+        };
 
+        // Sélectionner la ligne et mettre à jour les options de sens
+        var ligneSelect = document.getElementById('ligne');
+        var sensSelect = document.getElementById('sens');
+
+        ligneSelect.addEventListener('change', function() {
+            var selectedLigne = ligneSelect.value;
+
+            // Vider les options de sens actuelles
+            sensSelect.innerHTML = '';
+
+            // Récupérer les options spécifiques pour la ligne sélectionnée
+            var sensOptions = optionsParLigne[selectedLigne] || [];
+
+            // Ajouter les options de sens à la liste déroulante
+            sensOptions.forEach(function(option) {
+                var optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.text = option;
+                sensSelect.appendChild(optionElement);
+            });
+
+            // Activer la liste déroulante des sens
+            sensSelect.disabled = false;
+        });
+    </script>
 {% endblock %}

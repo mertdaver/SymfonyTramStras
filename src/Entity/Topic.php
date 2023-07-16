@@ -28,8 +28,7 @@ class Topic
     #[ORM\OneToMany(mappedBy: 'topic', targetEntity: Post::class)]
     private Collection $posts;
 
-    #[ORM\OneToMany(mappedBy: 'topic', targetEntity: Alerte::class)]
-    private Collection $alertes;
+
 
     #[ORM\ManyToOne(inversedBy: 'Topic')]
     private ?User $user = null;
@@ -37,7 +36,7 @@ class Topic
     public function __construct()
     {
         $this->posts = new ArrayCollection();
-        $this->alertes = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -105,36 +104,6 @@ class Topic
             // set the owning side to null (unless already changed)
             if ($post->getTopic() === $this) {
                 $post->setTopic(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Alerte>
-     */
-    public function getAlertes(): Collection
-    {
-        return $this->alertes;
-    }
-
-    public function addAlerte(Alerte $alerte): self
-    {
-        if (!$this->alertes->contains($alerte)) {
-            $this->alertes->add($alerte);
-            $alerte->setTopic($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAlerte(Alerte $alerte): self
-    {
-        if ($this->alertes->removeElement($alerte)) {
-            // set the owning side to null (unless already changed)
-            if ($alerte->getTopic() === $this) {
-                $alerte->setTopic(null);
             }
         }
 
