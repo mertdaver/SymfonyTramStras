@@ -28,26 +28,21 @@ class AlerteController extends AbstractController
     {
         $data = $request->request->all();
         $user = $security->getUser();
-
-        $pseudo = null;
-        if ($user !== null) {
-            $pseudo = $user->getPseudo();
-        }
-
+    
         $ligne = $data['ligne'] ?? null;
         $sens = $data['sens'] ?? null;
-
+    
         // Création d'une nouvelle alerte
         $alerte = new Alerte();
         $alerte->setLigne($ligne);
         $alerte->setSens($sens);
-        $alerte->setUser($pseudo);
+        $alerte->setUser($user); // Passer l'objet User directement à setUser()
         $alerte->setAlerteDate(new \DateTime());
-
+    
         // Enregistrement de l'alerte dans la base de données
         $entityManager->persist($alerte);
         $entityManager->flush();
-
+    
         return $this->redirectToRoute('confirmation');
     }
 
