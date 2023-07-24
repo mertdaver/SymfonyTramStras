@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Exception;
 use App\Entity\Marker;
 use Psr\Log\LoggerInterface;
 use App\Repository\MarkerRepository;
@@ -10,7 +11,10 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+
 
 class MapController extends AbstractController
 {
@@ -127,85 +131,100 @@ class MapController extends AbstractController
         }
     }
 
+
+    
     #[Route('/horaires/{stopCode}', name: 'horaires_map')]
     public function horaires_map(string $stopCode): Response
     {
-        // URL de l'API CTS pour récupérer les horaires d'un point d'arrêt spécifique
-        $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
-        $requestorRef = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
-        $previewInterval = 'PT2H';
-        $includeGeneralMessage = 'true';
-        $includeFLUO67 = 'false';
-        $removeCheckOut = 'false';
-        $getStopIdInsteadOfStopCode = 'false';
-
-        $queryParameters = [
-            'RequestorRef' => $requestorRef,
-            'PreviewInterval' => $previewInterval,
-            'IncludeGeneralMessage' => $includeGeneralMessage,
-            'IncludeFLUO67' => $includeFLUO67,
-            'RemoveCheckOut' => $removeCheckOut,
-            'GetStopIdInstedOfStopCode' => $getStopIdInsteadOfStopCode,
-        ];
-
-        $url .= '&' . http_build_query($queryParameters);
-
-        $username = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
-        $password = 'Mry78(5kmM_d';
-
-        $client = HttpClient::create([
-            'auth_basic' => [$username, $password],
-        ]);
-
-        $response = $client->request('GET', $url);
-        $data = $response->toArray();
-
-        if (isset($data['ServiceDelivery']['EstimatedTimetableDelivery'])) {
-            $timetableDelivery = $data['ServiceDelivery']['EstimatedTimetableDelivery'];
-
-            foreach ($timetableDelivery as $versionFrame) {
-                if (isset($versionFrame['EstimatedJourneyVersionFrame'])) {
-                    $journeyFrames = $versionFrame['EstimatedJourneyVersionFrame'];
-
-                    $estimatedJourneys = [];
-                    foreach ($journeyFrames as $journeyFrame) {
-                        if (isset($journeyFrame['EstimatedVehicleJourney'])) {
-                            $estimatedJourneys = array_merge($estimatedJourneys, $journeyFrame['EstimatedVehicleJourney']);
+        try {
+            // URL de l'API CTS pour récupérer les horaires d'un point d'arrêt spécifique
+            $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
+            $requestorRef = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
+            $previewInterval = 'PT2H';
+            $includeGeneralMessage = 'true';
+            $includeFLUO67 = 'false';
+            $removeCheckOut = 'false';
+            $getStopIdInsteadOfStopCode = 'false';
+    
+            $queryParameters = [
+                'RequestorRef' => $requestorRef,
+                'PreviewInterval' => $previewInterval,
+                'IncludeGeneralMessage' => $includeGeneralMessage,
+                'IncludeFLUO67' => $includeFLUO67,
+                'RemoveCheckOut' => $removeCheckOut,
+                'GetStopIdInstedOfStopCode' => $getStopIdInsteadOfStopCode,
+            ];
+    
+            $url .= '&' . http_build_query($queryParameters);
+    
+            $username = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
+            $password = 'Mry78(5kmM_d';
+    
+            $client = HttpClient::create([
+                'auth_basic' => [$username, $password],
+            ]);
+    
+            $response = $client->request('GET', $url);
+            $data = $response->toArray();
+    
+            if (isset($data['ServiceDelivery']['EstimatedTimetableDelivery'])) {
+                $timetableDelivery = $data['ServiceDelivery']['EstimatedTimetableDelivery'];
+    
+                foreach ($timetableDelivery as $versionFrame) {
+                    if (isset($versionFrame['EstimatedJourneyVersionFrame'])) {
+                        $journeyFrames = $versionFrame['EstimatedJourneyVersionFrame'];
+    
+                        $estimatedJourneys = [];
+                        foreach ($journeyFrames as $journeyFrame) {
+                            if (isset($journeyFrame['EstimatedVehicleJourney'])) {
+                                $estimatedJourneys = array_merge($estimatedJourneys, $journeyFrame['EstimatedVehicleJourney']);
+                            }
                         }
-                    }
-
-                    $stopTimes = [];
-                    foreach ($estimatedJourneys as $estimatedJourney) {
-                        if (isset($estimatedJourney['EstimatedCalls'])) {
-                            $estimatedCalls = $estimatedJourney['EstimatedCalls'];
-
-                            foreach ($estimatedCalls as $estimatedCall) {
-                                if ($estimatedCall['StopPointRef'] == $stopCode) {
-                                    $stopPointName = $estimatedCall['StopPointName'];
-                                    $expectedDepartureTime = new \DateTime($estimatedCall['ExpectedDepartureTime']);
-                                    $destinationName = $estimatedCall['DestinationName'];
-
-                                    // Ajoute l'heure d'arrêt au tableau uniquement si elle se situe dans le futur
-                                    if ($expectedDepartureTime > new \DateTime()) {
-                                        $stopTimes[] = [
-                                            'stopPointName' => $stopPointName,
-                                            'expectedDepartureTime' => $expectedDepartureTime->format('H:i:s'),
-                                            'destinationName' => $destinationName,
-                                        ];
+    
+                        $stopTimes = [];
+                        foreach ($estimatedJourneys as $estimatedJourney) {
+                            if (isset($estimatedJourney['EstimatedCalls'])) {
+                                $estimatedCalls = $estimatedJourney['EstimatedCalls'];
+    
+                                foreach ($estimatedCalls as $estimatedCall) {
+                                    if ($estimatedCall['StopPointRef'] == $stopCode) {
+                                        $stopPointName = $estimatedCall['StopPointName'];
+                                        $expectedDepartureTime = new \DateTime($estimatedCall['ExpectedDepartureTime']);
+                                        $destinationName = $estimatedCall['DestinationName'];
+    
+                                        // Ajoute l'heure d'arrêt au tableau uniquement si elle se situe dans le futur
+                                        if ($expectedDepartureTime > new \DateTime()) {
+                                            $stopTimes[] = [
+                                                'stopPointName' => $stopPointName,
+                                                'expectedDepartureTime' => $expectedDepartureTime->format('H:i:s'),
+                                                'destinationName' => $destinationName,
+                                            ];
+                                        }
                                     }
                                 }
                             }
                         }
+    
+                        return $this->render('map/horaires.html.twig', [
+                            'stopTimes' => $stopTimes,
+                            'stopCode' => $stopCode,
+                        ]);
                     }
-
-                    return $this->render('map/horaires.html.twig', [
-                        'stopTimes' => $stopTimes,
-                        'stopCode' => $stopCode,
-                    ]);
                 }
             }
+    
+            // Gérer le cas où les données attendues ne sont pas présentes dans la réponse de l'API
+            throw new \Exception('Impossible de récupérer les horaires pour ce point d\'arrêt.');
+        } catch (ClientException $e) {
+            // Gérer les erreurs liées à la requête HTTP (par exemple, erreur 401 non autorisée, 404 non trouvé, etc.)
+            throw new \Exception('Une erreur s\'est produite lors de la requête à l\'API : ' . $e->getMessage());
+        } catch (\Exception $e) {
+            // Gérer toutes les autres erreurs inattendues
+            throw new \Exception('Une erreur inattendue s\'est produite : ' . $e->getMessage());
         }
     }
+
+
 
     #[Route("/post/create", name: "post_create", methods: ["POST"])]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
@@ -234,5 +253,6 @@ class MapController extends AbstractController
         ];
 
         return new Response(json_encode($data));
-    }
+}
+
 }

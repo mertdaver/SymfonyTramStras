@@ -6,6 +6,7 @@ use App\Entity\Alerte;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+
 /**
  * @extends ServiceEntityRepository<Alerte>
  *
@@ -37,6 +38,15 @@ class AlerteRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findLatestAlert()
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.alerteDate', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 //    /**
