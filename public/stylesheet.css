@@ -305,6 +305,25 @@ p {
     cursor: pointer;
 }
 
+.alert-card {
+    /* Style de la card d'alerte */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+body.darken {
+    /* Assombrit le fond */
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
 .btn-delete{
         display: inline-block;
         padding: 10px 20px;

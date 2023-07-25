@@ -80,10 +80,49 @@ class AlerteController extends AbstractController
         return new JsonResponse($data);
     }
 
-    public function __construct(ManagerRegistry $registry)
-    {
-        $this->registry = $registry;
+
+    // https://waytolearnx.com/2022/09/creer-un-systeme-de-notification-avec-php-mysql-et-ajax.html
+    #[Route('/get-unread-alerts', name: 'get_unread_alerts', methods: ['POST'])]
+public function getUnreadAlerts(Request $request, AlerteRepository $alerteRepository, EntityManagerInterface $entityManager): JsonResponse
+{
+    if ($request->request->get('vue')) {
+        // Récupérer les alertes non lues et les marquer comme lues
+        $unreadAlerts = $alerteRepository->findBy(['vue' => 0]);
+        foreach ($unreadAlerts as $alert) {
+            $alert->setVue(1);
+            $entityManager->persist($alert);
+        }
+        $entityManager->flush();
+
+        // Récupérer les 4 dernières alertes
+        $latestAlerts = $alerteRepository->findBy([], ['id' => 'DESC'], 1);
+
+        $output = '';
+        if (!empty($latestAlerts)) {
+            foreach ($latestAlerts as $alert) {
+                $output .= '
+                <li>
+                <a href="#">
+                <b>' . $alert->getLigne() . '</b><br />
+                <small>' . $alert->getSens() . '</small>
+                </a>
+                </li>';
+            }
+        } else {
+            $output .= '<li><a href="#">Aucune alerte trouvée</a></li>';
+        }
+
+        $new_alert_count = count($alerteRepository->findBy(['vue' => 0]));
+
+        $data = [
+            'notification' => $output,
+            'new_notification' => $new_alert_count,
+        ];
+
+        return new JsonResponse($data);
     }
+}
+
 
 
 }
