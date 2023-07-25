@@ -95,12 +95,19 @@
                     }, 10000);
                 }
 
+var lastMarker = null; // ajout de la variable lastMarker
+
 map.on('click', function (e) {
     {% if not app.user %}
         var modal = document.getElementById("myModal");
         modal.style.display = "block";
     {% else %}
+        if (lastMarker !== null) { // supprime le dernier marqueur si existant
+            lastMarker.remove();
+        }
+
         var marker = L.marker(e.latlng, { icon: customMarkerIcon }).addTo(map);
+        lastMarker = marker; // mise à jour de la variable lastMarker
 
         var popupContent = `
             <form id="textForm">
@@ -110,40 +117,49 @@ map.on('click', function (e) {
             </form>
         `;
         marker.bindPopup(popupContent).openPopup();
-        fadeMarker(marker);
 
-document.getElementById("textForm").addEventListener('submit', function (event) {
-    event.preventDefault();
-    var text = document.getElementById('text').value;
-    if (text) {
-        var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
-        if (isConfirmed) {
-            var url = '{{ path('post_create') }}';
-            var formData = new FormData();
-            formData.append('lat', e.latlng.lat);
-            formData.append('lng', e.latlng.lng);
-            formData.append('text', text);
+        marker.on('popupclose', function(e) {
+            // Supprime le marqueur seulement si l'utilisateur a fermé la popup sans soumettre
+            if (lastMarker === marker) {
+                marker.remove();
+                lastMarker = null; // réinitialise la variable lastMarker
+            }
+        });
 
-            fetch(url, { method: 'POST', body: formData })
-                .then(function (response) {
-                    if (!response.ok) {
-                        throw new Error('Erreur HTTP ' + response.status);
-                    }
-                    console.log('Marqueur enregistré avec succès !');
-                    marker.bindPopup(text).openPopup();
-                    fadeMarker(marker);
-                })
-                .catch(function (error) {
-                    console.error('Erreur lors de l\'enregistrement du marqueur :', error);
-                });
-        } else {
-            // Supprimer le marqueur si l'utilisateur n'a pas confirmé
-            map.removeLayer(marker);
-        }
-    }
-});
+        document.getElementById("textForm").addEventListener('submit', function (event) {
+            event.preventDefault();
+            var text = document.getElementById('text').value;
+            var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+            if (isConfirmed) {
+                var url = '{{ path('post_create') }}';
+                var formData = new FormData();
+                formData.append('lat', e.latlng.lat);
+                formData.append('lng', e.latlng.lng);
+                formData.append('text', text);
+
+                fetch(url, { method: 'POST', body: formData })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Erreur HTTP ' + response.status);
+                        }
+                        console.log('Marqueur enregistré avec succès !');
+                        marker.bindPopup(text).openPopup();
+                        fadeMarker(marker);
+                        lastMarker = null; // mise à jour de la variable lastMarker
+                    })
+                    .catch(function (error) {
+                        console.error('Erreur lors de l\'enregistrement du marqueur :', error);
+                    });
+            } else {
+                // Supprimer immédiatement le marqueur si l'utilisateur n'a pas confirmé
+                marker.remove();
+                lastMarker = null; // réinitialise la variable lastMarker
+            }
+        });
     {% endif %}
-                });
+});
+
+
 
 function init() {
     if (Array.isArray(markers) && Array.isArray(polylines)) {
