@@ -124,45 +124,48 @@
                     {% endif %}
                 });
 
-                function init() {
-                    if (Array.isArray(markers) && Array.isArray(polylines)) {
-                        for (var i = 0; i < markers.length; i++) {
-                            var markerData = markers[i];
+function init() {
+    if (Array.isArray(markers) && Array.isArray(polylines)) {
+        for (var i = 0; i < markers.length; i++) {
+            var markerData = markers[i];
 
-                            if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                                var marker;
-                                if (markerData.isCustom) {
-                                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
-                                } else {
-                                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
-                                }
-
-                                var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-                                
-                                for (var j = 0; j < markerData.linesDestinations.length; j++) {
-                                    popupContent += markerData.linesDestinations[j] + '<br>';
-                                }
-
-                                var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                                popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
-
-                                marker.bindPopup(popupContent);
-                            }
-                        }
-
-                        for (var k = 0; k < polylines.length; k++) {
-                            var polylineData = polylines[k];
-                            var lineCoordinates = polylineData.coordinates;
-
-                            if (Array.isArray(lineCoordinates) && lineCoordinates.length >= 2) {
-                                var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
-                                polyline.bindPopup(polylineData.lineName);
-                            }
-                        }
-                    } else {
-                        console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
-                    }
+            if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                var marker;
+                if (markerData.isCustom) {
+                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
+                } else {
+                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
                 }
+
+                var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+                
+                for (var j = 0; j < markerData.linesDestinations.length; j++) {
+                    popupContent += markerData.linesDestinations[j] + '<br>';
+                }
+
+                // Ajout de la condition
+                if (!markerData.isCustom) {
+                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+                }
+
+                marker.bindPopup(popupContent);
+            }
+        }
+
+        for (var k = 0; k < polylines.length; k++) {
+            var polylineData = polylines[k];
+            var lineCoordinates = polylineData.coordinates;
+
+            if (Array.isArray(lineCoordinates) && lineCoordinates.length >= 2) {
+                var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
+                polyline.bindPopup(polylineData.lineName);
+            }
+        }
+    } else {
+        console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
+    }
+}
 
                 init();
 
