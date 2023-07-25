@@ -217,10 +217,16 @@ class MapController extends AbstractController
             throw new \Exception('Impossible de récupérer les horaires pour ce point d\'arrêt.');
         } catch (ClientException $e) {
             // Gérer les erreurs liées à la requête HTTP (par exemple, erreur 401 non autorisée, 404 non trouvé, etc.)
-            throw new \Exception('Une erreur s\'est produite lors de la requête à l\'API : ' . $e->getMessage());
+            // Au lieu de lancer l'exception, renvoyer la vue avec un message d'erreur
+            return $this->render('map/error.html.twig', [
+                'message' => 'Une erreur s\'est produite lors de la requête à l\'API : ' . $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
             // Gérer toutes les autres erreurs inattendues
-            throw new \Exception('Une erreur inattendue s\'est produite : ' . $e->getMessage());
+            // Au lieu de lancer l'exception, renvoyer la vue avec un message d'erreur
+            return $this->render('map/error.html.twig', [
+                'message' => 'Une erreur inattendue s\'est produite : ' . $e->getMessage(),
+            ]);
         }
     }
 
