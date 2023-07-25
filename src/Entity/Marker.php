@@ -27,6 +27,9 @@ class Marker
     #[ORM\JoinColumn(nullable: false)]
     private ?User $User = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $text = null;
+
     #[ORM\Column(length: 255)]
 
 
@@ -84,6 +87,18 @@ class Marker
     public function setUser(?User $User): self
     {
         $this->User = $User;
+
+        return $this;
+    }
+
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(?string $text): self
+    {
+        $this->text = $text;
 
         return $this;
     }

@@ -36,6 +36,7 @@
                     maxZoom: 18
                 }).addTo(map);
 
+
                 //AJOUT DES LIGNES - MERCI https://magosm.magellium.com/aide.html
 
         // Créer les couches WMS pour Tram et Bus
@@ -94,64 +95,80 @@
                     }, 10000);
                 }
 
-                map.on('click', function (e) {
-                    {% if not app.user %}
-                        var modal = document.getElementById("myModal");
-                        modal.style.display = "block";
-                    {% else %}
-                        var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
-                        if (isConfirmed) {
-                            var marker = L.marker(e.latlng, { icon: customMarkerIcon }).addTo(map);
-                            marker.bindPopup("<b>Marqueur d'alerte ajouté ici.</b>").openPopup();
-                            fadeMarker(marker);
+map.on('click', function (e) {
+    {% if not app.user %}
+        var modal = document.getElementById("myModal");
+        modal.style.display = "block";
+    {% else %}
+        var marker = L.marker(e.latlng, { icon: customMarkerIcon }).addTo(map);
 
-                            var url = '{{ path('post_create') }}';
-                            var formData = new FormData();
-                            formData.append('lat', e.latlng.lat);
-                            formData.append('lng', e.latlng.lng);
+        var popupContent = `
+            <form id="textForm">
+                <label for="text">Veuillez entrer votre textaire : </label>
+                <input type="text" id="text" name="text">
+                <input type="submit" value="Submit">
+            </form>
+        `;
+        marker.bindPopup(popupContent).openPopup();
+        fadeMarker(marker);
 
-                            fetch(url, { method: 'POST', body: formData })
-                                .then(function (response) {
-                                    if (!response.ok) {
-                                        throw new Error('Erreur HTTP ' + response.status);
-                                    }
-                                    console.log('Marqueur enregistré avec succès !');
-                                })
-                                .catch(function (error) {
-                                    console.error('Erreur lors de l\'enregistrement du marqueur :', error);
-                                });
-                        }
-                    {% endif %}
+document.getElementById("textForm").addEventListener('submit', function (event) {
+    event.preventDefault();
+    var text = document.getElementById('text').value;
+    if (text) {
+        var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+        if (isConfirmed) {
+            var url = '{{ path('post_create') }}';
+            var formData = new FormData();
+            formData.append('lat', e.latlng.lat);
+            formData.append('lng', e.latlng.lng);
+            formData.append('text', text);
+
+            fetch(url, { method: 'POST', body: formData })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error('Erreur HTTP ' + response.status);
+                    }
+                    console.log('Marqueur enregistré avec succès !');
+                    marker.bindPopup(text).openPopup();
+                    fadeMarker(marker);
+                })
+                .catch(function (error) {
+                    console.error('Erreur lors de l\'enregistrement du marqueur :', error);
+                });
+        }
+    }
+});
+    {% endif %}
                 });
 
 function init() {
     if (Array.isArray(markers) && Array.isArray(polylines)) {
         for (var i = 0; i < markers.length; i++) {
-            var markerData = markers[i];
+    var markerData = markers[i];
 
-            if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                var marker;
-                if (markerData.isCustom) {
-                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
-                } else {
-                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
-                }
-
-                var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-                
-                for (var j = 0; j < markerData.linesDestinations.length; j++) {
-                    popupContent += markerData.linesDestinations[j] + '<br>';
-                }
-
-                // Ajout de la condition
-                if (!markerData.isCustom) {
-                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
-                }
-
-                marker.bindPopup(popupContent);
-            }
+    if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+        var marker;
+        if (markerData.isCustom) {
+            marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
+            marker.bindPopup(markerData.text);
+        } else {
+            marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
         }
+
+        var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+        
+        for (var j = 0; j < markerData.linesDestinations.length; j++) {
+            popupContent += markerData.linesDestinations[j] + '<br>';
+        }
+
+        if (!markerData.isCustom) {
+            var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+            popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+            marker.bindPopup(popupContent);
+        }
+    }
+}
 
         for (var k = 0; k < polylines.length; k++) {
             var polylineData = polylines[k];
@@ -169,11 +186,6 @@ function init() {
 
                 init();
 
-                $.getJSON("D:\\CODE\\laragon\\www\\SymfonyTramStras\\public\\Tram.GeoJSON", function(data) {
-                    if (data) {
-                        L.geoJSON(data).addTo(map);
-                    }
-                });
             }
         });
     </script>

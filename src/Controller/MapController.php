@@ -231,11 +231,13 @@ class MapController extends AbstractController
     {
         $latitude = floatval($request->request->get('lat'));
         $longitude = floatval($request->request->get('lng'));
+        $text = $request->request->get('text');
 
         // Création d'un nouveau marqueur
         $marker = new Marker();
         $marker->setLatitude($latitude);
         $marker->setLongitude($longitude);
+        $marker->setText($text);
         $marker->setUser($this->getUser());
         $marker->setCreationDate(new \DateTime()); // Ajout de la date de création
 
@@ -249,6 +251,7 @@ class MapController extends AbstractController
             'user_id' => $marker->getUser()->getId(),  // Assurez-vous que la méthode getId() existe dans l'entité User
             'latitude' => $marker->getLatitude(),
             'longitude' => $marker->getLongitude(),
+            'text' => $marker->getText(),
             'creation_date' => $marker->getCreationDate(),
         ];
 
