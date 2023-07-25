@@ -11,84 +11,96 @@
     </style>
 {% endblock %}
 
-
 {% block body %}
     <h1>La Carte du Réseau CTS</h1>
-
     <div id="map"></div>
+{% endblock %}
 
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-        <script>
-            // Modèle d'URL pour les horaires des arrêts
-            var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-tilelayer-wms/dist/leaflet-tilelayer-wms.min.js"></script>
+    <script>
+        var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
 
-            document.addEventListener('DOMContentLoaded', function () {
-                var mapElement = document.getElementById('map');
-                if (mapElement && !mapElement._leaflet_id) {
-                    // Récupérer les marqueurs et les polylignes depuis le contexte Twig et les convertir en objets JavaScript
-                    var markers = {{ markers | json_encode | raw }};
-                    var polylines = {{ polylines | json_encode | raw }};
+        document.addEventListener('DOMContentLoaded', function () {
+            var mapElement = document.getElementById('map');
 
-                    // Créer une instance de la carte et la centrer sur stras
-                    var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+            if (mapElement && !mapElement._leaflet_id) {
+                var markers = {{ markers | json_encode | raw }};
+                var polylines = {{ polylines | json_encode | raw }};
+                var map = L.map('map').setView([48.5734053, 7.7521113], 13);
 
-                    // Tuiles OpenStreetMap à la carte
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-                        maxZoom: 18
-                    }).addTo(map);
+                var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+                    maxZoom: 18
+                }).addTo(map);
 
-                    // Tuiles personnalisée avec les lignes
-                    L.tileLayer('/directory/Mapnik/{z}/{x}/{y}.png', {maxZoom: 18}).addTo(map);
+        // Créer les couches WMS pour Tram et Bus
+        var wmsLayerTram = L.tileLayer.wms('https://magosm.magellium.com/geoserver/ows', {
+            layers: 'magosm:france_tram_ltr_routes_line',
+            format: 'image/png',
+            transparent: true,
+            version: '1.3.0'
+        }).addTo(map);
 
-                    // Définir une icône personnalisée pour les marqueurs de l'API
-                    var customIcon = L.icon({
-                        // iconUrl: 'http://localhost/SymfonyTramStras/png/Logo_CTS.svg', // Logo_CTS.svg
-                        iconUrl: 'http://localhost/SymfonyTramStras/png/icons8-tram-30.png', // Icône tram
-                        iconSize: [20, 20],
-                        iconAnchor: [24, 48],
-                        popupAnchor: [-3, -76]
-                    });
+        var wmsLayerBus = L.tileLayer.wms('https://magosm.magellium.com/geoserver/ows', {
+            layers: 'magosm:france_bus_routes_line',
+            format: 'image/png',
+            transparent: true,
+            version: '1.3.0'
+        }).addTo(map);
 
-                    // Définir une icône personnalisée pour les marqueurs de la base de données
-                    var customMarkerIcon = L.icon({
-                        iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png', // Logo ping rouge marqueur personnalisé alerte/événement
-                        iconSize: [48, 48],
-                        iconAnchor: [24, 48],
-                        popupAnchor: [-3, -76]
-                    });
+        // Ajoutez les couches WMS au contrôleur de couche
+        var baseMaps = {
+            "OpenStreetMap": osmLayer,
+        };
 
-                    // Fonction pour faire disparaître progressivement un marqueur
-                    function fadeMarker(marker) {
-                        var opacity = 1;
-                        var timer = setInterval(function () {
-                            if (opacity <= 0) {
-                                clearInterval(timer);
-                                map.removeLayer(marker);
-                            }
-                            marker.setOpacity(opacity);
-                            opacity -= 0.02;
-                        }, 10000);
-                    }
+        var overlayMaps = {
+            "Tramways": wmsLayerTram,
+            "Bus": wmsLayerBus,
+        };
 
-                    // Écouter l'événement de clic sur la carte
-                    map.on('click', function (e) {
-                        {% if not app.user %}
-                        // Afficher une pop-up pour les utilisateurs non connectés
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+                var customIcon = L.icon({
+                    iconUrl: 'http://localhost/SymfonyTramStras/png/icons8-tram-30.png',
+                    iconSize: [20, 20],
+                    iconAnchor: [24, 48],
+                    popupAnchor: [-3, -76]
+                });
+
+                var customMarkerIcon = L.icon({
+                    iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png',
+                    iconSize: [48, 48],
+                    iconAnchor: [24, 48],
+                    popupAnchor: [-3, -76]
+                });
+
+                function fadeMarker(marker) {
+                    var opacity = 1;
+                    var timer = setInterval(function () {
+                        if (opacity <= 0) {
+                            clearInterval(timer);
+                            map.removeLayer(marker);
+                        }
+                        marker.setOpacity(opacity);
+                        opacity -= 0.02;
+                    }, 10000);
+                }
+
+                map.on('click', function (e) {
+                    {% if not app.user %}
                         var modal = document.getElementById("myModal");
                         modal.style.display = "block";
-                        {% else %}
-                        // Demander confirmation pour ajouter un marqueur d'alerte
+                    {% else %}
                         var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
                         if (isConfirmed) {
-                            // Créer un marqueur avec l'icône personnalisée et l'ajouter à la carte
                             var marker = L.marker(e.latlng, { icon: customMarkerIcon }).addTo(map);
                             marker.bindPopup("<b>Marqueur d'alerte ajouté ici.</b>").openPopup();
                             fadeMarker(marker);
 
-                            // Envoyer une requête POST pour enregistrer le marqueur dans la base de données
                             var url = '{{ path('post_create') }}';
                             var formData = new FormData();
                             formData.append('lat', e.latlng.lat);
@@ -105,59 +117,57 @@
                                     console.error('Erreur lors de l\'enregistrement du marqueur :', error);
                                 });
                         }
-                        {% endif %}
-                    });
+                    {% endif %}
+                });
 
-                    // Fonction d'initialisation pour ajouter les marqueurs et les polylignes à la carte
-                    function init() {
-                        if (Array.isArray(markers) && Array.isArray(polylines)) {
-                            // Ajouter les marqueurs à la carte
-                            for (var i = 0; i < markers.length; i++) {
-                                var markerData = markers[i];
+                function init() {
+                    if (Array.isArray(markers) && Array.isArray(polylines)) {
+                        for (var i = 0; i < markers.length; i++) {
+                            var markerData = markers[i];
 
-                                if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-                                    var marker;
-                                    if (markerData.isCustom) {
-                                        marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
-                                    } else {
-                                        marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
-                                    }
-
-                                    // Construire le contenu de la popup du marqueur
-                                    var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-                                    popupContent += '<strong>Destinations de lignes :</strong><br>';
-                                    for (var j = 0; j < markerData.linesDestinations.length; j++) {
-                                        popupContent += markerData.linesDestinations[j] + '<br>';
-                                    }
-
-                                    // Remplacer le paramètre 'stopCode' dans l'URL des horaires
-                                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
-
-                                    // Ajouter la popup au marqueur
-                                    marker.bindPopup(popupContent);
+                            if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                                var marker;
+                                if (markerData.isCustom) {
+                                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
+                                } else {
+                                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
                                 }
-                            }
 
-                            // Ajouter les polylignes à la carte
-                            for (var k = 0; k < polylines.length; k++) {
-                                var polylineData = polylines[k];
-                                var lineCoordinates = polylineData.coordinates;
-
-                                if (Array.isArray(lineCoordinates) && lineCoordinates.length >= 2) {
-                                    var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
-                                    polyline.bindPopup(polylineData.lineName);
+                                var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+                                popupContent += '<strong>Destinations de lignes :</strong><br>';
+                                for (var j = 0; j < markerData.linesDestinations.length; j++) {
+                                    popupContent += markerData.linesDestinations[j] + '<br>';
                                 }
+
+                                var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                                popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+
+                                marker.bindPopup(popupContent);
                             }
-                        } else {
-                            console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
                         }
-                    }
 
-                    // Appeler la fonction d'initialisation
-                    init();
+                        for (var k = 0; k < polylines.length; k++) {
+                            var polylineData = polylines[k];
+                            var lineCoordinates = polylineData.coordinates;
+
+                            if (Array.isArray(lineCoordinates) && lineCoordinates.length >= 2) {
+                                var polyline = L.polyline(lineCoordinates, { color: polylineData.color }).addTo(map);
+                                polyline.bindPopup(polylineData.lineName);
+                            }
+                        }
+                    } else {
+                        console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
+                    }
                 }
-            });
-        </script>
-    {% endblock %}
+
+                init();
+
+                $.getJSON("D:\\CODE\\laragon\\www\\SymfonyTramStras\\public\\Tram.GeoJSON", function(data) {
+                    if (data) {
+                        L.geoJSON(data).addTo(map);
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}
