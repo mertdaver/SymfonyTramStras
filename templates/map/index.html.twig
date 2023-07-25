@@ -136,6 +136,9 @@ document.getElementById("textForm").addEventListener('submit', function (event) 
                 .catch(function (error) {
                     console.error('Erreur lors de l\'enregistrement du marqueur :', error);
                 });
+        } else {
+            // Supprimer le marqueur si l'utilisateur n'a pas confirmé
+            map.removeLayer(marker);
         }
     }
 });
@@ -145,30 +148,31 @@ document.getElementById("textForm").addEventListener('submit', function (event) 
 function init() {
     if (Array.isArray(markers) && Array.isArray(polylines)) {
         for (var i = 0; i < markers.length; i++) {
-    var markerData = markers[i];
+            var markerData = markers[i];
 
-    if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-        var marker;
-        if (markerData.isCustom) {
-            marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
-            marker.bindPopup(markerData.text);
-        } else {
-            marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
-        }
+            if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+                var marker;
+                if (markerData.isCustom) {
+                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customMarkerIcon }).addTo(map);
+                } else {
+                    marker = L.marker([markerData.latitude, markerData.longitude], { icon: customIcon }).addTo(map);
+                }
 
-        var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-        
-        for (var j = 0; j < markerData.linesDestinations.length; j++) {
-            popupContent += markerData.linesDestinations[j] + '<br>';
-        }
+                var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+                
+                for (var j = 0; j < markerData.linesDestinations.length; j++) {
+                    popupContent += markerData.linesDestinations[j] + '<br>';
+                }
 
-        if (!markerData.isCustom) {
-            var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-            popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
-            marker.bindPopup(popupContent);
+                // Ajout de la condition
+                if (!markerData.isCustom) {
+                    var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+                }
+
+                marker.bindPopup(popupContent);
+            }
         }
-    }
-}
 
         for (var k = 0; k < polylines.length; k++) {
             var polylineData = polylines[k];
