@@ -36,6 +36,8 @@
                     maxZoom: 18
                 }).addTo(map);
 
+                //AJOUT DES LIGNES - MERCI https://magosm.magellium.com/aide.html
+
         // Créer les couches WMS pour Tram et Bus
         var wmsLayerTram = L.tileLayer.wms('https://magosm.magellium.com/geoserver/ows', {
             layers: 'magosm:france_tram_ltr_routes_line',
@@ -65,7 +67,9 @@
 
 
                 var customIcon = L.icon({
-                    iconUrl: 'http://localhost/SymfonyTramStras/png/icons8-tram-30.png',
+                    // iconUrl: 'http://localhost/SymfonyTramStras/png/icons8-tram-30.png',
+                    iconUrl: 'http://localhost/SymfonyTramStras/png/location-pin.png',
+
                     iconSize: [20, 20],
                     iconAnchor: [24, 48],
                     popupAnchor: [-3, -76]
@@ -134,7 +138,7 @@
                                 }
 
                                 var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-                                popupContent += '<strong>Destinations de lignes :</strong><br>';
+                                
                                 for (var j = 0; j < markerData.linesDestinations.length; j++) {
                                     popupContent += markerData.linesDestinations[j] + '<br>';
                                 }
