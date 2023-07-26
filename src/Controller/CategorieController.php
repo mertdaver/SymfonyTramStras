@@ -41,7 +41,7 @@ class CategorieController extends AbstractController
         $entityManager = $this->doctrine->getManager();
         $categorie = $entityManager->getRepository(Categorie::class)->find($id);
     
-        // Check if the category exists
+        // vérifie si catégorie existe
         if (!$categorie) {
             return $this->redirectToRoute('app_categorie');
         }

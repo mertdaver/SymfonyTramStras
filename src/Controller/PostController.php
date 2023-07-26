@@ -26,8 +26,12 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/topic/{id}', name: 'app_topic_show')]
-    public function show(Request $request, Topic $topic, ManagerRegistry $doctrine): Response
+    public function show(Request $request, Topic $topic = null, ManagerRegistry $doctrine): Response
     {
+        if (!$topic) {
+            return $this->redirectToRoute('app_categorie');
+        }
+    
         $posts = $doctrine->getRepository(Post::class)->findBy(['topic' => $topic]);
     
         $post = new Post();
@@ -46,14 +50,15 @@ class PostController extends AbstractController
     
             // Redirection vers la page d'affichage du topic
             return $this->redirectToRoute('app_topic_show', ['id' => $topic->getId()]);
-        }
+        } 
     
         return $this->render('topic/show.html.twig', [
             'topic' => $topic,
-            'posts' => $posts, // Assurez-vous que cette variable est définie et transmise au template
+            'posts' => $posts, 
             'form' => $form->createView(),
         ]);
     }
+    
     
 
 
