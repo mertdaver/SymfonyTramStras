@@ -63,6 +63,16 @@
             }
         };
         {% endif %}
+
+    
+
+
+
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
     </script>
     {% endblock %}
 </head>
@@ -115,23 +125,26 @@
         </div>
     </div>
 </div>
+
 {% endif %}
 
 {% block body %}
+<div id="message">
+
+</div>
 
 <div id="latestAlert"></div> <!-- Balise div pour afficher la dernière alerte -->
 
 {% endblock %}
 
-
 <script>
-    
-
-
-    function closeModal() {
-        var modal = document.getElementById("myModal");
-        modal.style.display = "none";
-    }
+{# MERCURE PUSH JS #}
+const eventSource = new EventSource("{{ mercure('https://example.com/books/1')|escape('js') }}");
+eventSource.onmessage = event => {
+    // Will be called every time an update is published by the server
+    document.getElementById("message").innerHTML+= "<div class="card>" "+(JSON.parse(event.data)).status+"</div></br>";
+}
 </script>
+
 </body>
 </html>

@@ -1,0 +1,14 @@
+mercure:
+    hubs:
+        default:
+            url: 'http://localhost:8081'
+            public_url: 'https://localhost/.well-known/mercure' 
+            jwt:
+                secret: 'n9FassBHgy0rWXpm5zXkYzvl4/lecdJYCzGE19f2s0w='
+                publish: '*'
+
+# Configurations SSL
+server:
+    tls:
+        cert_file: 'C:\laragon\www\SymfonyTramStras\mercure_0.14.10_Windows_x86_64\server.crt'
+        key_file: 'C:\laragon\www\SymfonyTramStras\mercure_0.14.10_Windows_x86_64\server.key'

@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Alerte;
 use App\Repository\AlerteRepository;
+use Symfony\Component\Mercure\Update;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -40,7 +42,7 @@ class AlerteController extends AbstractController
         $alerte = new Alerte();
         $alerte->setLigne($ligne);
         $alerte->setSens($sens);
-        $alerte->setUser($user); // Passer l'objet User directement à setUser()
+        $alerte->setUser($user); 
         $alerte->setAlerteDate(new \DateTime());
     
         // Enregistrement de l'alerte dans la base de données
@@ -80,49 +82,18 @@ class AlerteController extends AbstractController
         return new JsonResponse($data);
     }
 
+#[Route('/publish', name: 'publish')]
+public function publish(HubInterface $hub): Response
+    {
+        $update = new Update(
+            'https://example.com/books/1',
+            json_encode(['status' => 'message reçu'])
+        );
 
-    // https://waytolearnx.com/2022/09/creer-un-systeme-de-notification-avec-php-mysql-et-ajax.html
-    #[Route('/get-unread-alerts', name: 'get_unread_alerts', methods: ['POST'])]
-public function getUnreadAlerts(Request $request, AlerteRepository $alerteRepository, EntityManagerInterface $entityManager): JsonResponse
-{
-    if ($request->request->get('vue')) {
-        // Récupérer les alertes non lues et les marquer comme lues
-        $unreadAlerts = $alerteRepository->findBy(['vue' => 0]);
-        foreach ($unreadAlerts as $alert) {
-            $alert->setVue(1);
-            $entityManager->persist($alert);
-        }
-        $entityManager->flush();
+        $hub->publish($update);
 
-        // Récupérer les 4 dernières alertes
-        $latestAlerts = $alerteRepository->findBy([], ['id' => 'DESC'], 1);
-
-        $output = '';
-        if (!empty($latestAlerts)) {
-            foreach ($latestAlerts as $alert) {
-                $output .= '
-                <li>
-                <a href="#">
-                <b>' . $alert->getLigne() . '</b><br />
-                <small>' . $alert->getSens() . '</small>
-                </a>
-                </li>';
-            }
-        } else {
-            $output .= '<li><a href="#">Aucune alerte trouvée</a></li>';
-        }
-
-        $new_alert_count = count($alerteRepository->findBy(['vue' => 0]));
-
-        $data = [
-            'notification' => $output,
-            'new_notification' => $new_alert_count,
-        ];
-
-        return new JsonResponse($data);
+        return new Response('published!');
     }
-}
-
 
 
 }
