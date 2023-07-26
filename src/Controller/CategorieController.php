@@ -35,44 +35,48 @@ class CategorieController extends AbstractController
     }
 
 
-
     #[Route('/categorie/{id}', name: 'show_categorie')]
     public function show(int $id, Request $request, TokenStorageInterface $tokenStorage): Response
     {
         $entityManager = $this->doctrine->getManager();
         $categorie = $entityManager->getRepository(Categorie::class)->find($id);
-
+    
+        // Check if the category exists
+        if (!$categorie) {
+            return $this->redirectToRoute('app_categorie');
+        }
+    
         $topics = $categorie->getTopics();
-
+    
         $topic = new Topic();
         $topic->setCategorie($categorie); // Associe le topic à la catégorie
         $form = $this->createForm(TopicType::class, $topic);
-
+    
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $topic->setCategorie($categorie);
-
+    
             // Vérifier si l'utilisateur est connecté
             if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
                 throw new AccessDeniedException('Accès refusé. Vous devez être connecté.');
             }
-
+    
             // Récupérer l'utilisateur connecté
             $user = $tokenStorage->getToken()->getUser();
             $topic->setUser($user);
-
+    
             // Récupérer la date de création
             $creationDate = new \DateTime();
             $topic->setCreationDate($creationDate);
-
+    
             $entityManager->persist($topic);
             $entityManager->flush();
         }
-
+    
         // Récupérer l'utilisateur connecté s'il existe
         $user = $this->getUser();
-
+    
         return $this->render('categorie/show.html.twig', [
             'categorie' => $categorie,
             'topics' => $topics,
@@ -81,4 +85,5 @@ class CategorieController extends AbstractController
             'user' => $user,
         ]);
     }
+    
 }
