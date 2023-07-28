@@ -43,7 +43,7 @@ class DebugStack implements SQLLogger
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function startQuery($sql, ?array $params = null, ?array $types = null)
     {
@@ -62,7 +62,7 @@ class DebugStack implements SQLLogger
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function stopQuery()
     {

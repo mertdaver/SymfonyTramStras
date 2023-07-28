@@ -74,7 +74,7 @@ final class Statement implements StatementInterface
         );
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
         if (! isset($this->parameterMap[$param])) {
@@ -87,7 +87,7 @@ final class Statement implements StatementInterface
         return true;
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function bindParam($param, &$variable, $type = ParameterType::STRING, $length = null): bool
     {
         Deprecation::trigger(
@@ -124,7 +124,7 @@ final class Statement implements StatementInterface
         return true;
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function execute($params = null): Result
     {
         if ($params !== null) {

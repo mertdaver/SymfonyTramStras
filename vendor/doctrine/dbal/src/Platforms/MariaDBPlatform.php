@@ -24,7 +24,7 @@ class MariaDBPlatform extends MySQLPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @link https://mariadb.com/kb/en/library/json-data-type/
      */

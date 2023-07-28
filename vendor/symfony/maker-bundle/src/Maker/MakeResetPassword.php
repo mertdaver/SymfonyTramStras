@@ -11,6 +11,7 @@
 
 namespace Symfony\Bundle\MakerBundle\Maker;
 
+use Doctrine\Common\Annotations\Annotation;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpParser\Builder\Param;
 use Symfony\Bridge\Twig\AppVariable;
@@ -29,7 +30,6 @@ use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Security\InteractiveSecurityHelper;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 use Symfony\Bundle\MakerBundle\Util\ClassSourceManipulator;
-use Symfony\Bundle\MakerBundle\Util\CliOutputHelper;
 use Symfony\Bundle\MakerBundle\Util\UseStatementGenerator;
 use Symfony\Bundle\MakerBundle\Util\YamlSourceManipulator;
 use Symfony\Bundle\MakerBundle\Validator;
@@ -121,6 +121,8 @@ class MakeResetPassword extends AbstractMaker
 
         ORMDependencyBuilder::buildDependencies($dependencies);
 
+        $dependencies->addClassDependency(Annotation::class, 'annotations');
+
         // reset-password-bundle 1.6 includes the ability to generate a fake token.
         // we need to check that version 1.6 is installed
         if (class_exists(ResetPasswordHelper::class) && !method_exists(ResetPasswordHelper::class, 'generateFakeResetToken')) {
@@ -135,7 +137,7 @@ class MakeResetPassword extends AbstractMaker
         $interactiveSecurityHelper = new InteractiveSecurityHelper();
 
         if (!$this->fileManager->fileExists($path = 'config/packages/security.yaml')) {
-            throw new RuntimeCommandException('The file "config/packages/security.yaml" does not exist. PHP & XML configuration formats are currently not supported.');
+            throw new RuntimeCommandException('The file "config/packages/security.yaml" does not exist. This command needs that file to accurately build the reset password form.');
         }
 
         $manipulator = new YamlSourceManipulator($this->fileManager->getFileContents($path));
@@ -382,7 +384,7 @@ class MakeResetPassword extends AbstractMaker
     private function successMessage(InputInterface $input, ConsoleStyle $io, string $requestClassName): void
     {
         $closing[] = 'Next:';
-        $closing[] = sprintf('  1) Run <fg=yellow>"%s make:migration"</> to generate a migration for the new <fg=yellow>"%s"</> entity.', CliOutputHelper::getCommandPrefix(), $requestClassName);
+        $closing[] = sprintf('  1) Run <fg=yellow>"php bin/console make:migration"</> to generate a migration for the new <fg=yellow>"%s"</> entity.', $requestClassName);
         $closing[] = '  2) Review forms in <fg=yellow>"src/Form"</> to customize validation and labels.';
         $closing[] = '  3) Review and customize the templates in <fg=yellow>`templates/reset_password`</>.';
         $closing[] = '  4) Make sure your <fg=yellow>MAILER_DSN</> env var has the correct settings.';

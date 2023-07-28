@@ -7,7 +7,6 @@ use Doctrine\DBAL\Schema\LegacySchemaManagerFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use InvalidArgumentException;
 use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -15,7 +14,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
 
-use function array_diff_key;
 use function array_intersect_key;
 use function array_key_exists;
 use function array_keys;
@@ -74,27 +72,17 @@ class Configuration implements ConfigurationInterface
      */
     private function addDbalSection(ArrayNodeDefinition $node): void
     {
-        // Key that should not be rewritten to the connection config
-        $excludedKeys = ['default_connection' => true, 'driver_schemes' => true, 'driver_scheme' => true, 'types' => true, 'type' => true];
-
         $node
             ->children()
             ->arrayNode('dbal')
                 ->beforeNormalization()
-                    ->ifTrue(static function ($v) use ($excludedKeys) {
-                        if (! is_array($v)) {
-                            return false;
-                        }
-
-                        if (array_key_exists('connections', $v) || array_key_exists('connection', $v)) {
-                            return false;
-                        }
-
-                        // Is there actually anything to use once excluded keys are considered?
-                        return (bool) array_diff_key($v, $excludedKeys);
+                    ->ifTrue(static function ($v) {
+                        return is_array($v) && ! array_key_exists('connections', $v) && ! array_key_exists('connection', $v);
                     })
-                    ->then(static function ($v) use ($excludedKeys) {
-                        $connection = [];
+                    ->then(static function ($v) {
+                        // Key that should not be rewritten to the connection config
+                        $excludedKeys = ['default_connection' => true, 'types' => true, 'type' => true];
+                        $connection   = [];
                         foreach ($v as $key => $value) {
                             if (isset($excludedKeys[$key])) {
                                 continue;
@@ -104,7 +92,8 @@ class Configuration implements ConfigurationInterface
                             unset($v[$key]);
                         }
 
-                        $v['connections'] = [($v['default_connection'] ?? 'default') => $connection];
+                        $v['default_connection'] = isset($v['default_connection']) ? (string) $v['default_connection'] : 'default';
+                        $v['connections']        = [$v['default_connection'] => $connection];
 
                         return $v;
                     })
@@ -133,35 +122,6 @@ class Configuration implements ConfigurationInterface
                                     )
                                 ->end()
                             ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->fixXmlConfig('driver_scheme')
-                ->children()
-                    ->arrayNode('driver_schemes')
-                        ->useAttributeAsKey('scheme')
-                        ->normalizeKeys(false)
-                        ->scalarPrototype()->end()
-                        ->info('Defines a driver for given URL schemes. Schemes being driver names cannot be redefined. However, other default schemes can be overwritten.')
-                        ->validate()
-                            ->always()
-                            ->then(static function (array $value) {
-                                $unsupportedSchemes = [];
-
-                                foreach ($value as $scheme => $driver) {
-                                    if (! in_array($scheme, ['pdo-mysql', 'pdo-sqlite', 'pdo-pgsql', 'pdo-oci', 'oci8', 'ibm-db2', 'pdo-sqlsrv', 'mysqli', 'pgsql', 'sqlsrv', 'sqlite3'], true)) {
-                                        continue;
-                                    }
-
-                                    $unsupportedSchemes[] = $scheme;
-                                }
-
-                                if ($unsupportedSchemes) {
-                                    throw new InvalidArgumentException(sprintf('Registering a scheme with the name of one of the official drivers is forbidden, as those are defined in DBAL itself. The following schemes are forbidden: %s', implode(', ', $unsupportedSchemes)));
-                                }
-
-                                return $value;
-                            })
                         ->end()
                     ->end()
                 ->end()
@@ -420,39 +380,30 @@ class Configuration implements ConfigurationInterface
      */
     private function addOrmSection(ArrayNodeDefinition $node): void
     {
-        // Key that should not be rewritten to the entity-manager config
-        $excludedKeys = [
-            'default_entity_manager' => true,
-            'auto_generate_proxy_classes' => true,
-            'enable_lazy_ghost_objects' => true,
-            'proxy_dir' => true,
-            'proxy_namespace' => true,
-            'resolve_target_entities' => true,
-            'resolve_target_entity' => true,
-            'controller_resolver' => true,
-        ];
-
         $node
             ->children()
                 ->arrayNode('orm')
                     ->beforeNormalization()
-                        ->ifTrue(static function ($v) use ($excludedKeys) {
+                        ->ifTrue(static function ($v) {
                             if (! empty($v) && ! class_exists(EntityManager::class)) {
                                 throw new LogicException('The doctrine/orm package is required when the doctrine.orm config is set.');
                             }
 
-                            if (! is_array($v)) {
-                                return false;
-                            }
-
-                            if (array_key_exists('entity_managers', $v) || array_key_exists('entity_manager', $v)) {
-                                return false;
-                            }
-
-                            // Is there actually anything to use once excluded keys are considered?
-                            return (bool) array_diff_key($v, $excludedKeys);
+                            return $v === null || (is_array($v) && ! array_key_exists('entity_managers', $v) && ! array_key_exists('entity_manager', $v));
                         })
-                        ->then(static function ($v) use ($excludedKeys) {
+                        ->then(static function ($v) {
+                            $v = (array) $v;
+                            // Key that should not be rewritten to the entity-manager config
+                            $excludedKeys  = [
+                                'default_entity_manager' => true,
+                                'auto_generate_proxy_classes' => true,
+                                'enable_lazy_ghost_objects' => true,
+                                'proxy_dir' => true,
+                                'proxy_namespace' => true,
+                                'resolve_target_entities' => true,
+                                'resolve_target_entity' => true,
+                                'controller_resolver' => true,
+                            ];
                             $entityManager = [];
                             foreach ($v as $key => $value) {
                                 if (isset($excludedKeys[$key])) {
@@ -463,7 +414,8 @@ class Configuration implements ConfigurationInterface
                                 unset($v[$key]);
                             }
 
-                            $v['entity_managers'] = [($v['default_entity_manager'] ?? 'default') => $entityManager];
+                            $v['default_entity_manager'] = isset($v['default_entity_manager']) ? (string) $v['default_entity_manager'] : 'default';
+                            $v['entity_managers']        = [$v['default_entity_manager'] => $entityManager];
 
                             return $v;
                         })
@@ -658,8 +610,6 @@ class Configuration implements ConfigurationInterface
                     ->arrayNode('schema_ignore_classes')
                         ->prototype('scalar')->end()
                     ->end()
-                    ->scalarNode('report_fields_where_declared')->defaultFalse()->info('Set to "true" to opt-in to the new mapping driver mode that was added in Doctrine ORM 2.16 and will be mandatory in ORM 3.0. See https://github.com/doctrine/orm/pull/10455.')->end()
-                    ->booleanNode('validate_xml_mapping')->defaultFalse()->info('Set to "true" to opt-in to the new mapping driver mode that was added in Doctrine ORM 2.14 and will be mandatory in ORM 3.0. See https://github.com/doctrine/orm/pull/6728.')->end()
                 ->end()
                 ->children()
                     ->arrayNode('second_level_cache')

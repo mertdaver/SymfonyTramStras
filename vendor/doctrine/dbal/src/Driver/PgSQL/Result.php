@@ -60,7 +60,7 @@ final class Result implements ResultInterface
         $this->free();
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function fetchNumeric()
     {
         if ($this->result === null) {
@@ -75,7 +75,7 @@ final class Result implements ResultInterface
         return $this->mapNumericRow($row, $this->fetchNumericColumnTypes());
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function fetchAssociative()
     {
         if ($this->result === null) {
@@ -90,13 +90,13 @@ final class Result implements ResultInterface
         return $this->mapAssociativeRow($row, $this->fetchAssociativeColumnTypes());
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function fetchOne()
     {
         return FetchUtils::fetchOne($this);
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function fetchAllNumeric(): array
     {
         if ($this->result === null) {
@@ -117,7 +117,7 @@ final class Result implements ResultInterface
         );
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function fetchAllAssociative(): array
     {
         if ($this->result === null) {
@@ -138,7 +138,7 @@ final class Result implements ResultInterface
         );
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function fetchFirstColumn(): array
     {
         if ($this->result === null) {

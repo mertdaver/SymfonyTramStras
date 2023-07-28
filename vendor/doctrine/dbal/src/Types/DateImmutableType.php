@@ -12,7 +12,7 @@ use Doctrine\Deprecations\Deprecation;
 class DateImmutableType extends DateType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -20,7 +20,7 @@ class DateImmutableType extends DateType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -46,7 +46,7 @@ class DateImmutableType extends DateType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -74,7 +74,7 @@ class DateImmutableType extends DateType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */

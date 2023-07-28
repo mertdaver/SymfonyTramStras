@@ -19,7 +19,7 @@ class MariaDBKeywords extends MySQLKeywords
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getKeywords(): array
     {

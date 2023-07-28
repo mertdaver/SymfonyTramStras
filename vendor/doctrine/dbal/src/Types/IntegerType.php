@@ -11,7 +11,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class IntegerType extends Type implements PhpIntegerMappingType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -19,7 +19,7 @@ class IntegerType extends Type implements PhpIntegerMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -27,7 +27,7 @@ class IntegerType extends Type implements PhpIntegerMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -41,7 +41,7 @@ class IntegerType extends Type implements PhpIntegerMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getBindingType()
     {

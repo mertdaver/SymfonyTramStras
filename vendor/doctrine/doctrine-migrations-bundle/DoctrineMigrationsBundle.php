@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class DoctrineMigrationsBundle extends Bundle
 {
-    /** @return void */
     public function build(ContainerBuilder $container)
     {
       $container->addCompilerPass(new ConfigureDependencyFactoryPass());

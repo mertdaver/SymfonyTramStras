@@ -73,7 +73,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
      */
     public function listTableDetails($name)
     {
-        Deprecation::triggerIfCalledFromOutside(
+        Deprecation::trigger(
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/5595',
             '%s is deprecated. Use introspectTable() instead.',
@@ -108,7 +108,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableViewDefinition($view)
     {
@@ -116,7 +116,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableDefinition($table)
     {
@@ -124,7 +124,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
@@ -154,7 +154,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableDatabaseDefinition($database)
     {
@@ -162,7 +162,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableColumnDefinition($tableColumn)
     {
@@ -330,7 +330,7 @@ class MySQLSchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {

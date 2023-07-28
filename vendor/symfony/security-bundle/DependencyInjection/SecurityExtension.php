@@ -417,10 +417,11 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         $listeners[] = new Reference('security.channel_listener');
 
         $contextKey = null;
+        $contextListenerId = null;
         // Context serializer listener
         if (false === $firewall['stateless']) {
             $contextKey = $firewall['context'] ?? $id;
-            $listeners[] = new Reference($this->createContextListener($container, $contextKey, $firewallEventDispatcherId));
+            $listeners[] = new Reference($contextListenerId = $this->createContextListener($container, $contextKey, $firewallEventDispatcherId));
             $sessionStrategyId = 'security.authentication.session_strategy';
 
             $container
@@ -489,7 +490,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
 
         // Authentication listeners
         $firewallAuthenticationProviders = [];
-        [$authListeners, $defaultEntryPoint] = $this->createAuthenticationListeners($container, $id, $firewall, $firewallAuthenticationProviders, $defaultProvider, $providerIds, $configuredEntryPoint);
+        [$authListeners, $defaultEntryPoint] = $this->createAuthenticationListeners($container, $id, $firewall, $firewallAuthenticationProviders, $defaultProvider, $providerIds, $configuredEntryPoint, $contextListenerId);
 
         // $configuredEntryPoint is resolved into a service ID and stored in $defaultEntryPoint
         $configuredEntryPoint = $defaultEntryPoint;
@@ -595,7 +596,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         return $this->contextListeners[$contextKey] = $listenerId;
     }
 
-    private function createAuthenticationListeners(ContainerBuilder $container, string $id, array $firewall, array &$authenticationProviders, ?string $defaultProvider, array $providerIds, ?string $defaultEntryPoint)
+    private function createAuthenticationListeners(ContainerBuilder $container, string $id, array $firewall, array &$authenticationProviders, ?string $defaultProvider, array $providerIds, ?string $defaultEntryPoint, string $contextListenerId = null)
     {
         $listeners = [];
         $entryPoints = [];
@@ -604,7 +605,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
             $key = str_replace('-', '_', $factory->getKey());
 
             if (isset($firewall[$key])) {
-                $userProvider = $this->getUserProvider($container, $id, $firewall, $key, $defaultProvider, $providerIds);
+                $userProvider = $this->getUserProvider($container, $id, $firewall, $key, $defaultProvider, $providerIds, $contextListenerId);
 
                 if (!$factory instanceof AuthenticatorFactoryInterface) {
                     throw new InvalidConfigurationException(sprintf('Authenticator factory "%s" ("%s") must implement "%s".', get_debug_type($factory), $key, AuthenticatorFactoryInterface::class));
@@ -636,7 +637,7 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
         return [$listeners, $defaultEntryPoint];
     }
 
-    private function getUserProvider(ContainerBuilder $container, string $id, array $firewall, string $factoryKey, ?string $defaultProvider, array $providerIds): string
+    private function getUserProvider(ContainerBuilder $container, string $id, array $firewall, string $factoryKey, ?string $defaultProvider, array $providerIds, ?string $contextListenerId): string
     {
         if (isset($firewall[$factoryKey]['provider'])) {
             if (!isset($providerIds[$normalizedName = str_replace('-', '_', $firewall[$factoryKey]['provider'])])) {
@@ -644,6 +645,10 @@ class SecurityExtension extends Extension implements PrependExtensionInterface
             }
 
             return $providerIds[$normalizedName];
+        }
+
+        if ('remember_me' === $factoryKey && $contextListenerId) {
+            $container->getDefinition($contextListenerId)->addTag('security.remember_me_aware', ['id' => $id, 'provider' => 'none']);
         }
 
         if ($defaultProvider) {

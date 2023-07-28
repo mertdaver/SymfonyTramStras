@@ -34,7 +34,7 @@ class SQLSessionInit implements EventSubscriber
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {

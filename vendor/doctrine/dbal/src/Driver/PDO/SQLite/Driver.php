@@ -16,7 +16,7 @@ use function array_intersect_key;
 final class Driver extends AbstractSQLiteDriver
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return Connection
      */

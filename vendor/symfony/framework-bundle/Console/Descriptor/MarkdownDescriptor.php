@@ -162,9 +162,6 @@ class MarkdownDescriptor extends Descriptor
             if ($service instanceof Alias) {
                 $services['aliases'][$serviceId] = $service;
             } elseif ($service instanceof Definition) {
-                if ($service->hasTag('container.excluded')) {
-                    continue;
-                }
                 $services['definitions'][$serviceId] = $service;
             } else {
                 $services['services'][$serviceId] = $service;

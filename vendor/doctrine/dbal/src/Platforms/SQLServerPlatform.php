@@ -49,7 +49,7 @@ use const PREG_OFFSET_CAPTURE;
 class SQLServerPlatform extends AbstractPlatform
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCurrentDateSQL()
     {
@@ -57,7 +57,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCurrentTimeSQL()
     {
@@ -76,7 +76,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getDateArithmeticIntervalExpression($date, $operator, $interval, $unit)
     {
@@ -135,7 +135,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsSchemas()
     {
@@ -143,7 +143,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */
@@ -189,7 +189,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @internal The method should be only used from within the {@see AbstractSchemaManager} class hierarchy.
      */
@@ -206,7 +206,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSequenceNextValSQL($sequence)
     {
@@ -857,7 +857,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getRenameIndexSQL($oldIndexName, Index $index, $tableName)
     {
@@ -1315,7 +1315,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getBinaryTypeDeclarationSQLSnippet($length, $fixed/*, $lengthOmitted = false*/)
     {
@@ -1334,7 +1334,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */
@@ -1575,7 +1575,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
      */
@@ -1659,7 +1659,7 @@ class SQLServerPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
      */

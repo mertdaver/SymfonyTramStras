@@ -14,7 +14,7 @@ use function date_create_immutable;
 class VarDateTimeImmutableType extends VarDateTimeType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -22,7 +22,7 @@ class VarDateTimeImmutableType extends VarDateTimeType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -48,7 +48,7 @@ class VarDateTimeImmutableType extends VarDateTimeType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -72,7 +72,7 @@ class VarDateTimeImmutableType extends VarDateTimeType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */

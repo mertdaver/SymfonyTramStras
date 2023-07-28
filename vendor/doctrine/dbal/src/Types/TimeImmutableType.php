@@ -12,7 +12,7 @@ use Doctrine\Deprecations\Deprecation;
 class TimeImmutableType extends TimeType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -20,7 +20,7 @@ class TimeImmutableType extends TimeType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -46,7 +46,7 @@ class TimeImmutableType extends TimeType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -74,7 +74,7 @@ class TimeImmutableType extends TimeType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */

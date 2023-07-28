@@ -129,7 +129,14 @@ EOF
                 if ($output->isVerbose()) {
                     $io->comment('Warming up optional cache...');
                 }
-                $this->warmupOptionals($realCacheDir);
+                $warmer = $kernel->getContainer()->get('cache_warmer');
+                // non optional warmers already ran during container compilation
+                $warmer->enableOnlyOptionalWarmers();
+                $preload = (array) $warmer->warmUp($realCacheDir);
+
+                if ($preload && file_exists($preloadFile = $realCacheDir.'/'.$kernel->getContainer()->getParameter('kernel.container_class').'.preload.php')) {
+                    Preloader::append($preloadFile, $preload);
+                }
             }
         } else {
             $fs->mkdir($warmupDir);
@@ -138,14 +145,7 @@ EOF
                 if ($output->isVerbose()) {
                     $io->comment('Warming up cache...');
                 }
-                $this->warmup($warmupDir, $realBuildDir);
-
-                if (!$input->getOption('no-optional-warmers')) {
-                    if ($output->isVerbose()) {
-                        $io->comment('Warming up optional cache...');
-                    }
-                    $this->warmupOptionals($realCacheDir);
-                }
+                $this->warmup($warmupDir, $realCacheDir, !$input->getOption('no-optional-warmers'));
             }
 
             if (!$fs->exists($warmupDir.'/'.$containerDir)) {
@@ -219,7 +219,7 @@ EOF
         return false;
     }
 
-    private function warmup(string $warmupDir, string $realBuildDir): void
+    private function warmup(string $warmupDir, string $realBuildDir, bool $enableOptionalWarmers = true)
     {
         // create a temporary kernel
         $kernel = $this->getApplication()->getKernel();
@@ -227,6 +227,18 @@ EOF
             throw new \LogicException('Calling "cache:clear" with a kernel that does not implement "Symfony\Component\HttpKernel\RebootableInterface" is not supported.');
         }
         $kernel->reboot($warmupDir);
+
+        // warmup temporary dir
+        if ($enableOptionalWarmers) {
+            $warmer = $kernel->getContainer()->get('cache_warmer');
+            // non optional warmers already ran during container compilation
+            $warmer->enableOnlyOptionalWarmers();
+            $preload = (array) $warmer->warmUp($warmupDir);
+
+            if ($preload && file_exists($preloadFile = $warmupDir.'/'.$kernel->getContainer()->getParameter('kernel.container_class').'.preload.php')) {
+                Preloader::append($preloadFile, $preload);
+            }
+        }
 
         // fix references to cached files with the real cache directory name
         $search = [$warmupDir, str_replace('\\', '\\\\', $warmupDir)];
@@ -236,19 +248,6 @@ EOF
             if ($count) {
                 file_put_contents($file, $content);
             }
-        }
-    }
-
-    private function warmupOptionals(string $realCacheDir): void
-    {
-        $kernel = $this->getApplication()->getKernel();
-        $warmer = $kernel->getContainer()->get('cache_warmer');
-        // non optional warmers already ran during container compilation
-        $warmer->enableOnlyOptionalWarmers();
-        $preload = (array) $warmer->warmUp($realCacheDir);
-
-        if ($preload && file_exists($preloadFile = $realCacheDir.'/'.$kernel->getContainer()->getParameter('kernel.container_class').'.preload.php')) {
-            Preloader::append($preloadFile, $preload);
         }
     }
 }

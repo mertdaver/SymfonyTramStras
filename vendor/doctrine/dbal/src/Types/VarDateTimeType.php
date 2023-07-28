@@ -18,7 +18,7 @@ use function date_create;
 class VarDateTimeType extends DateTimeType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *

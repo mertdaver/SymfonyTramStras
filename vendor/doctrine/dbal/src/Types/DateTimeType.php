@@ -14,7 +14,7 @@ use function date_create;
 class DateTimeType extends Type implements PhpDateTimeMappingType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -22,7 +22,7 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -30,7 +30,7 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -52,7 +52,7 @@ class DateTimeType extends Type implements PhpDateTimeMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *

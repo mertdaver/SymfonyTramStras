@@ -39,7 +39,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptNamespace($namespaceName)
     {
@@ -51,7 +51,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptTable(Table $table)
     {
@@ -59,7 +59,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
@@ -71,7 +71,7 @@ class CreateSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptSequence(Sequence $sequence)
     {

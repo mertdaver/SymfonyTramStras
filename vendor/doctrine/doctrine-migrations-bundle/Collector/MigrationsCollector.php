@@ -24,9 +24,6 @@ class MigrationsCollector extends DataCollector
         $this->flattener = $migrationsFlattener;
     }
 
-    /**
-     * @return void
-     */
     public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         if (!empty($this->data)) {
@@ -85,9 +82,6 @@ class MigrationsCollector extends DataCollector
         return $this->data;
     }
 
-    /**
-     * @return void
-     */
     public function reset()
     {
         $this->data = [];

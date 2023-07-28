@@ -62,8 +62,7 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
         $fixture->set<?= ucfirst($form_field); ?>('My Title');
 <?php endforeach; ?>
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $this->repository->save($fixture, true);
 
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
 
@@ -109,7 +108,7 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
         $fixture->set<?= ucfirst($form_field); ?>('Value');
 <?php endforeach; ?>
 
-        $this->manager->remove($fixture);
+        $$this->manager->remove($fixture);
         $this->manager->flush();
 
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));

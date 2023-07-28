@@ -24,7 +24,7 @@ final class Statement implements StatementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function bindValue($param, $value, $type = ParameterType::STRING)
     {
@@ -104,7 +104,7 @@ final class Statement implements StatementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($params = null): ResultInterface
     {

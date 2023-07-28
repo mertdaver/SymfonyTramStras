@@ -107,13 +107,13 @@ class SymfonyTestsListenerTrait
         }
     }
 
-    public function globalListenerDisabled(): void
+    public function globalListenerDisabled()
     {
         self::$globallyEnabled = false;
         $this->state = -1;
     }
 
-    public function startTestSuite($suite): void
+    public function startTestSuite($suite)
     {
         $suiteName = $suite->getName();
 
@@ -188,14 +188,14 @@ class SymfonyTestsListenerTrait
         }
     }
 
-    public function addSkippedTest($test, \Exception $e, $time): void
+    public function addSkippedTest($test, \Exception $e, $time)
     {
         if (0 < $this->state) {
             $this->isSkipped[\get_class($test)][$test->getName()] = 1;
         }
     }
 
-    public function startTest($test): void
+    public function startTest($test)
     {
         if (-2 < $this->state && $test instanceof TestCase) {
             // This event is triggered before the test is re-run in isolation
@@ -224,7 +224,7 @@ class SymfonyTestsListenerTrait
             $annotations = Test::parseTestMethodAnnotations(\get_class($test), $test->getName(false));
 
             if (isset($annotations['class']['expectedDeprecation'])) {
-                $test->getTestResultObject()->addError($test, new AssertionFailedError('"@expectedDeprecation" annotations are not allowed at the class level.'), 0);
+                $test->getTestResultObject()->addError($test, new AssertionFailedError('`@expectedDeprecation` annotations are not allowed at the class level.'), 0);
             }
             if (isset($annotations['method']['expectedDeprecation']) || $this->checkNumAssertions = method_exists($test, 'expectDeprecation') && (new \ReflectionMethod($test, 'expectDeprecation'))->getFileName() === (new \ReflectionMethod(ExpectDeprecationTrait::class, 'expectDeprecation'))->getFileName()) {
                 if (isset($annotations['method']['expectedDeprecation'])) {
@@ -242,7 +242,7 @@ class SymfonyTestsListenerTrait
         }
     }
 
-    public function endTest($test, $time): void
+    public function endTest($test, $time)
     {
         if ($file = getenv('SYMFONY_EXPECTED_DEPRECATIONS_SERIALIZE')) {
             putenv('SYMFONY_EXPECTED_DEPRECATIONS_SERIALIZE');
@@ -297,7 +297,7 @@ class SymfonyTestsListenerTrait
             restore_error_handler();
 
             if (!\in_array('legacy', $groups, true)) {
-                $test->getTestResultObject()->addError($test, new AssertionFailedError('Only tests with the "@group legacy" annotation can expect a deprecation.'), 0);
+                $test->getTestResultObject()->addError($test, new AssertionFailedError('Only tests with the `@group legacy` annotation can expect a deprecation.'), 0);
             } elseif (!\in_array($test->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE, BaseTestRunner::STATUS_FAILURE, BaseTestRunner::STATUS_ERROR], true)) {
                 try {
                     $prefix = "@expectedDeprecation:\n";
@@ -338,10 +338,15 @@ class SymfonyTestsListenerTrait
         }
         self::$gatheredDeprecations[] = $msg;
 
-        return true;
+        return null;
     }
 
-    private function willBeIsolated(TestCase $test): bool
+    /**
+     * @param TestCase $test
+     *
+     * @return bool
+     */
+    private function willBeIsolated($test)
     {
         if ($test->isInIsolation()) {
             return false;
@@ -350,6 +355,6 @@ class SymfonyTestsListenerTrait
         $r = new \ReflectionProperty($test, 'runTestInSeparateProcess');
         $r->setAccessible(true);
 
-        return $r->getValue($test) ?? false;
+        return $r->getValue($test);
     }
 }

@@ -57,7 +57,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getColumns()
     {
@@ -65,7 +65,7 @@ class UniqueConstraint extends AbstractAsset implements Constraint
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getQuotedColumns(AbstractPlatform $platform)
     {

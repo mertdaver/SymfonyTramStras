@@ -56,7 +56,7 @@ EOT);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return int
      *

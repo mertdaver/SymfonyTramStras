@@ -322,7 +322,6 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
 
         $constructor = $this->getConstructor($data, $class, $context, $reflectionClass, $allowedAttributes);
         if ($constructor) {
-            $context['has_constructor'] = true;
             if (true !== $constructor->isPublic()) {
                 return $reflectionClass->newInstanceWithoutConstructor();
             }
@@ -412,8 +411,6 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
                 return $constructor->invokeArgs(null, $params);
             }
         }
-
-        unset($context['has_constructor']);
 
         return new $class();
     }

@@ -193,7 +193,7 @@ class ErrorHandler
             ($this->previousExceptionHandler)($e);
         }
 
-        if (!headers_sent() && in_array(strtolower((string) ini_get('display_errors')), ['0', '', 'false', 'off', 'none', 'no'], true)) {
+        if (!headers_sent() && !(bool) ini_get('display_errors')) {
             http_response_code(500);
         }
 

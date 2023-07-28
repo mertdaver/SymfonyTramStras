@@ -25,7 +25,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class DateTimeTzType extends Type implements PhpDateTimeMappingType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -33,7 +33,7 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -41,7 +41,7 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -67,7 +67,7 @@ class DateTimeTzType extends Type implements PhpDateTimeMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *

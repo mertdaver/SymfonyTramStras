@@ -198,10 +198,6 @@ class TextDescriptor extends Descriptor
             }
 
             if ($definition instanceof Definition) {
-                if ($definition->hasTag('container.excluded')) {
-                    unset($serviceIds[$key]);
-                    continue;
-                }
                 if ($showTag) {
                     $tags = $definition->getTag($showTag);
                     foreach ($tags as $tag) {

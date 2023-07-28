@@ -20,7 +20,7 @@ use function assert;
 abstract class AbstractOracleDriver implements Driver
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDatabasePlatform()
     {
@@ -28,7 +28,7 @@ abstract class AbstractOracleDriver implements Driver
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated Use {@link OraclePlatform::createSchemaManager()} instead.
      */

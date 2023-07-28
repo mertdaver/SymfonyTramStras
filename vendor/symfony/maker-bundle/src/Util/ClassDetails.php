@@ -57,16 +57,19 @@ final class ClassDetails
         return (new \ReflectionClass($this->fullClassName))->getFileName();
     }
 
-    public function hasAttribute(string $attributeClassName): bool
+    /**
+     * An imperfect, but simple way to check for the presence of an annotation.
+     *
+     * @param string $annotation The annotation - e.g. @UniqueEntity
+     */
+    public function doesDocBlockContainAnnotation(string $annotation): bool
     {
-        $reflected = new \ReflectionClass($this->fullClassName);
+        $docComment = (new \ReflectionClass($this->fullClassName))->getDocComment();
 
-        foreach ($reflected->getAttributes($attributeClassName) as $reflectedAttribute) {
-            if ($reflectedAttribute->getName() === $attributeClassName) {
-                return true;
-            }
+        if (false === $docComment) {
+            return false;
         }
 
-        return false;
+        return str_contains($docComment, $annotation);
     }
 }

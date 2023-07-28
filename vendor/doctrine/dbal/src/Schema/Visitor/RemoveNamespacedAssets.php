@@ -36,7 +36,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptSchema(Schema $schema)
     {
@@ -44,7 +44,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptTable(Table $table)
     {
@@ -60,7 +60,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptSequence(Sequence $sequence)
     {
@@ -76,7 +76,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {

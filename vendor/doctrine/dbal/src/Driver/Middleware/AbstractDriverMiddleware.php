@@ -20,7 +20,7 @@ abstract class AbstractDriverMiddleware implements VersionAwarePlatformDriver
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connect(
         #[SensitiveParameter]
@@ -30,7 +30,7 @@ abstract class AbstractDriverMiddleware implements VersionAwarePlatformDriver
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDatabasePlatform()
     {
@@ -38,7 +38,7 @@ abstract class AbstractDriverMiddleware implements VersionAwarePlatformDriver
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated Use {@link AbstractPlatform::createSchemaManager()} instead.
      */
@@ -60,7 +60,7 @@ abstract class AbstractDriverMiddleware implements VersionAwarePlatformDriver
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createDatabasePlatformForVersion($version)
     {

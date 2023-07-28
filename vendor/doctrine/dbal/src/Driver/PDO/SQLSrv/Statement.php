@@ -23,7 +23,7 @@ final class Statement extends AbstractStatementMiddleware
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated Use {@see bindValue()} instead.
      *
@@ -82,7 +82,7 @@ final class Statement extends AbstractStatementMiddleware
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {

@@ -11,7 +11,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class BigIntType extends Type implements PhpIntegerMappingType
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -19,7 +19,7 @@ class BigIntType extends Type implements PhpIntegerMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -27,7 +27,7 @@ class BigIntType extends Type implements PhpIntegerMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getBindingType()
     {
@@ -35,7 +35,7 @@ class BigIntType extends Type implements PhpIntegerMappingType
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *

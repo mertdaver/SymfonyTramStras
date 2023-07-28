@@ -105,12 +105,7 @@ class ComposerPlugin implements PluginInterface, EventSubscriberInterface
             '%runtime_options%' => '['.substr(var_export($extra, true), 7, -1)."  'project_dir' => {$projectDir},\n]",
         ]);
 
-        // could use Composer\Util\Filesystem::filePutContentsIfModified once Composer 1.x support is dropped for this plugin
-        $path = substr_replace($autoloadFile, '_runtime', -4, 0);
-        $currentContent = @file_exists($path) ? @file_get_contents($path) : false;
-        if (false === $currentContent || $currentContent !== $code) {
-            file_put_contents($path, $code);
-        }
+        file_put_contents(substr_replace($autoloadFile, '_runtime', -4, 0), $code);
     }
 
     public static function getSubscribedEvents(): array

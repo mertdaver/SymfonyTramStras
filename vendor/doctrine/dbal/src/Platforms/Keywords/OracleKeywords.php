@@ -10,7 +10,7 @@ use Doctrine\Deprecations\Deprecation;
 class OracleKeywords extends KeywordList
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */
@@ -26,7 +26,7 @@ class OracleKeywords extends KeywordList
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getKeywords()
     {

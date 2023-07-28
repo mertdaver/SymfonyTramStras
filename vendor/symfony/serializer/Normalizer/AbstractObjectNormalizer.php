@@ -128,8 +128,8 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
 
         $this->propertyTypeExtractor = $propertyTypeExtractor;
 
-        if ($classMetadataFactory) {
-            $classDiscriminatorResolver ??= new ClassDiscriminatorFromClassMetadata($classMetadataFactory);
+        if (null === $classDiscriminatorResolver && null !== $classMetadataFactory) {
+            $classDiscriminatorResolver = new ClassDiscriminatorFromClassMetadata($classMetadataFactory);
         }
         $this->classDiscriminatorResolver = $classDiscriminatorResolver;
         $this->objectClassResolver = $objectClassResolver;
@@ -217,7 +217,7 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
         }
 
         $preserveEmptyObjects = $context[self::PRESERVE_EMPTY_OBJECTS] ?? $this->defaultContext[self::PRESERVE_EMPTY_OBJECTS] ?? false;
-        if ($preserveEmptyObjects && !$data) {
+        if ($preserveEmptyObjects && !\count($data)) {
             return new \ArrayObject();
         }
 
@@ -226,8 +226,19 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
 
     protected function instantiateObject(array &$data, string $class, array &$context, \ReflectionClass $reflectionClass, array|bool $allowedAttributes, string $format = null)
     {
-        if ($class !== $mappedClass = $this->getMappedClass($data, $class, $context)) {
-            return $this->instantiateObject($data, $mappedClass, $context, new \ReflectionClass($mappedClass), $allowedAttributes, $format);
+        if ($this->classDiscriminatorResolver && $mapping = $this->classDiscriminatorResolver->getMappingForClass($class)) {
+            if (!isset($data[$mapping->getTypeProperty()])) {
+                throw NotNormalizableValueException::createForUnexpectedDataType(sprintf('Type property "%s" not found for the abstract object "%s".', $mapping->getTypeProperty(), $class), null, ['string'], isset($context['deserialization_path']) ? $context['deserialization_path'].'.'.$mapping->getTypeProperty() : $mapping->getTypeProperty(), false);
+            }
+
+            $type = $data[$mapping->getTypeProperty()];
+            if (null === ($mappedClass = $mapping->getClassForType($type))) {
+                throw NotNormalizableValueException::createForUnexpectedDataType(sprintf('The type "%s" is not a valid value.', $type), $type, ['string'], isset($context['deserialization_path']) ? $context['deserialization_path'].'.'.$mapping->getTypeProperty() : $mapping->getTypeProperty(), true);
+            }
+
+            if ($mappedClass !== $class) {
+                return $this->instantiateObject($data, $mappedClass, $context, new \ReflectionClass($mappedClass), $allowedAttributes, $format);
+            }
         }
 
         return parent::instantiateObject($data, $class, $context, $reflectionClass, $allowedAttributes, $format);
@@ -259,7 +270,7 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
 
         $attributes = $this->extractAttributes($object, $format, $context);
 
-        if ($mapping = $this->classDiscriminatorResolver?->getMappingForMappedObject($object)) {
+        if ($this->classDiscriminatorResolver && $mapping = $this->classDiscriminatorResolver->getMappingForMappedObject($object)) {
             array_unshift($attributes, $mapping->getTypeProperty());
         }
 
@@ -308,9 +319,11 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
         $normalizedData = $this->prepareForDenormalization($data);
         $extraAttributes = [];
 
-        $mappedClass = $this->getMappedClass($normalizedData, $type, $context);
+        $reflectionClass = new \ReflectionClass($type);
+        $object = $this->instantiateObject($normalizedData, $type, $context, $reflectionClass, $allowedAttributes, $format);
+        $resolvedClass = $this->objectClassResolver ? ($this->objectClassResolver)($object) : $object::class;
 
-        $nestedAttributes = $this->getNestedAttributes($mappedClass);
+        $nestedAttributes = $this->getNestedAttributes($resolvedClass);
         $nestedData = [];
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         foreach ($nestedAttributes as $property => $serializedPath) {
@@ -322,9 +335,6 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
         }
 
         $normalizedData = array_merge($normalizedData, $nestedData);
-
-        $object = $this->instantiateObject($normalizedData, $mappedClass, $context, new \ReflectionClass($mappedClass), $allowedAttributes, $format);
-        $resolvedClass = $this->objectClassResolver ? ($this->objectClassResolver)($object) : $object::class;
 
         foreach ($normalizedData as $attribute => $value) {
             if ($this->nameConverter) {
@@ -665,8 +675,11 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
      */
     private function isMaxDepthReached(array $attributesMetadata, string $class, string $attribute, array &$context): bool
     {
-        if (!($enableMaxDepth = $context[self::ENABLE_MAX_DEPTH] ?? $this->defaultContext[self::ENABLE_MAX_DEPTH] ?? false)
-            || null === $maxDepth = $attributesMetadata[$attribute]?->getMaxDepth()
+        $enableMaxDepth = $context[self::ENABLE_MAX_DEPTH] ?? $this->defaultContext[self::ENABLE_MAX_DEPTH] ?? false;
+        if (
+            !$enableMaxDepth ||
+            !isset($attributesMetadata[$attribute]) ||
+            null === $maxDepth = $attributesMetadata[$attribute]->getMaxDepth()
         ) {
             return false;
         }
@@ -742,7 +755,7 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
      */
     private function getNestedAttributes(string $class): array
     {
-        if (!$this->classMetadataFactory?->hasMetadataFor($class)) {
+        if (!$this->classMetadataFactory || !$this->classMetadataFactory->hasMetadataFor($class)) {
             return [];
         }
 
@@ -768,34 +781,15 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
     private function removeNestedValue(array $path, array $data): array
     {
         $element = array_shift($path);
-        if (!$path || !$data[$element] = $this->removeNestedValue($path, $data[$element])) {
+        if ([] === $path) {
             unset($data[$element]);
+        } else {
+            $data[$element] = $this->removeNestedValue($path, $data[$element]);
+            if ([] === $data[$element]) {
+                unset($data[$element]);
+            }
         }
 
         return $data;
-    }
-
-    /**
-     * @return class-string
-     */
-    private function getMappedClass(array $data, string $class, array $context): string
-    {
-        if (null !== $object = $this->extractObjectToPopulate($class, $context, self::OBJECT_TO_POPULATE)) {
-            return $object::class;
-        }
-
-        if (!$mapping = $this->classDiscriminatorResolver?->getMappingForClass($class)) {
-            return $class;
-        }
-
-        if (null === $type = $data[$mapping->getTypeProperty()] ?? null) {
-            throw NotNormalizableValueException::createForUnexpectedDataType(sprintf('Type property "%s" not found for the abstract object "%s".', $mapping->getTypeProperty(), $class), null, ['string'], isset($context['deserialization_path']) ? $context['deserialization_path'].'.'.$mapping->getTypeProperty() : $mapping->getTypeProperty(), false);
-        }
-
-        if (null === $mappedClass = $mapping->getClassForType($type)) {
-            throw NotNormalizableValueException::createForUnexpectedDataType(sprintf('The type "%s" is not a valid value.', $type), $type, ['string'], isset($context['deserialization_path']) ? $context['deserialization_path'].'.'.$mapping->getTypeProperty() : $mapping->getTypeProperty(), true);
-        }
-
-        return $mappedClass;
     }
 }

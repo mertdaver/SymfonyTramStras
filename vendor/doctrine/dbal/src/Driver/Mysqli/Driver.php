@@ -16,7 +16,7 @@ use SensitiveParameter;
 final class Driver extends AbstractMySQLDriver
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return Connection
      */

@@ -10,7 +10,6 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
     private KernelBrowser $client;
     private <?= "$repository_class_name " ?>$repository;
     private string $path = '<?= $route_path; ?>/';
-    private EntityManagerInterface $manager;
 
     protected function setUp(): void
     {
@@ -18,7 +17,7 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
         $this->repository = static::getContainer()->get('doctrine')->getRepository(<?= $entity_class_name; ?>::class);
 
         foreach ($this->repository->findAll() as $object) {
-            $this->manager->remove($object);
+            $this->repository->remove($object, true);
         }
     }
 
@@ -61,8 +60,7 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
         $fixture->set<?= ucfirst($form_field); ?>('My Title');
 <?php endforeach; ?>
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $this->repository->save($fixture, true);
 
         $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
 
@@ -80,8 +78,7 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
         $fixture->set<?= ucfirst($form_field); ?>('My Title');
 <?php endforeach; ?>
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $this->repository->save($fixture, true);
 
         $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
 
@@ -111,8 +108,7 @@ class <?= $class_name ?> extends WebTestCase<?= "\n" ?>
         $fixture->set<?= ucfirst($form_field); ?>('My Title');
 <?php endforeach; ?>
 
-        $this->manager->persist($fixture);
-        $this->manager->flush();
+        $this->repository->save($fixture, true);
 
         self::assertSame($originalNumObjectsInRepository + 1, count($this->repository->findAll()));
 

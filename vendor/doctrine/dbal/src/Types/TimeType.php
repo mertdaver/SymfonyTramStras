@@ -12,7 +12,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 class TimeType extends Type
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -20,7 +20,7 @@ class TimeType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -28,7 +28,7 @@ class TimeType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -50,7 +50,7 @@ class TimeType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *

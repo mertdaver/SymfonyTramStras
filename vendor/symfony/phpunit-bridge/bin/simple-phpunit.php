@@ -98,8 +98,10 @@ $passthruOrFail = function ($command) {
 };
 
 if (\PHP_VERSION_ID >= 80000) {
-    $PHPUNIT_VERSION = $getEnvVar('SYMFONY_PHPUNIT_VERSION', '9.6') ?: '9.6';
+    // PHP 8 requires PHPUnit 9.3+, PHP 8.1 requires PHPUnit 9.5+
+    $PHPUNIT_VERSION = $getEnvVar('SYMFONY_PHPUNIT_VERSION', '9.5') ?: '9.5';
 } elseif (\PHP_VERSION_ID >= 70200) {
+    // PHPUnit 8 requires PHP 7.2+
     $PHPUNIT_VERSION = $getEnvVar('SYMFONY_PHPUNIT_VERSION', '8.5') ?: '8.5';
 } else {
     $PHPUNIT_VERSION = $getEnvVar('SYMFONY_PHPUNIT_VERSION', '7.5') ?: '7.5';
@@ -147,11 +149,6 @@ foreach ($defaultEnvs as $envName => $envValue) {
 
 if ('disabled' === $getEnvVar('SYMFONY_DEPRECATIONS_HELPER')) {
     putenv('SYMFONY_DEPRECATIONS_HELPER=disabled');
-}
-
-if (!$getEnvVar('DOCTRINE_DEPRECATIONS')) {
-    putenv('DOCTRINE_DEPRECATIONS=trigger');
-    $_SERVER['DOCTRINE_DEPRECATIONS'] = $_ENV['DOCTRINE_DEPRECATIONS'] = 'trigger';
 }
 
 $COMPOSER = ($COMPOSER = getenv('COMPOSER_BINARY'))
@@ -371,7 +368,7 @@ if (isset($argv[1]) && is_dir($argv[1]) && !file_exists($argv[1].'/phpunit.xml.d
     }
 }
 
-$cmd[0] = sprintf('%s %s --colors=%s', $PHP, escapeshellarg("$PHPUNIT_DIR/$PHPUNIT_VERSION_DIR/phpunit"), false === $getEnvVar('NO_COLOR') ? 'always' : 'never');
+$cmd[0] = sprintf('%s %s --colors=always', $PHP, escapeshellarg("$PHPUNIT_DIR/$PHPUNIT_VERSION_DIR/phpunit"));
 $cmd = str_replace('%', '%%', implode(' ', $cmd)).' %1$s';
 
 if ('\\' === \DIRECTORY_SEPARATOR) {
@@ -438,7 +435,7 @@ if ($components) {
         {
         }
     }
-    array_splice($argv, 1, 0, ['--colors='.(false === $getEnvVar('NO_COLOR') ? 'always' : 'never')]);
+    array_splice($argv, 1, 0, ['--colors=always']);
     $_SERVER['argv'] = $argv;
     $_SERVER['argc'] = ++$argc;
     include "$PHPUNIT_DIR/$PHPUNIT_VERSION_DIR/phpunit";

@@ -43,7 +43,7 @@ abstract class AbstractConfigurator
 
     abstract public function update(RecipeUpdate $recipeUpdate, array $originalConfig, array $newConfig): void;
 
-    protected function write($messages, $verbosity = IOInterface::VERBOSE)
+    protected function write($messages)
     {
         if (!\is_array($messages)) {
             $messages = [$messages];
@@ -51,7 +51,7 @@ abstract class AbstractConfigurator
         foreach ($messages as $i => $message) {
             $messages[$i] = '    '.$message;
         }
-        $this->io->writeError($messages, true, $verbosity);
+        $this->io->writeError($messages, true, IOInterface::VERBOSE);
     }
 
     protected function isFileMarked(Recipe $recipe, string $file): bool

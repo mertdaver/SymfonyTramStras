@@ -24,8 +24,6 @@
         "symfony/http-client": "6.2.*",
         "symfony/intl": "6.2.*",
         "symfony/mailer": "6.2.*",
-        "symfony/mercure": "*",
-        "symfony/mercure-bundle": "^0.3.7",
         "symfony/mime": "6.2.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/notifier": "6.2.*",
@@ -91,8 +89,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.2.*",
-            "docker": false
+            "require": "6.2.*"
         }
     },
     "require-dev": {

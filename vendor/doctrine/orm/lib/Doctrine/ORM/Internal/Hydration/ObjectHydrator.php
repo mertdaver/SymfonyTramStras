@@ -14,7 +14,6 @@ use Doctrine\Persistence\Proxy;
 
 use function array_fill_keys;
 use function array_keys;
-use function array_map;
 use function count;
 use function is_array;
 use function key;
@@ -285,17 +284,13 @@ class ObjectHydrator extends AbstractHydrator
         $class = $this->_metadataCache[$className];
 
         if ($class->isIdentifierComposite) {
-            $idHash = UnitOfWork::getIdHashByIdentifier(
-                array_map(
-                    /** @return mixed */
-                    static function (string $fieldName) use ($data, $class) {
-                        return isset($class->associationMappings[$fieldName])
-                            ? $data[$class->associationMappings[$fieldName]['joinColumns'][0]['name']]
-                            : $data[$fieldName];
-                    },
-                    $class->identifier
-                )
-            );
+            $idHash = '';
+
+            foreach ($class->identifier as $fieldName) {
+                $idHash .= ' ' . (isset($class->associationMappings[$fieldName])
+                    ? $data[$class->associationMappings[$fieldName]['joinColumns'][0]['name']]
+                    : $data[$fieldName]);
+            }
 
             return $this->_uow->tryGetByIdHash(ltrim($idHash), $class->rootEntityName);
         } elseif (isset($class->associationMappings[$class->identifier[0]])) {
@@ -313,6 +308,7 @@ class ObjectHydrator extends AbstractHydrator
      * that belongs to a particular component/class. Afterwards, all these chunks
      * are processed, one after the other. For each chunk of class data only one of the
      * following code paths is executed:
+     *
      * Path A: The data chunk belongs to a joined/associated object and the association
      *         is collection-valued.
      * Path B: The data chunk belongs to a joined/associated object and the association

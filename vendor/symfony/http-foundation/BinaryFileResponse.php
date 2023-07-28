@@ -319,7 +319,7 @@ class BinaryFileResponse extends Response
                 while ('' !== $data) {
                     $read = fwrite($out, $data);
                     if (false === $read || connection_aborted()) {
-                        break 2;
+                        break;
                     }
                     if (0 < $length) {
                         $length -= $read;

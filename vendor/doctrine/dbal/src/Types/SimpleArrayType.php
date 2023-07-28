@@ -20,7 +20,7 @@ use function stream_get_contents;
 class SimpleArrayType extends Type
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -28,7 +28,7 @@ class SimpleArrayType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param mixed $value
      *
@@ -44,7 +44,7 @@ class SimpleArrayType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param mixed $value
      *
@@ -62,7 +62,7 @@ class SimpleArrayType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -70,7 +70,7 @@ class SimpleArrayType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */

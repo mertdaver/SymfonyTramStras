@@ -179,10 +179,7 @@ final class PhpStanExtractor implements PropertyTypeExtractorInterface, Construc
             return null;
         }
 
-        if (!$rawDocNode = $reflectionConstructor->getDocComment()) {
-            return null;
-        }
-
+        $rawDocNode = $reflectionConstructor->getDocComment();
         $tokens = new TokenIterator($this->lexer->tokenize($rawDocNode));
         $phpDocNode = $this->phpDocParser->parse($tokens);
         $tokens->consumeTokenType(Lexer::TOKEN_END);

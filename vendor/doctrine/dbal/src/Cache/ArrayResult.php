@@ -30,7 +30,7 @@ final class ArrayResult implements Result
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetchNumeric()
     {
@@ -44,7 +44,7 @@ final class ArrayResult implements Result
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetchAssociative()
     {
@@ -52,7 +52,7 @@ final class ArrayResult implements Result
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetchOne()
     {
@@ -66,7 +66,7 @@ final class ArrayResult implements Result
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetchAllNumeric(): array
     {
@@ -74,7 +74,7 @@ final class ArrayResult implements Result
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetchAllAssociative(): array
     {
@@ -82,7 +82,7 @@ final class ArrayResult implements Result
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetchFirstColumn(): array
     {

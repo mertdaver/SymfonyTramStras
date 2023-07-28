@@ -38,7 +38,7 @@ class DropSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptTable(Table $table)
     {
@@ -46,7 +46,7 @@ class DropSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
@@ -58,7 +58,7 @@ class DropSchemaSqlCollector extends AbstractVisitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptSequence(Sequence $sequence)
     {

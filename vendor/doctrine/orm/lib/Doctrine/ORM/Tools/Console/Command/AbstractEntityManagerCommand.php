@@ -33,7 +33,7 @@ abstract class AbstractEntityManagerCommand extends Command
                 'doctrine/orm',
                 'https://github.com/doctrine/orm/issues/8327',
                 'Not passing EntityManagerProvider as a dependency to command class "%s" is deprecated',
-                static::class
+                $this->getName()
             );
 
             $helper = $this->getHelper('em');

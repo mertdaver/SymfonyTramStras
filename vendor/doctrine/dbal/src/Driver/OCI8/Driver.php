@@ -17,7 +17,7 @@ use const OCI_NO_AUTO_COMMIT;
 final class Driver extends AbstractOracleDriver
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @return Connection
      */

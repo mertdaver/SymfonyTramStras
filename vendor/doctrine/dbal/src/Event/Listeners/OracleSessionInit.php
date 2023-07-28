@@ -68,7 +68,7 @@ class OracleSessionInit implements EventSubscriber
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSubscribedEvents()
     {

@@ -50,7 +50,7 @@ class DB2SchemaManager extends AbstractSchemaManager
      */
     public function listTableDetails($name)
     {
-        Deprecation::triggerIfCalledFromOutside(
+        Deprecation::trigger(
             'doctrine/dbal',
             'https://github.com/doctrine/dbal/pull/5595',
             '%s is deprecated. Use introspectTable() instead.',
@@ -85,7 +85,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws Exception
      */
@@ -170,7 +170,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableDefinition($table)
     {
@@ -180,7 +180,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableIndexesList($tableIndexes, $tableName = null)
     {
@@ -193,7 +193,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
@@ -207,7 +207,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableTableForeignKeysList($tableForeignKeys)
     {
@@ -255,7 +255,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function _getPortableViewDefinition($view)
     {

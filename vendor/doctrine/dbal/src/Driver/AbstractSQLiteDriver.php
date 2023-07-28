@@ -19,7 +19,7 @@ use function assert;
 abstract class AbstractSQLiteDriver implements Driver
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDatabasePlatform()
     {
@@ -27,7 +27,7 @@ abstract class AbstractSQLiteDriver implements Driver
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated Use {@link SqlitePlatform::createSchemaManager()} instead.
      */

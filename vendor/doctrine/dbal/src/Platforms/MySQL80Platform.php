@@ -10,7 +10,7 @@ use Doctrine\Deprecations\Deprecation;
 class MySQL80Platform extends MySQL57Platform
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated Implement {@see createReservedKeywordsList()} instead.
      */

@@ -20,5 +20,8 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 interface InputAwareMakerInterface extends MakerInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function configureDependencies(DependencyBuilder $dependencies, InputInterface $input = null);
 }

@@ -34,7 +34,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function quote($value, $type = ParameterType::STRING)
     {
@@ -47,7 +47,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function lastInsertId($name = null)
     {
@@ -63,7 +63,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function beginTransaction()
     {
@@ -71,7 +71,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function commit()
     {
@@ -79,7 +79,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function rollBack()
     {
@@ -87,7 +87,7 @@ abstract class AbstractConnectionMiddleware implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getServerVersion()
     {

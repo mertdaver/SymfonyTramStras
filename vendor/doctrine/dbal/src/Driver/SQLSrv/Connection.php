@@ -36,7 +36,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getServerVersion()
     {

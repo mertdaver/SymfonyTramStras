@@ -35,7 +35,7 @@ abstract class AbstractException extends BaseException implements Exception
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLState()
     {

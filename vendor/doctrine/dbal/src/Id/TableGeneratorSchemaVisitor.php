@@ -30,7 +30,7 @@ class TableGeneratorSchemaVisitor implements Visitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptSchema(Schema $schema)
     {
@@ -41,35 +41,35 @@ class TableGeneratorSchemaVisitor implements Visitor
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptTable(Table $table)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptColumn(Table $table, Column $column)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptForeignKey(Table $localTable, ForeignKeyConstraint $fkConstraint)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptIndex(Table $table, Index $index)
     {
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function acceptSequence(Sequence $sequence)
     {

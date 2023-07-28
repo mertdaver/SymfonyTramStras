@@ -113,7 +113,7 @@ abstract class AbstractMySQLPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getDateArithmeticIntervalExpression($date, $operator, $interval, $unit)
     {
@@ -238,7 +238,7 @@ abstract class AbstractMySQLPlatform extends AbstractPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getBinaryTypeDeclarationSQLSnippet($length, $fixed/*, $lengthOmitted = false*/)
     {
@@ -510,7 +510,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @internal The method should be only used from within the {@see AbstractPlatform} class hierarchy.
      */
@@ -983,7 +983,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getPostAlterTableIndexForeignKeySQL(TableDiff $diff)
     {
@@ -1062,7 +1062,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFloatDeclarationSQL(array $column)
     {
@@ -1070,7 +1070,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDecimalTypeDeclarationSQL(array $column)
     {
@@ -1279,7 +1279,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */
@@ -1368,7 +1368,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function quoteStringLiteral($str)
     {
@@ -1378,7 +1378,7 @@ SQL
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getDefaultTransactionIsolationLevel()
     {

@@ -41,10 +41,10 @@ class ScriptExecutor
     /**
      * @throws ScriptExecutionException if the executed command returns a non-0 exit code
      */
-    public function execute(string $type, string $cmd, array $arguments = [])
+    public function execute(string $type, string $cmd)
     {
         $parsedCmd = $this->options->expandTargetDir($cmd);
-        if (null === $expandedCmd = $this->expandCmd($type, $parsedCmd, $arguments)) {
+        if (null === $expandedCmd = $this->expandCmd($type, $parsedCmd)) {
             return;
         }
 
@@ -76,13 +76,13 @@ class ScriptExecutor
         }
     }
 
-    private function expandCmd(string $type, string $cmd, array $arguments)
+    private function expandCmd(string $type, string $cmd)
     {
         switch ($type) {
             case 'symfony-cmd':
-                return $this->expandSymfonyCmd($cmd, $arguments);
+                return $this->expandSymfonyCmd($cmd);
             case 'php-script':
-                return $this->expandPhpScript($cmd, $arguments);
+                return $this->expandPhpScript($cmd);
             case 'script':
                 return $cmd;
             default:
@@ -90,7 +90,7 @@ class ScriptExecutor
         }
     }
 
-    private function expandSymfonyCmd(string $cmd, array $arguments)
+    private function expandSymfonyCmd(string $cmd)
     {
         $repo = $this->composer->getRepositoryManager()->getLocalRepository();
         if (!$repo->findPackage('symfony/console', new MatchAllConstraint())) {
@@ -104,10 +104,10 @@ class ScriptExecutor
             $console .= ' --ansi';
         }
 
-        return $this->expandPhpScript($console.' '.$cmd, $arguments);
+        return $this->expandPhpScript($console.' '.$cmd);
     }
 
-    private function expandPhpScript(string $cmd, array $scriptArguments): string
+    private function expandPhpScript(string $cmd): string
     {
         $phpFinder = new PhpExecutableFinder();
         if (!$php = $phpFinder->find(false)) {
@@ -116,7 +116,7 @@ class ScriptExecutor
 
         $arguments = $phpFinder->findArguments();
 
-        if ($env = (string) getenv('COMPOSER_ORIGINAL_INIS')) {
+        if ($env = (string) (getenv('COMPOSER_ORIGINAL_INIS'))) {
             $paths = explode(\PATH_SEPARATOR, $env);
             $ini = array_shift($paths);
         } else {
@@ -132,8 +132,7 @@ class ScriptExecutor
         }
 
         $phpArgs = implode(' ', array_map([ProcessExecutor::class, 'escape'], $arguments));
-        $scriptArgs = implode(' ', array_map([ProcessExecutor::class, 'escape'], $scriptArguments));
 
-        return ProcessExecutor::escape($php).($phpArgs ? ' '.$phpArgs : '').' '.$cmd.($scriptArgs ? ' '.$scriptArgs : '');
+        return ProcessExecutor::escape($php).($phpArgs ? ' '.$phpArgs : '').' '.$cmd;
     }
 }

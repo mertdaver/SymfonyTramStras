@@ -24,7 +24,7 @@ final class Statement extends AbstractStatementMiddleware
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($params = null): ResultInterface
     {

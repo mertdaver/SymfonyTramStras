@@ -40,7 +40,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getServerVersion()
     {
@@ -77,7 +77,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function quote($value, $type = ParameterType::STRING)
     {
@@ -85,7 +85,7 @@ final class Connection implements ServerInfoAwareConnection
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function lastInsertId($name = null)
     {

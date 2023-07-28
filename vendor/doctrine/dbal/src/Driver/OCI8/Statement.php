@@ -52,7 +52,7 @@ final class Statement implements StatementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function bindValue($param, $value, $type = ParameterType::STRING): bool
     {
@@ -69,7 +69,7 @@ final class Statement implements StatementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated Use {@see bindValue()} instead.
      */
@@ -137,7 +137,7 @@ final class Statement implements StatementInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function execute($params = null): ResultInterface
     {

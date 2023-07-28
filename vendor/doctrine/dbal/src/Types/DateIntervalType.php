@@ -17,7 +17,7 @@ class DateIntervalType extends Type
     public const FORMAT = '%RP%YY%MM%DDT%HH%IM%SS';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -25,7 +25,7 @@ class DateIntervalType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform)
     {
@@ -35,7 +35,7 @@ class DateIntervalType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -57,7 +57,7 @@ class DateIntervalType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @param T $value
      *
@@ -92,7 +92,7 @@ class DateIntervalType extends Type
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @deprecated
      */

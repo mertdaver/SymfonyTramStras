@@ -62,6 +62,8 @@ abstract class AbstractLazyCollection implements Collection
 
     /**
      * {@inheritDoc}
+     *
+     * @template TMaybeContained
      */
     public function contains(mixed $element)
     {
