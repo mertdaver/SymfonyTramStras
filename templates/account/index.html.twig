@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{# https://www.youtube.com/watch?v=OJAH7MdrCFs #}
+{% block title %}Mon Compte{% endblock %}
+
+
+{% block body %}
+
+    {% if activeSub %}
+    Voter abonnement {{ subscription.plan.name }} est actif et sera renouvelé {{sebscription.currentPeriodEnd|date('d/m/Y')}}.<br><br>
+    {% if else %}
+    {% for plan in plans %}
+        <a target="_blank" href="{{ plan.paymentLink }}">{{ plan.name }}</a>
+    {% endfor %}
+
+{% endblock %}

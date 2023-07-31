@@ -46,11 +46,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Marker::class, orphanRemoval: true)]
     private Collection $markers;
 
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subscription::class, orphanRemoval: true)]
+    private Collection $subscriptions;
+
+    #[ORM\Column(length: 255)]
+    private ?string $stripeId = null;
+
     public function __construct()
     {
         $this->Post = new ArrayCollection();
         $this->Topic = new ArrayCollection();
         $this->markers = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -238,6 +245,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $marker->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): self
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): self
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getStripeId(): ?string
+    {
+        return $this->stripeId;
+    }
+
+    public function setStripeId(string $stripeId): self
+    {
+        $this->stripeId = $stripeId;
 
         return $this;
     }

@@ -104,6 +104,7 @@ class ComposerStaticInit5305b16ee57e63f1de597485e2e33843
             'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
             'SymfonyCasts\\Bundle\\VerifyEmail\\' => 32,
+            'Stripe\\' => 7,
         ),
         'P' => 
         array (
@@ -436,6 +437,10 @@ class ComposerStaticInit5305b16ee57e63f1de597485e2e33843
         'SymfonyCasts\\Bundle\\VerifyEmail\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfonycasts/verify-email-bundle/src',
+        ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'Psr\\Log\\' => 
         array (
