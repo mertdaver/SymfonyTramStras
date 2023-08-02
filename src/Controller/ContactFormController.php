@@ -10,15 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ContactFormController extends AbstractController
 {
-    /**
-     * @Route("/contact_form", name="contact_form")
-     */
+    #[Route('/contact_form', name: 'contact_form')]
     public function contactForm(Request $request)
     {
         $contactMessage = new ContactMessage();
         $form = $this->createForm(ContactMessageType::class, $contactMessage);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($contactMessage);

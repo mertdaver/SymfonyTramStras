@@ -11,9 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ContactMessageController extends AbstractController
 {
-    /**
-     * @Route("/contact_message", name="contact_message")
-     */
+
+    #[Route('/contact_message', name: 'contact_message')]
     public function new(Request $request): Response
     {
         $contactMessage = new ContactMessage();
