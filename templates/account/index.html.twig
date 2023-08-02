@@ -1,15 +1,32 @@
 {% extends 'base.html.twig' %}
-{# https://www.youtube.com/watch?v=OJAH7MdrCFs #}
+
 {% block title %}Mon Compte{% endblock %}
 
-
 {% block body %}
-
+    <h1>Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
+    <div class="card">
+        {% if activeSub %}
+            {% if activeSub.isIsActive() %}
+                <p>Votre abonnement est actif jusqu'au {{ activeSub.getCurrentPeriodEnd|date('d/m/Y') }}.</p>
+                <p>Votre abonnement sera renouvelé le {{ activeSub.getCurrentPeriodEnd|date('d F Y') }}.</p>
+            {% else %}
+                <p>Votre abonnement a expiré, veuillez renouveler pour continuer à profiter des avantages.</p>
+                {# Bouton pour renouveler l'abonnement #}
+                <a href="{{ path('route_pour_payer_abonnement') }}" class="btn btn-primary">Renouveler l'abonnement</a>
+            {% endif %}
+        {% else %}
     {% if activeSub %}
-    Voter abonnement {{ subscription.plan.name }} est actif et sera renouvelé {{sebscription.currentPeriodEnd|date('d/m/Y')}}.<br><br>
-    {% if else %}
-    {% for plan in plans %}
-        <a target="_blank" href="{{ plan.paymentLink }}">{{ plan.name }}</a>
-    {% endfor %}
+        Votre abonnement {{ activeSub.plan.name }} est actif et sera renouvelé {{ activeSub.currentPeriodEnd|date('d/m/Y') }}.<br /><br />
+    {% else %}
+        {% for plan in plans %}
+            <a target="_blank" href="{{ plan.paymentLink }}">{{ plan.name }}</a>
+        {% endfor %}
+    {% endif %}
+        {% endif %}
+    </div>
+
+
+
+
 
 {% endblock %}

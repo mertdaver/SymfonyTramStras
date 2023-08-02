@@ -8,6 +8,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use App\Repository\UserRepository;
+
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -55,6 +57,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->save($user, true);
     }
+
+    public function findByActiveSub(bool $activeSub): array
+{
+    return $this->createQueryBuilder('u')
+        ->andWhere('u.activeSub = :activeSub')
+        ->setParameter('activeSub', $activeSub)
+        ->getQuery()
+        ->getResult();
+}
+
 
 //    /**
 //     * @return User[] Returns an array of User objects

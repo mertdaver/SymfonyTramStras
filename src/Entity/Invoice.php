@@ -17,60 +17,76 @@ class Invoice
     #[ORM\Column(length: 255)]
     private ?string $stripeId = null;
 
-    #[ORM\ManyToOne(inversedBy: 'invoices')]
+    #[ORM\Column]
+    private ?int $amountPaid = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $number = null;
+
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?subscription $subscription = null;
+    private ?Subscription $subscription = null;
 
-    #[ORM\Column]
-    private ?float $amountPaid = null;
-
-    #[ORM\Column]
-    private ?int $number = null;
-
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(length: 255)]
     private ?string $hostedInvoiceUrl = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();   
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSubscription(): ?subscription
+    public function getStripeId(): ?string
     {
-        return $this->subscription;
+        return $this->stripeId;
     }
 
-    public function setSubscription(?subscription $subscription): self
+    public function setStripeId(string $stripeId): self
     {
-        $this->subscription = $subscription;
+        $this->stripeId = $stripeId;
 
         return $this;
     }
 
-    public function getAmountPaid(): ?float
+    public function getAmountPaid(): ?int
     {
         return $this->amountPaid;
     }
 
-    public function setAmountPaid(float $amountPaid): self
+    public function setAmountPaid(int $amountPaid): self
     {
         $this->amountPaid = $amountPaid;
 
         return $this;
     }
 
-    public function getNumber(): ?int
+    public function getNumber(): ?string
     {
         return $this->number;
     }
 
-    public function setNumber(int $number): self
+    public function setNumber(string $number): self
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): self
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }
@@ -80,7 +96,7 @@ class Invoice
         return $this->hostedInvoiceUrl;
     }
 
-    public function setHostedInvoiceUrl(?string $hostedInvoiceUrl): self
+    public function setHostedInvoiceUrl(string $hostedInvoiceUrl): self
     {
         $this->hostedInvoiceUrl = $hostedInvoiceUrl;
 
@@ -95,18 +111,6 @@ class Invoice
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getStripeId(): ?string
-    {
-        return $this->stripeId;
-    }
-
-    public function setStripeId(string $stripeId): self
-    {
-        $this->stripeId = $stripeId;
 
         return $this;
     }

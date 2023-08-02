@@ -24,3 +24,13 @@ if (alertForm) {
 }
 
 setInterval(updateLatestAlert, 2000);
+
+// JS parallax Footer
+
+window.addEventListener('scroll', function() {
+    var parallax = document.querySelector('.parallax-footer');
+    var scrollPosition = window.scrollY;
+
+    parallax.style.backgroundPosition = 'center ' + (scrollPosition * 0.1) + 'px';
+});
+

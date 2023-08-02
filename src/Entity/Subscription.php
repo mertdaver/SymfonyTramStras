@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\SubscriptionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,6 +14,9 @@ class Subscription
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $stripeId = null;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $currentPeriodStart = null;
 
@@ -25,28 +26,34 @@ class Subscription
     #[ORM\Column]
     private ?bool $isActive = null;
 
-    #[ORM\OneToMany(mappedBy: 'subscription', targetEntity: Invoice::class, orphanRemoval: true)]
-    private Collection $invoices;
-
-    #[ORM\Column(length: 255)]
-    private ?string $stripeId = null;
-
-    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Plan $Plan = null;
+    private ?Plan $plan = null;
 
-    #[ORM\ManyToOne(inversedBy: 'subscriptions')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $User = null;
+    private ?User $user = null;
 
     public function __construct()
     {
-        $this->invoices = new ArrayCollection();
+        $this->createdAt = new \DateTime();   
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getStripeId(): ?string
+    {
+        return $this->stripeId;
+    }
+
+    public function setStripeId(string $stripeId): self
+    {
+        $this->stripeId = $stripeId;
+
+        return $this;
     }
 
     public function getCurrentPeriodStart(): ?\DateTimeInterface
@@ -85,68 +92,26 @@ class Subscription
         return $this;
     }
 
-    /**
-     * @return Collection<int, Invoice>
-     */
-    public function getInvoices(): Collection
-    {
-        return $this->invoices;
-    }
-
-    public function addInvoice(Invoice $invoice): self
-    {
-        if (!$this->invoices->contains($invoice)) {
-            $this->invoices->add($invoice);
-            $invoice->setSubscription($this);
-        }
-
-        return $this;
-    }
-
-    public function removeInvoice(Invoice $invoice): self
-    {
-        if ($this->invoices->removeElement($invoice)) {
-            // set the owning side to null (unless already changed)
-            if ($invoice->getSubscription() === $this) {
-                $invoice->setSubscription(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getStripeId(): ?string
-    {
-        return $this->stripeId;
-    }
-
-    public function setStripeId(string $stripeId): self
-    {
-        $this->stripeId = $stripeId;
-
-        return $this;
-    }
-
     public function getPlan(): ?Plan
     {
-        return $this->Plan;
+        return $this->plan;
     }
 
-    public function setPlan(?Plan $Plan): self
+    public function setPlan(?Plan $plan): self
     {
-        $this->Plan = $Plan;
+        $this->plan = $plan;
 
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): self
+    public function setUser(?User $user): self
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
