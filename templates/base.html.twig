@@ -61,42 +61,47 @@ if (event.target == modal) {
 modal.style.display = "none";
 }
 };{% endif %}
+
+
+
 			</script>
 		{% endblock %}
 	</head>
 	<body>
 		<header class="navbar parallax">
-			<div class="navbar">
+			<div class="navbar" data-hidden="flase">
 				<div class="menu-icon" onclick="toggleMenu()">
 					<span></span>
 					<span></span>
 					<span></span>
 				</div>
-				<ul>
-					{% if app.user %}
-						<li>
-							<a href="{{ path('app_logout') }}">Se déconnecter</a>
-							<a href="{{ path('app_account') }}">{{ app.user.pseudo }}</a>
-						</li>
-
-					{% else %}
-						<li>
-							<a href="{{ path('app_login') }}">Se connecter</a>
-						</li>
-						<li>
-							<a href="{{ path('app_register') }}">S'inscrire</a>
-						</li>
-					{% endif %}
-					<li>
-						<a href="{{ path('points_map') }}">Carte</a>
-					</li>
-					<li>
-						<a href="{{ path('get_alerte') }}">Demander de l'aide</a>
-					</li>
-					<li>
-						<a href="{{ path('app_categorie') }}">Forum</a>
-					</li>
-				</ul>
+        <ul>
+            <li>
+                <a href="/">Accueil</a>
+            </li>
+            <li>
+                <a href="{{ path('points_map') }}">Carte</a>
+            </li>
+            <li>
+                <a href="{{ path('get_alerte') }}">Demander de l'aide</a>
+            </li>
+            <li>
+                <a href="{{ path('app_categorie') }}">Forum</a>
+            </li>
+            {% if app.user %}
+                <li>
+                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                    <a href="{{ path('app_account') }}">{{ app.user.pseudo }}</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path('app_login') }}">Se connecter</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_register') }}">S'inscrire</a>
+                </li>
+            {% endif %}
+        </ul>
 			</div>
 		</header>
 
@@ -116,8 +121,7 @@ modal.style.display = "none";
 
 		{% block body %}
 
-			<div id="latestAlert"></div>
-			<!-- Balise div pour afficher la dernière alerte -->
+
 
 		{% endblock %}
 
@@ -186,13 +190,14 @@ modal.style.display = "none";
 			</div>
 		</div>
 	</div>
-<p>
-  <img src="/png/logoCTSKiller.png" alt="Logo CTS Killer">
-  Copyright © 2023 CTS Killer
-</p>
 
 
 </footer>
+<div id="label">
+  <img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer">
+<p>
+  Copyright © 2023 CTS Killer
+</p>
 
 	</body>
 </html></body></html>

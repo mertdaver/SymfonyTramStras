@@ -34,3 +34,5 @@ window.addEventListener('scroll', function() {
     parallax.style.backgroundPosition = 'center ' + (scrollPosition * 0.1) + 'px';
 });
 
+// MENU
+

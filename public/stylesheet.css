@@ -45,6 +45,17 @@ header, .navbar {
     transition: top var(--transition-speed), background-color var(--transition-speed);
 }
 
+/* Pour cacher le menu */
+.navbar[data-hidden="true"] {
+    display: none;
+}
+
+/* Pour cacher la barre de navigation principale */
+.navbar .parallax[data-hidden="true"] {
+    display: none;
+}
+
+
 .navbar:hover {
     background-color: var(--secondary-color);
 }
@@ -267,7 +278,7 @@ p {
     box-shadow: var(--box-shadow);
     width: 400px;
     color: var(--white-color);
-    margin: auto; /* centre la carte horizontalement */
+    margin: auto;
     margin-top: 5%; 
     margin-bottom: 10%; 
 
@@ -306,7 +317,6 @@ p {
 }
 
 .alert-card {
-    /* Style de la card d'alerte */
     position: fixed;
     top: 50%;
     left: 50%;
@@ -318,8 +328,15 @@ p {
     border-radius: 10px;
 }
 
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 body.darken {
-    /* Assombrit le fond */
     background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -346,7 +363,7 @@ body.darken {
     .footer {
         background-color: var(--primary-color);
         color: var(--white-color);
-        padding: 20px 0;
+        padding: 5px 0;
     }
     
     .footer .container {
@@ -392,7 +409,7 @@ body.darken {
     .footer {
         background-color: #f2f2f2;
         color: #333;
-        padding: 20px 0;
+        padding: 5px 0;
         margin-top: 100px;
         margin-bottom: 100px;
 
@@ -539,6 +556,23 @@ body.darken {
     text-align: center;
 }
 
+
+#label {
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+#logoRondCTSKiller{
+    height: 75px;
+    width: 75px;
+    padding-right: 1%;
+}
+
 /* CSS pour écrans de tablettes et plus petits */
 @media (max-width: 1024px) {
     .parallax-footer-content {
@@ -573,4 +607,97 @@ body.darken {
         margin-bottom: 10px;
     }
   }
-  
+
+/* MENU */
+
+.card-menu {
+    text-shadow: #292929;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Ajoute une ombre portée pour donner un effet 3D */
+    width: 400px;
+    color: var(--white-color);
+    margin: auto;
+    margin-top: 5%; 
+    margin-bottom: 10%; 
+    position: relative;
+    perspective: 1000px;
+    height: 200px;
+    transform-style: preserve-3d;
+    transition: transform 0.2s, box-shadow 0.2s; /* Ajoute une transition à l'ombre */
+    z-index: 1; /* Définir le z-index plus bas que celui du texte et de l'image */
+}
+
+.card-menu p {
+    color: var(--white-color);
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+.card-menu:hover {
+    transform: translateZ(130px) scale(1.05); /* Ajoute une translation en Z lors du survol pour l'effet de profondeur */
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+}
+
+.card-menu p, .card-menu img {
+    position: relative;
+    z-index: 2; /* Définir un z-index plus élevé pour le texte et l'image */
+}
+
+.card-menu p {
+    color: var(--white-color);
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    transform: translateZ(3000px);
+}
+
+
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    perspective: 1000px; /* Ajoute une perspective pour l'effet 3D */
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.back-face {
+    transform: rotateY(180deg);
+    /* ajoutez vos styles pour la "tranche" ici, par exemple une couleur de fond différente */
+}
+
+.card-image {
+    width: 50%;
+    height: auto;
+    max-height: 1000px; /* Réglez ici la hauteur maximale souhaitée pour toutes les images */
+    object-fit: cover; /* Ajuste l'image pour qu'elle remplisse complètement le conteneur tout en préservant son rapport hauteur/largeur */
+    display: block; /* Pour éviter les espaces vides en dessous des images */
+    margin: 0 auto; /* Centre l'image horizontalement */
+    transform: translateZ(10px);
+    filter: drop-shadow(0 20px 30px rgb(0, 0, 0)); /* Utilisez drop-shadow() pour l'effet d'ombre portée */
+}
+
+
+
+@media screen and (max-width: 768px) {
+    .card-menu {
+        width: 90%;
+    }
+}
