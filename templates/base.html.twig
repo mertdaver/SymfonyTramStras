@@ -61,12 +61,15 @@ if (event.target == modal) {
 modal.style.display = "none";
 }
 };{% endif %}
+
+
+
 			</script>
 		{% endblock %}
 	</head>
 	<body>
 		<header class="navbar parallax">
-			<div class="navbar">
+			<div class="navbar" data-hidden="flase">
 				<div class="menu-icon" onclick="toggleMenu()">
 					<span></span>
 					<span></span>
@@ -116,8 +119,7 @@ modal.style.display = "none";
 
 		{% block body %}
 
-			<div id="latestAlert"></div>
-			<!-- Balise div pour afficher la dernière alerte -->
+
 
 		{% endblock %}
 
@@ -186,13 +188,14 @@ modal.style.display = "none";
 			</div>
 		</div>
 	</div>
-<p>
-  <img src="/png/logoCTSKiller.png" alt="Logo CTS Killer">
-  Copyright © 2023 CTS Killer
-</p>
 
 
 </footer>
+<div id="label">
+  <img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer">
+<p>
+  Copyright © 2023 CTS Killer
+</p>
 
 	</body>
 </html></body></html>

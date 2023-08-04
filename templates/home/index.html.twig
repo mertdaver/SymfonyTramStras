@@ -1,27 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{# {% block title %} Bienvenu {{ app.user.pseudo }} !{% endblock %} #}
-{# Pour faire la page utilisateur, Authentification partie 2 minute 5 #}
+
+
 {% block body %}
-{# <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/src/Controller/PostController.php'|file_link(0) }}">src/Controller/PostController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/templates/post/index.html.twig'|file_link(0) }}">templates/post/index.html.twig</a></code></li>
-    </ul>
-</div> #}
 
 
- <h1> Voici le menu </h1>
+	<h1>
+		Voici le menu
+	</h1>
+	<div class="card-wrapper">
+		<div class="card">
+			<p>Map</p>
+			<img id="MapPNG" src="/cartonnette-2019-688.jpg" alt="carte réseau CTS">
+		</div>
+		<div class="card">
+			<p>Demander de l'aide</p>
+			<img id="AlertePNG" src="/Alerte.png" alt="carte réseau CTS">
 
-
-
+		</div>
+		<div class="card">
+			<p>Forum</p>
+			<img id="Forum" src="/cartonnette-2019-688.jpg" alt="Aperçu du Forum pour CTSKiller">
+		</div>
+		{# <div
+			class="card">
+            
+		</div> #}
+	</div>
 
 {% endblock %}
+
+
