@@ -1,85 +1,38 @@
 {% extends 'base.html.twig' %}
 
+{# {% block title %} Bienvenu {{ app.user.pseudo }} !{% endblock %} #}
+{# Pour faire la page utilisateur, Authentification partie 2 minute 5 #}
 {% block body %}
-<h1>Voici le menu</h1>
-<div class="card-wrapper">
-    <a href="{{ path('points_map') }}" class="card-menu">
-        <div class="card-face front-face">
-            <div class="card-content">
-                <p>Carte du réseau</p>
-                <img class="card-image" id="MapPNG" src="/tramRouge.png" alt="Aperçu de la carte">
-            </div>
-        </div>
-        <div class="card-face back-face"></div>
-    </a>
-    <a href="{{ path('get_alerte') }}" class="card-menu">
-        <div class="card-face front-face">
-            <div class="card-content">
-                <p>Demander de l'aide</p>
-                <img class="card-image" id="AlertePNG" src="/Alerte.png" alt="Icone d'aide">
-            </div>
-        </div>
-        <div class="card-face back-face"></div>
-    </a>
-    <a href="{{ path('app_categorie') }}" class="card-menu">
-        <div class="card-face front-face">
-            <div class="card-content">
-                <p>Forum</p>
-                <img class="card-image" id="Forum" src="/cartonnette-2019-688.jpg" alt="Aperçu du Forum">
-            </div>
-        </div>
-        <div class="card-face back-face"></div>
-    </a>
-</div>
+{# <style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
 
-{% endblock %}
-{% block javascripts %}
-    <script>
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/src/Controller/PostController.php'|file_link(0) }}">src/Controller/PostController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/laragon/www/SymfonyTramStras/TramStras/templates/post/index.html.twig'|file_link(0) }}">templates/post/index.html.twig</a></code></li>
+    </ul>
+</div> #}
 
 
-function easeOutQuart(t) {
-    return 1 - (--t) * t * t * t;
-}
+ <h1> Voici le menu </h1>
 
-window.addEventListener('mousemove', (event) => {
-    let cardMenus = document.querySelectorAll('.card-menu');
-    cardMenus.forEach((cardMenu) => {
-        let boundingRect = cardMenu.getBoundingClientRect();
-        if (
-            event.clientX >= boundingRect.left &&
-            event.clientX <= boundingRect.right &&
-            event.clientY >= boundingRect.top &&
-            event.clientY <= boundingRect.bottom
-        ) {
-            let x = boundingRect.left + boundingRect.width / 2;
-            let y = boundingRect.top + boundingRect.height / 2;
-            let deltaX = event.clientX - x;
-            let deltaY = event.clientY - y;
-            // Inverse les valeurs des rotations pour les axes haut-bas et gauche-droite
-            let rotationX = Math.max(Math.min(deltaY / -3, 30), -30);
-            let rotationY = Math.max(Math.min(deltaX / 3, 30), -30);
-            // Utilise la fonction d'interpolation pour adoucir l'effet
-            let distanceFactor = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            distanceFactor = Math.min(distanceFactor, 100) / 100; // Limite le facteur entre 0 et 1
-            rotationX *= distanceFactor;
-            rotationY *= distanceFactor;
-
-            cardMenu.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg) translateZ(30px)`;
-        } else {
-            cardMenu.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
-        }
-    });
-});
-
-window.addEventListener('mouseout', (event) => {
-    let cardMenus = document.querySelectorAll('.card-menu');
-    cardMenus.forEach((cardMenu) => {
-        cardMenu.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
-    });
-});
-
-
-
+		</div>
+		<div class="card">
+			<p>Forum</p>
+			<img id="Forum" src="/cartonnette-2019-688.jpg" alt="Aperçu du Forum pour CTSKiller">
+		</div>
+		{# <div
+			class="card">
+            
+		</div> #}
+	</div>
 
     </script>
 {% endblock %}
+
+

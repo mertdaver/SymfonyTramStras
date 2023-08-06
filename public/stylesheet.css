@@ -609,6 +609,7 @@ body.darken {
   }
 
 /* MENU */
+<<<<<<< HEAD
 
 .card-menu {
     text-shadow: #292929;
@@ -701,3 +702,9 @@ body.darken {
         width: 90%;
     }
 }
+=======
+#MapPNG{
+    width: 100%;
+    height: auto;
+}
+>>>>>>> 63122ccc929a5e80bd6d48bdd5f1d4971e8d02a9
