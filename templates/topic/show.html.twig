@@ -3,36 +3,40 @@
 {% block title %}Hello PostController!{% endblock %}
 
 {% block body %}
-    <h1>
-        <a href="{{ path('app_topic_show', {'id': topic.id}) }}">La liste des posts du Topic : {{ topic.getTitre() }}</a>
-    </h1>
-
-    {% if posts|length > 0 %}
-        <ul>
-            {% for post in posts %}
-                <li>
-                    Message de {{ post.user }} :
-                    <br>
-                    {{ post.text }}
-                    <br>
-                    posté le : {{ post.datePost|date('Y-m-d H:i:s') }}
-
-                    {% if post.user == app.user %}
-                        <a class="btn btn-warning" href="{{ path('delete_post', {'id': post.id}) }}">Delete</a>
-                    {% endif %}
-                </li>
-                <br><br>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Aucun message disponible dans ce Sujet. Soyez le premier à réagir !</p>
-    {% endif %}
-
-    <hr>
-
-    <h2>Ajouter un nouveau post</h2>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Ajouter</button>
-    {{ form_end(form) }}
+    <div class="chat-page">
+        <div class="chat-header">
+            <h1>
+                <a href="{{ path('app_topic_show', {'id': topic.id}) }}">Topic : {{ topic.getTitre() }}</a>
+            </h1>
+        </div>
+        <div class="chat-window">
+            <div class="chat-messages">
+                {% if posts|length > 0 %}
+                    {% for post in posts %}
+                        <div class="chat-message {% if post.user == app.user %}outgoing{% else %}incoming{% endif %}">
+                            <div class="message-bubble">
+                                <span class="username">{{ post.user }}</span>
+                                <p class="message-text">{{ post.text }}</p>
+                                <span class="message-date">{{ post.datePost|date('Y-m-d H:i:s') }}</span>
+                            </div>
+                            {% if post.user == app.user %}
+                                <div class="message-actions">
+                                    <a class="btn btn-delete" href="{{ path('delete_post', {'id': post.id}) }}">X</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Aucun message disponible dans ce Sujet. Soyez le premier à réagir !</p>
+                {% endif %}
+                <div class="chat-input">
+                    <h2>Poster un nouveau message</h2>
+                    {{ form_start(form, {'attr': {'class': 'form-chat'}}) }}
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
