@@ -167,6 +167,8 @@ class MapController extends AbstractController
             $response = $client->request('GET', $url);
             $data = $response->toArray();
     
+            $stopTimes = [];
+
             if (isset($data['ServiceDelivery']['EstimatedTimetableDelivery'])) {
                 $timetableDelivery = $data['ServiceDelivery']['EstimatedTimetableDelivery'];
     
@@ -181,7 +183,6 @@ class MapController extends AbstractController
                             }
                         }
     
-                        $stopTimes = [];
                         foreach ($estimatedJourneys as $estimatedJourney) {
                             if (isset($estimatedJourney['EstimatedCalls'])) {
                                 $estimatedCalls = $estimatedJourney['EstimatedCalls'];
@@ -204,32 +205,23 @@ class MapController extends AbstractController
                                 }
                             }
                         }
-    
-                        return $this->render('map/horaires.html.twig', [
-                            'stopTimes' => $stopTimes,
-                            'stopCode' => $stopCode,
-                        ]);
                     }
                 }
             }
     
-            // Gérer le cas où les données attendues ne sont pas présentes dans la réponse de l'API
-            throw new \Exception('Impossible de récupérer les horaires pour ce point d\'arrêt.');
-        } catch (ClientException $e) {
-            // Gérer les erreurs liées à la requête HTTP (par exemple, erreur 401 non autorisée, 404 non trouvé, etc.)
-            // Au lieu de lancer l'exception, renvoyer la vue avec un message d'erreur
-            return $this->render('map/error.html.twig', [
-                'message' => 'Une erreur s\'est produite lors de la requête à l\'API : ' . $e->getMessage(),
+            // Instead of rendering a twig template, return the data as a JSON response
+            return $this->json([
+                'stopTimes' => $stopTimes,
+                'stopCode' => $stopCode,
             ]);
+    
         } catch (\Exception $e) {
-            // Gérer toutes les autres erreurs inattendues
-            // Au lieu de lancer l'exception, renvoyer la vue avec un message d'erreur
-            return $this->render('map/error.html.twig', [
-                'message' => 'Une erreur inattendue s\'est produite : ' . $e->getMessage(),
-            ]);
+            // In case of any exceptions, return an error message as JSON
+            return $this->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
-
 
 
     #[Route("/post/create", name: "post_create", methods: ["POST"])]

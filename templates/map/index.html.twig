@@ -184,7 +184,8 @@ function init() {
                 // Ajout de la condition
                 if (!markerData.isCustom) {
                     var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
-                    popupContent += '<a href="' + stopTimesUrl + '">Voir les horaires</a>';
+                    popupContent += '<button class="loadStopTimes" data-stop-url="' + stopTimesUrl + '">Voir les horaires</button>';
+
                 }
 
                 marker.bindPopup(popupContent);
@@ -209,5 +210,35 @@ function init() {
 
             }
         });
+
+
+document.addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('loadStopTimes')) {
+        var stopTimesUrl = event.target.getAttribute('data-stop-url');
+
+        fetch(stopTimesUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.stopTimes && data.stopTimes.length > 0) {
+                var destination = data.stopTimes[0].destinationName;
+                var times = data.stopTimes.map(item => item.expectedDepartureTime);
+                var timesHTML = `<strong>Direction: ${destination}</strong><br>` + times.join('<br>');
+                
+                // Insérez les horaires à l'endroit souhaité, par exemple dans le parent du bouton
+                event.target.parentNode.innerHTML = timesHTML;
+            } else {
+                console.warn('No stop times available');
+            }
+            
+            // Si vous voulez garder le bouton désactivé, assurez-vous de le faire ici, après avoir inséré les horaires
+            // event.target.setAttribute('disabled', 'disabled'); 
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des horaires:', error);
+        });
+    }
+});
+
+
     </script>
 {% endblock %}
