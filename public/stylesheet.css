@@ -862,3 +862,7 @@ body.darken {
         padding: 10px;
     }
 }
+
+    .honeypot-field {
+        display: none;
+    }

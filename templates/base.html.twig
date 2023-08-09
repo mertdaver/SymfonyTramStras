@@ -186,6 +186,7 @@ modal.style.display = "none";
 		<div class="footer-column">
 			<div class="card-form-footer">
 				<h3>Contactez-nous</h3>
+				<input type="text" name="honeypot" class="honeypot-field">
 				{{ render(controller('App\\Controller\\ContactFormController::contactForm')) }}
 			</div>
 		</div>
