@@ -156,8 +156,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->email.' '.$this->pseudo.' '.implode(', ', $this->roles).' '.$this->isVerified;
+        $roles = implode(', ', $this->roles);
+        
+        // Remplacer le rôle "ROLE_ADMIN" par "admin"
+        if (in_array('ROLE_ADMIN', $this->roles)) {
+            $roles = str_replace('ROLE_ADMIN', 'admin', $roles);
+        }
+        
+        // Filtrer les rôles pour ne pas afficher "ROLE_USER"
+        $filteredRoles = array_filter($this->roles, fn($role) => $role !== 'ROLE_USER');
+        
+        return $this->email.' '.$this->pseudo.' '.implode(', ', $filteredRoles).' '.$this->isVerified;
     }
+    
 
     /**
      * @return Collection<int, Post>

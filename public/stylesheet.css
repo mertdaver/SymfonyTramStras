@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 :root {
-    --primary-color: #8B0000;
-    --secondary-color: #1A1A1A;
-    --white-color: #FFFFFF;
-    --black-color: #292929;
+    --primary-color: #ab2729;
+    --secondary-color: #2c2d2d;
+    --white-color: #f4f0f0;
+    --black-color: #2c2d2d;
+    --accent-color: #dcdde1;
     --transition-speed: 0.3s;
     --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     --box-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -32,7 +33,7 @@ body {
 
 header, .navbar {
     background-color: var(--primary-color);
-    padding: 10px;
+    padding-top: 10px;
     color: var(--white-color);
     box-shadow: var(--box-shadow);
 }
@@ -80,7 +81,7 @@ header, .navbar {
 }
 
 .navbar ul li a:hover {
-    background-color: #8B0000;
+    background-color: var(--primary-color);
     transform: scale(1.05);
     color: white;
 }
@@ -357,7 +358,7 @@ body.darken {
 
     .btn-delete:active {
         background-color: var(--black-color);
-        border: 1px solid #8B0000;
+        border: 1px solid var(--primary-color);
     }
     
     .footer {
@@ -396,7 +397,7 @@ body.darken {
     }
     
     .footer ul li a:hover {
-        color: #8B0000;
+        color: var(--primary-color);
         text-decoration: none;
     }
     
@@ -539,7 +540,7 @@ body.darken {
 
 .card-form-footer .form-group input[type="submit"]:active {
     background-color: var(--primary-color);
-    border: 1px solid #8B0000;
+    border: 1px solid var(--primary-color);
 }
 
 .card-form-footer .form-group input[type="text"]::placeholder {
@@ -704,161 +705,185 @@ body.darken {
 
 /* Messages Post du Forum */
 .chat-page {
-    max-width: 100%;
-    box-sizing: border-box;
+    margin-top: 8% !important;
+    max-width: 90%;
+    margin: 0 auto;
+    background-color: transparent;
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
     padding: 20px;
-}
-
-.chat-header {
-    text-align: center;
-    padding-bottom: 20px;
-}
-
-.chat-window {
-    background-color: var(--black-color);
-    border-radius: 10px;
+  }
+  
+  .chat-window {
+    border: 1px solid var(--accent-color);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .chat-messages {
     padding: 20px;
-    box-shadow: var(--box-shadow);
+    background-color: rgba(255, 255, 255, 0.1); /* Couleur de fond blanche avec transparence */
+    backdrop-filter: blur(10px); /* Flou sans modification de teinte */
+}
+  
+  .chat-message {
     display: flex;
     flex-direction: column;
-}
-
-.chat-messages {
-    overflow-y: auto;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-message {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-message.outgoing .message-bubble {
-    background-color: var(--white-color);
-    color: var(--black-color);
-    align-self: flex-start;
-    border-radius: 10px;
-    margin-right: 20px;
-    max-width: 75%;
-}
-
-.chat-message.incoming .message-bubble {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    align-self: flex-end;
-    border-radius: 10px;
-    margin-left: 20px;
-    max-width: 75%;
-}
-
-.message-bubble {
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .incoming {
+    align-items: flex-end;
+  }
+  
+  .message-bubble {
     padding: 10px;
-    position: relative;
-    word-wrap: break-word;
-}
-
-.username {
-    font-weight: bold;
-    font-size: 0.9em;
-}
-
-.message-text {
-    font-size: 0.9em;
-    margin: 5px 0;
-    color:#292929;
-}
-
-.message-date {
-    font-size: 0.7em;
-    color: #777;
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-}
-
-.message-actions {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.btn-delete {
-    color: var(--white-color);
+    border-radius: 20px;
     background-color: var(--primary-color);
-    border-radius: 3px;
-    padding: 5px 10px;
-    text-decoration: none;
-}
-
-.chat-input {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: var(--black-color);
-    border-radius: 10px;
     box-shadow: var(--box-shadow);
-}
-
-.btn-primary {
+    max-width: 70%;
+    word-wrap: break-word;
+  }
+  
+  .incoming .message-bubble {
+    background-color: var(--secondary-color);
+  }
+  
+  p.message-text {
+    color: var(--accent-color) !important;
+    margin: 0;
+    color: var(--black-color);
+  }
+  
+  .username {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  
+  .message-date {
+    font-size: 12px;
+    color: var(--accent-color);
+  }
+  
+  /* Chat input styling */
+  .chat-input {
+    padding: 20px;
+    border-top: 1px solid var(--accent-color);
+  }
+  
+  .form-chat {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .btn-primary {
     background-color: var(--primary-color);
     color: var(--white-color);
     border: none;
-    padding: 10px 20px;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color var(--transition-speed);
-    width: 40%;
-}
-
-.btn-primary:hover {
-    background-color: darken(var(--primary-color), 10%);
-}
-
-.form-chat {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.form-input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--primary-color);
-    font-size: 0.9em;
-}
-
-.form-submit {
-    align-self: flex-end;
+    border-radius: 4px;
+    padding: 8px 12px;
     margin-top: 10px;
+    cursor: pointer;
+  }
+
+/* Style pour le textarea du formulaire */
+.form-chat textarea[name="text"] {
+    padding: 12px;
+    border: 2px solid #3498db;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
+    resize: vertical; /* Permet de redimensionner verticalement le textarea */
 }
 
-#post_text {
-    background-color: var(--white-color);
-    color: var(--black-color);
-    padding: 10px;
-    border-radius: 10px;
-    margin-right: 20px;
-    max-width: 75%;
-    position: relative;
-    word-wrap: break-word;
-    font-size: 0.9em;
-    width: 40%; 
+/* Style pour le textarea quand il est en focus */
+.form-chat textarea[name="text"]:focus {
+    border-color: #2980b9;
+    outline: none;
+    box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
 }
 
-/* Animation de validation après l'envoi d'un message */
-@keyframes validation {
+
+
+  
+  /* Animation de validation après l'envoi d'un message */
+  @keyframes validation {
     0% { background-color: var(--white-color); }
     50% { background-color: var(--primary-color); color: var(--white-color); }
     100% { background-color: var(--white-color); }
+  }
+  
+  @media screen and (max-width: 768px) { 
+    .chat-page {
+      padding: 10px;
+    }
+  
+    .chat-window {
+      padding: 10px;
+    }
+  }
+
+  /* CONNEXION */
+  /* Styles spécifiques à la page de connexion */
+
+.custom-login-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: var(--white-color);
+    box-shadow: var(--box-shadow);
 }
 
-@media screen and (max-width: 768px) { 
-    .chat-page {
-        padding: 10px;
-    }
+.custom-login-title {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
 
-    .chat-window {
-        padding: 10px;
-    }
+.custom-login-input {
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--accent-color);
+    box-shadow: var(--box-shadow-inset);
+    transition: background-color var(--transition-speed);
+}
+
+.custom-login-input:focus {
+    background-color: var(--white-color);
+    outline: none;
+}
+
+.custom-login-button {
+    margin-top: 20px;
+    color: var(--white-color);
+    background-color: var(--primary-color);
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    cursor: pointer;
+}
+
+.custom-login-button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+.custom-alert {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    color: var(--white-color);
+    background-color: var(--primary-color);
+    text-align: center;
+}
+
+.custom-login-info {
+    margin-bottom: 20px;
+    text-align: center;
 }

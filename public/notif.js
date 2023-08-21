@@ -36,8 +36,6 @@ window.addEventListener('scroll', function() {
 
 // MENU
 
-<<<<<<< HEAD
-=======
 document.querySelectorAll('.gravityButton').forEach(btn => {
   
     btn.addEventListener('mousemove', (e) => {
@@ -68,4 +66,4 @@ document.querySelectorAll('.gravityButton').forEach(btn => {
       btn.style.setProperty('--opacity', `${0.25}`);
     });
   })
->>>>>>> 63122ccc929a5e80bd6d48bdd5f1d4971e8d02a9
+

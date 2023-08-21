@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+
 class ContactFormController extends AbstractController
 {
     #[Route('/contact_form', name: 'contact_form')]

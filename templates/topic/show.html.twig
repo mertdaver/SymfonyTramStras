@@ -14,8 +14,15 @@
                 {% if posts|length > 0 %}
                     {% for post in posts %}
                         <div class="chat-message {% if post.user == app.user %}outgoing{% else %}incoming{% endif %}">
-                            <div class="message-bubble">
-                                <span class="username">{{ post.user }}</span>
+                            <div class="message-bubble {% if post.user == app.user %}outgoing-bubble{% else %}incoming-bubble{% endif %}">
+                                <span class="username">
+                                    {# Afficher le rôle "ROLE_ADMIN" comme "admin" #}
+                                    {% if 'ROLE_ADMIN' in post.user.roles %}
+                                        admin
+                                    {% else %}
+                                        {{ post.user.pseudo }}
+                                    {% endif %}
+                                </span>
                                 <p class="message-text">{{ post.text }}</p>
                                 <span class="message-date">{{ post.datePost|date('Y-m-d H:i:s') }}</span>
                             </div>
@@ -29,12 +36,25 @@
                 {% else %}
                     <p>Aucun message disponible dans ce Sujet. Soyez le premier à réagir !</p>
                 {% endif %}
-                <div class="chat-input">
+<div class="chat-input">
                     <h2>Poster un nouveau message</h2>
-                    {{ form_start(form, {'attr': {'class': 'form-chat'}}) }}
-                    {{ form_widget(form) }}
-                    <button type="submit" class="btn btn-primary">Ajouter</button>
-                    {{ form_end(form) }}
+                    
+                    {% if app.user %}
+                        {{ form_start(form, {'attr': {'class': 'form-chat'}}) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                        {{ form_end(form) }}
+                    {% else %}
+                        <p>Vous devez être connecté pour participer à la conversation.</p>
+                        <ul>
+                            <li>
+                                <a href="{{ path('app_login') }}">Se connecter</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_register') }}">S'inscrire</a>
+                            </li>
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
