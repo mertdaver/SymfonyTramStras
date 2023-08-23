@@ -37,7 +37,7 @@
                     maxZoom: 18
                 }).addTo(map);
 
-
+                
                 //AJOUT DES LIGNES - MERCI https://magosm.magellium.com/aide.html
 
         // Créer les couches WMS pour Tram et Bus
@@ -239,6 +239,30 @@ document.addEventListener('click', function(event) {
     }
 });
 
+   /* Verifie que le navigateur est compatible avec la géolocalisation */
+   if ("geolocation" in navigator) {
+    var locationOptions = {
+        enableHighAccuracy: true, 
+        timeout: 5000, 
+        maximumAge: 0 
+    };
+    
+    navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError, locationOptions);
+} else {
+    /* Le navigateur n'est pas compatible */
+    alert("Géolocalisation indisponible");
+}
 
-    </script>
+function handleLocation(position) {
+    /* Zoom avant de trouver la localisation */
+    map.setZoom(16);
+    /* Centre la carte sur la latitude et la longitude de la localisation de l'utilisateur */
+    map.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+}
+
+function handleLocationError(error) {
+    alert("Erreur de géolocalisation: " + error.message);
+}
+;
+</script>
 {% endblock %}

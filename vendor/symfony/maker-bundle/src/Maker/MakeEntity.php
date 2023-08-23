@@ -331,13 +331,6 @@ final class MakeEntity extends AbstractMaker implements InputAwareMakerInterface
             }
         }
 
-        if (null !== $input && $input->getOption('broadcast')) {
-            $dependencies->addClassDependency(
-                Broadcast::class,
-                'ux-turbo-mercure'
-            );
-        }
-
         ORMDependencyBuilder::buildDependencies($dependencies);
     }
 

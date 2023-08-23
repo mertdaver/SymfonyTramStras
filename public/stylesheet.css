@@ -42,9 +42,6 @@ header,
   padding-top: 10px;
   color: var(--white-color);
   box-shadow: var(--box-shadow);
-}
-
-.navbar {
   position: fixed;
   top: 0;
   width: 100%;
@@ -57,6 +54,7 @@ header,
 .navbar[data-hidden="true"] {
   display: none;
 }
+
 
 /* Pour cacher la barre de navigation principale */
 .navbar .parallax[data-hidden="true"] {
@@ -97,6 +95,122 @@ header,
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.5);
 }
+
+#burger {
+  display: none;
+}
+
+@media screen and (max-width: 850px) {
+  .navbar ul {
+    flex-direction: column;
+  }
+
+  .navbar.responsive .menu-icon {
+    display: block;
+  }
+
+  .navbar.responsive ul {
+    display: none;
+  }
+
+  .navbar.responsive.open ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary-color);
+    width: 100%;
+    padding: 10px;
+    box-shadow: var(--box-shadow);
+  }
+
+  .navbar.responsive.open ul li {
+    margin-bottom: 10px;
+  }
+
+  .navbar.responsive.open ul li:last-child {
+    margin-bottom: 0;
+  }
+
+  .navbar.responsive.open ul li a {
+    padding: 10px;
+  }
+
+  .navbar.hide {
+    top: -100px;
+    transition: top var(--transition-speed);
+  }
+
+  .strong {
+    font-weight: bold;
+    color: var(--white-color);
+  }
+
+  /* MENU BURGER */
+  .navbar {
+    display: none;
+  }
+
+  #burger {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-size: calc(0.5rem + 1.5vw);
+    z-index: 1000; /* s'assurer que le burger est au-dessus de la navbar */
+  }
+
+  #burger ul {
+    display: flex !important;
+    justify-content: space-between;
+    width: 60%;
+  }
+
+
+
+  #menu-icon {
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 1001;
+}
+
+@media screen and (max-width: 850px) {
+    #menu-icon {
+        display: block;
+    }
+}
+
+  @media screen and (max-width: 850px) {
+    
+    #burger ul {
+      position: fixed;
+      left: -100%;
+      top: 5%;
+      flex-direction: column;
+      background: var(--secondary-color);
+      width: 100%;
+      text-align: center;
+      transition: 0.25s;
+      z-index: 1000; /* s'assurer que le menu est au-dessus de la navbar */
+    }
+    #burger li {
+      padding: 3px 0;
+    }
+    #burger li:hover {
+      background:var(--secondary-color);
+    }
+    #burger.active ul {
+      left: 0;
+    }
+  }
+}
+
+
+
+
 
 .logout-link,
 .register-link {
@@ -169,55 +283,7 @@ a:active {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-@media (max-width: 768px) {
-  .navbar ul {
-    flex-direction: column;
-  }
 
-  .navbar.responsive .menu-icon {
-    display: block;
-  }
-
-  .navbar.responsive ul {
-    display: none;
-  }
-
-  .navbar.responsive.open ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--primary-color);
-    width: 100%;
-    padding: 10px;
-    box-shadow: var(--box-shadow);
-  }
-
-  .navbar.responsive.open ul li {
-    margin-bottom: 10px;
-  }
-
-  .navbar.responsive.open ul li:last-child {
-    margin-bottom: 0;
-  }
-
-  .navbar.responsive.open ul li a {
-    padding: 10px;
-  }
-
-  .navbar.hide {
-    top: -100px;
-    transition: top var(--transition-speed);
-  }
-
-  .strong {
-    font-weight: bold;
-    color: var(--white-color);
-  }
-}
 
 .modal {
   display: none;
@@ -490,7 +556,7 @@ ul li {
 }
 
 /* Add responsive CSS for the card */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .card-form-footer {
     margin-top: 2%;
     margin-bottom: 5%;
@@ -565,6 +631,8 @@ ul li {
   text-align: center;
 }
 
+
+
 #label {
   display: flex;
   margin-left: auto;
@@ -582,7 +650,7 @@ ul li {
 }
 
 /* CSS pour écrans de tablettes et plus petits */
-@media (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
   .parallax-footer-content {
     flex-direction: column;
   }
@@ -594,7 +662,7 @@ ul li {
 }
 
 /* CSS pour écrans de smartphones et plus petits */
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .parallax-footer-content {
     padding: 20px;
   }
@@ -870,6 +938,7 @@ p.message-text {
   border-radius: 5px;
   background-color: var(--white-color);
   box-shadow: var(--box-shadow);
+  width: 99%;
 }
 
 .custom-login-title {
@@ -886,6 +955,7 @@ p.message-text {
   background-color: var(--accent-color);
   box-shadow: var(--box-shadow-inset);
   transition: background-color var(--transition-speed);
+  width: 95%; 
 }
 
 .custom-login-input:focus {
@@ -920,6 +990,7 @@ p.message-text {
   margin-bottom: 20px;
   text-align: center;
 }
+
 
 /* CARTE GOOGLE MAP */
 

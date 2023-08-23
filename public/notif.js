@@ -67,3 +67,42 @@ document.querySelectorAll('.gravityButton').forEach(btn => {
     });
   })
 
+//   MENU BURGER
+  document.addEventListener("DOMContentLoaded", function() {
+    const menuIcon = document.getElementById("menu-icon");
+    const nav = document.getElementById("burger");
+    const links = nav.querySelectorAll("li");
+
+    menuIcon.addEventListener("click", () => {
+        nav.classList.toggle("active");
+        if (nav.classList.contains("active")) {
+            menuIcon.innerHTML = "&times;";
+        } else {
+            menuIcon.innerHTML = "&#9776;";
+        }
+    });
+
+    links.forEach((link) => {
+        link.addEventListener("click", () => {
+            nav.classList.remove("active");
+            menuIcon.innerHTML = "&#9776;";
+        });
+    });
+});
+
+
+// STYLE INSCRIPTION 
+function darken(color, percentage) {
+    const amount = (percentage / 100) * 255;
+    let [r, g, b] = color.match(/\w\w/g).map((c) => parseInt(c, 16) - amount);
+
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+}
+
+document.querySelector('.btn').addEventListener('mouseover', function() {
+    this.style.backgroundColor = darken('--primary-color', 10);
+});
+
+document.querySelector('.btn').addEventListener('mouseout', function() {
+    this.style.backgroundColor = 'var(--primary-color)';
+});

@@ -36,7 +36,6 @@ class Link implements EvolvableLinkInterface
     public const REL_PRERENDER = 'prerender';
 
     // Extra relations
-    public const REL_MERCURE = 'mercure';
 
     private string $href = '';
 

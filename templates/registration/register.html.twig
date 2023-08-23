@@ -1,23 +1,41 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.html.twig' %} 
 
 {% block title %}S'inscrire{% endblock %}
 
-{% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+{% block body %} 
 
-    <h1>S'inscrire</h1>
+{% for flash_error in app.flashes('verify_email_error') %}
+<div class="custom-alert alert-danger">{{ flash_error }}</div>
+{% endfor %}
 
-{{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.pseudo) }}
-    {{ form_row(registrationForm.plainPassword, {
-        label: 'Mot de Passe',
-    }) }}
-    {{ form_row(registrationForm.agreeTerms) }}
+<div class="custom-login-form">
+  <h1 class="custom-login-title">S'inscrire</h1>
 
-    <button type="submit" class="btn">S'inscrire</button>
-{{ form_end(registrationForm) }}
+  {{ form_start(registrationForm) }}
+
+  <label for="{{ registrationForm.email.vars.id }}" class="custom-login-label">Email</label>
+  {{ form_widget(registrationForm.email, { attr: { class: "custom-login-input form-control" }}) }}
+
+</br>
+  <label for="{{ registrationForm.pseudo.vars.id }}" class="custom-login-label">Pseudo</label>
+  {{ form_widget(registrationForm.pseudo, { attr: { class: "custom-login-input form-control" }}) }}
+
+  <div class="password-container">
+    <label for="{{ registrationForm.plainPassword.first.vars.id }}" class="custom-login-label">Mot de Passe</label>
+    {{ form_widget(registrationForm.plainPassword.first, { attr: { class: "custom-login-input form-control" }}) }}
+  </br>
+    <label for="{{ registrationForm.plainPassword.second.vars.id }}" class="custom-login-label">Répéter le Mot de Passe</label>
+    {{ form_widget(registrationForm.plainPassword.second, { attr: { class: "custom-login-input form-control" }}) }}
+  </div>
+
+  <div class="custom-login-checkbox">
+    {{ form_widget(registrationForm.agreeTerms) }}
+    {{ form_label(registrationForm.agreeTerms) }}
+  </div>
+
+  <button type="submit" class="custom-login-button btn btn-lg btn-primary">S'inscrire</button>
+
+  {{ form_end(registrationForm) }}
+</div>
 
 {% endblock %}
