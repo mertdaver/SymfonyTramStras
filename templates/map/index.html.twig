@@ -77,6 +77,13 @@
                     popupAnchor: [-3, -76]
                 });
 
+                var userLocationIcon = L.icon({
+                    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Rond_bleu.png?20140330010413',
+                    iconSize: [32, 32],  // Taille de l'icône. Ajustez selon vos besoins.
+                    iconAnchor: [16, 16],  // Position de l'icône par rapport à son emplacement.
+                });
+                
+
                 var customMarkerIcon = L.icon({
                     iconUrl: 'https://img.icons8.com/fluency/48/000000/map-pin.png',
                     iconSize: [48, 48],
@@ -238,31 +245,39 @@ document.addEventListener('click', function(event) {
         });
     }
 });
+{# GROUPEMENT POINTS SUPERPOSITIONS #}
+{# https://leafletjs.com/2012/08/20/guest-post-markerclusterer-0-1-released.html #}
 
-   /* Verifie que le navigateur est compatible avec la géolocalisation */
-   if ("geolocation" in navigator) {
-    var locationOptions = {
-        enableHighAccuracy: true, 
-        timeout: 5000, 
-        maximumAge: 0 
-    };
-    
-    navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError, locationOptions);
-} else {
-    /* Le navigateur n'est pas compatible */
-    alert("Géolocalisation indisponible");
+{# 
+// GEOLOCALISATION
+// Demande la géolocalisation de l'utilisateur et commence à suivre les mises à jour de position.
+navigator.geolocation.watchPosition(success, error);
+// en cas de succès
+function success(userPosition) {
+    // Lorsque la géolocalisation est obtenue avec succès, stocke la latitude et la longitude dans des variables globales.
+    window.userLat = userPosition.coords.latitude;
+    window.userLng = userPosition.coords.longitude;
+    window.isUserLocationKnown = true;
+    // Obtient la précision des données de géolocalisation.
+    var accuracy = userPosition.coords.accuracy;
+    //icon custom pour l'emplacement de l'utilisateur
+    var youAreHereIcon = L.icon({
+        iconUrl: 'https://png.pngtree.com/png-vector/20230320/ourmid/pngtree-you-are-here-location-pointer-vector-png-image_6656543.png',
+        iconSize: [60, 60],
+        iconAnchor: [22, 94],
+        popupAnchor: [-3, -76],
+        shadowAnchor: [22, 94],
+    })
+    // Ajoute un marqueur sur la carte à l'emplacement de l'utilisateur.
+    L.marker([userLat, userLng], {icon: youAreHereIcon, title: 'Vous êtes ici',
+        alt: 'Marqueur "vous êtes ici"'}).addTo(map);
+    // Ajoute un cercle sur la carte représentant la précision de la position de l'utilisateur.
+    // L.circle([userLat, userLng], { radius: accuracy }).addTo(map);
 }
+https://developer.mozilla.org/fr/docs/Web/API/Geolocation_API
+API Geolocation (géolocalisation) - Référence Web API | MDN
+L'API Geolocation permet à une personne, si elle le veut, de fournir sa position géographique à une application web. Pour respecter la vie privée, la permission est demandée auprès de l'utilisatric... #}
 
-function handleLocation(position) {
-    /* Zoom avant de trouver la localisation */
-    map.setZoom(16);
-    /* Centre la carte sur la latitude et la longitude de la localisation de l'utilisateur */
-    map.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-}
 
-function handleLocationError(error) {
-    alert("Erreur de géolocalisation: " + error.message);
-}
-;
 </script>
 {% endblock %}
