@@ -34,7 +34,7 @@ window.addEventListener('scroll', function() {
     parallax.style.backgroundPosition = 'center ' + (scrollPosition * 0.1) + 'px';
 });
 
-// MENU
+// MENU CARDS
 
 document.querySelectorAll('.gravityButton').forEach(btn => {
   
@@ -67,28 +67,19 @@ document.querySelectorAll('.gravityButton').forEach(btn => {
     });
   })
 
-//   MENU BURGER
-  document.addEventListener("DOMContentLoaded", function() {
-    const menuIcon = document.getElementById("menu-icon");
-    const nav = document.getElementById("burger");
-    const links = nav.querySelectorAll("li");
+//   BURGER MENU
 
-    menuIcon.addEventListener("click", () => {
-        nav.classList.toggle("active");
-        if (nav.classList.contains("active")) {
-            menuIcon.innerHTML = "&times;";
-        } else {
-            menuIcon.innerHTML = "&#9776;";
-        }
-    });
+document.addEventListener("DOMContentLoaded", function() {
+    var menuIcon = document.getElementById('menu-icon');
+    var menu = document.getElementById('menu');
 
-    links.forEach((link) => {
-        link.addEventListener("click", () => {
-            nav.classList.remove("active");
-            menuIcon.innerHTML = "&#9776;";
-        });
+    menuIcon.addEventListener('click', function() {
+        var expanded = this.getAttribute("aria-expanded") === "true";
+        this.setAttribute("aria-expanded", !expanded);
+        menu.setAttribute("aria-hidden", expanded);
     });
 });
+
 
 
 // STYLE INSCRIPTION 
@@ -106,3 +97,4 @@ document.querySelector('.btn').addEventListener('mouseover', function() {
 document.querySelector('.btn').addEventListener('mouseout', function() {
     this.style.backgroundColor = 'var(--primary-color)';
 });
+

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 :root {
   --primary-color: #e53236;
+  --primary-color-lighter: #e47577;
   --secondary-color: #2c2d2d;
   --white-color: #f4f0f0;
   --black-color: #2c2d2d;
@@ -36,36 +37,26 @@ body {
   animation: gradient-background 15s ease infinite;
 }
 
-header,
-.navbar {
+header, #navbar {
   background-color: var(--primary-color);
-  padding-top: 10px;
+  padding: 10px;
   color: var(--white-color);
   box-shadow: var(--box-shadow);
+}
+
+#navbar {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 999;
-  transition: top var(--transition-speed),
-    background-color var(--transition-speed);
+  transition: top var(--transition-speed), background-color var(--transition-speed);
 }
 
-/* Pour cacher le menu */
-.navbar[data-hidden="true"] {
-  display: none;
-}
-
-
-/* Pour cacher la barre de navigation principale */
-.navbar .parallax[data-hidden="true"] {
-  display: none;
-}
-
-.navbar:hover {
+#navbar:hover {
   background-color: var(--secondary-color);
 }
 
-.navbar ul {
+#navbar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -73,144 +64,91 @@ header,
   justify-content: space-between;
 }
 
-.navbar ul li a {
+#navbar ul li a {
   color: var(--white-color);
   text-decoration: none;
   padding: 10px;
   font-weight: bold;
-  transition: background-color var(--transition-speed),
-    transform var(--transition-speed);
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
   background-color: var(--secondary-color);
   border-radius: 8px;
   box-shadow: var(--box-shadow);
 }
 
-.navbar ul li a:hover {
-  background-color: var(--primary-color);
+#navbar ul li a:hover {
+  background-color: #8B0000;
   transform: scale(1.05);
   color: white;
 }
 
-.navbar ul li a:focus {
+#navbar ul li a:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.5);
 }
 
-#burger {
-  display: none;
+#menu-icon {
+  display: none; 
+  cursor: pointer;
+  font-size: 30px;
+  z-index: 1001;
 }
 
-@media screen and (max-width: 850px) {
-  .navbar ul {
-    flex-direction: column;
-  }
-
-  .navbar.responsive .menu-icon {
-    display: block;
-  }
-
-  .navbar.responsive ul {
-    display: none;
-  }
-
-  .navbar.responsive.open ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--primary-color);
-    width: 100%;
-    padding: 10px;
-    box-shadow: var(--box-shadow);
-  }
-
-  .navbar.responsive.open ul li {
-    margin-bottom: 10px;
-  }
-
-  .navbar.responsive.open ul li:last-child {
-    margin-bottom: 0;
-  }
-
-  .navbar.responsive.open ul li a {
-    padding: 10px;
-  }
-
-  .navbar.hide {
-    top: -100px;
-    transition: top var(--transition-speed);
-  }
-
-  .strong {
-    font-weight: bold;
-    color: var(--white-color);
-  }
-
-  /* MENU BURGER */
-  .navbar {
-    display: none;
-  }
-
-  #burger {
-    display: flex !important;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    font-size: calc(0.5rem + 1.5vw);
-    z-index: 1000; /* s'assurer que le burger est au-dessus de la navbar */
-  }
-
-  #burger ul {
-    display: flex !important;
-    justify-content: space-between;
-    width: 60%;
-  }
-
-
-
+/* Ajustements pour les petits écrans */
+@media (max-width: 850px) {
   #menu-icon {
-    cursor: pointer;
-    font-size: 30px;
-    z-index: 1001;
-}
+      display: block;
+  }
 
-@media screen and (max-width: 850px) {
-    #menu-icon {
-        display: block;
-    }
-}
-
-  @media screen and (max-width: 850px) {
-    
-    #burger ul {
+  #navbar ul {
       position: fixed;
       left: -100%;
       top: 5%;
       flex-direction: column;
-      background: var(--secondary-color);
+      background-color: skyblue;
       width: 100%;
       text-align: center;
       transition: 0.25s;
-      z-index: 1000; /* s'assurer que le menu est au-dessus de la navbar */
-    }
-    #burger li {
-      padding: 3px 0;
-    }
-    #burger li:hover {
-      background:var(--secondary-color);
-    }
-    #burger.active ul {
-      left: 0;
-    }
+      z-index: 1000;
   }
+
+  #navbar ul[aria-hidden="false"] {
+    left: 0;
+}
+
+  #navbar ul li {
+      padding: 3px 0;
+  }
+
+  #navbar ul li:hover {
+      background: rgb(157, 217, 240);
+  }
+
+  #navbar ul[aria-hidden="true"] {
+    left: -100%;
+}
+
+/* Style pour le bouton du menu burger lorsqu'il est activé (fermé) */
+#menu-icon[aria-expanded="true"]::before {
+  content: '\2715'; /* Unicode pour la croix de fermeture */
+}
+
+/* Style pour le menu lorsqu'il est activé (visible) */
+#menu[aria-hidden="false"] {
+  left: 0;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0.3s, opacity 0.3s linear;
+}
+
+/* Style de base pour le menu (caché) */
+#menu {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s linear;
 }
 
 
-
-
+}
 
 .logout-link,
 .register-link {
@@ -283,8 +221,7 @@ a:active {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-
-
+/* FENETRE MODALE */
 .modal {
   display: none;
   position: fixed;
@@ -325,8 +262,27 @@ a:active {
   text-decoration: none;
 }
 
+/* BOUTONS */
 .buttons {
   margin-top: 20px;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+}
+
+.button:active {
+  background-color: var(--black-color);
 }
 
 .login-button,
@@ -421,10 +377,11 @@ body.darken {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+/* BOUTON SUPPRIMER  */
 .btn-delete {
   display: inline-block;
   padding: 10px 20px;
-  background-color: var(--primary-color);
+  background-color: rgba(255, 0, 0, 0);
   color: var(--white-color);
   text-decoration: none;
   border-radius: 4px;
@@ -439,6 +396,102 @@ body.darken {
   background-color: var(--black-color);
   border: 1px solid var(--primary-color);
 }
+
+/* TEXTAREA MESSAGE FORUM */
+
+.form-chat {
+  position: relative;
+  max-width: 800px;
+  margin: 30px auto;  /* Espacement accru autour du formulaire pour une meilleure respiration */
+  padding: 25px;  /* Légère augmentation du padding pour plus d'espace */
+  border-radius: 20px;  /* Bordures arrondies légèrement plus grandes */
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);  /* Un flou un peu plus prononcé pour un effet esthétique */
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);  /* Ombre douce pour un effet de flottement */
+  transition: box-shadow 0.3s;  /* Transition douce pour les effets hover */
+}
+
+.form-chat:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);  /* Ombre plus profonde au survol pour une sensation de "lift" */
+}
+
+/* Base de réinitialisation pour éliminer les styles par défaut du navigateur */
+textarea#post_text {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 52px 12px 17px;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.5;
+  border: double 4px transparent;
+  border-radius: 16px;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+textarea#post_text:focus {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), inset 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+
+@media (max-width: 480px) {
+  textarea#post_text {
+      font-size: 16px; /* Ajustement pour éviter un texte trop grand sur les petits écrans */
+      padding: 8px 40px 8px 12px; 
+  }
+}
+
+textarea#post_text::placeholder {
+  color: var(--primary-color-lighter);
+  transition: color 0.2s;
+}
+
+textarea#post_text:focus::placeholder {
+  color: var(--secondary-color);
+  opacity: 0.5; /* Légère opacité pour un effet subtil lors de la mise au point */
+}
+
+/* Animation pour le bouton */
+@keyframes btnPulse {
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.05); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+
+/* Bouton Ajouter transformé en flèche à l'intérieur du textarea */
+.btn.btn-primary {
+  position: absolute;
+  top: 50%;
+  right: 15px; /* Ajustement pour une meilleure position */
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  padding: 0;
+  font-size: 26px; /* Taille légèrement augmentée */
+  line-height: 1;
+  animation: btnPulse 1.5s infinite;
+}
+
+.btn.btn-primary:after {
+  content: '→';
+  display: inline-block;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.btn.btn-primary:hover:after {
+  color: var(--secondary-color);
+  transform: translateX(8px);
+}
+
+
+
+
+/* PIED DE PAGE */
 
 .footer {
   background-color: var(--primary-color);
@@ -631,8 +684,6 @@ ul li {
   text-align: center;
 }
 
-
-
 #label {
   display: flex;
   margin-left: auto;
@@ -739,19 +790,21 @@ ul li {
 }
 
 .card-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Crée une grille avec deux colonnes */
-    gap: 1rem; /* Espacement entre les cards */
-    justify-content: center;
-    align-items: center;
-    padding: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(
+    2,
+    1fr
+  ); /* Crée une grille avec deux colonnes */
+  gap: 1rem; /* Espacement entre les cards */
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
 }
 
 .card-wrapper > .card:nth-child(5) {
-    grid-column: 1 / span 2; /* Cette règle permet à la card de s'étendre sur les deux colonnes */
-    justify-self: center;   /* Centre la card sur sa ligne */
+  grid-column: 1 / span 2; /* Cette règle permet à la card de s'étendre sur les deux colonnes */
+  justify-self: center; /* Centre la card sur sa ligne */
 }
-
 
 .card-face {
   position: absolute;
@@ -788,13 +841,10 @@ ul li {
   .card-wrapper {
     grid-template-columns: 1fr; /* Une seule colonne */
   }
-
-
 }
 
-
-
 /* Messages Post du Forum */
+
 .chat-page {
   margin-top: 8% !important;
   max-width: 90%;
@@ -813,13 +863,8 @@ ul li {
 
 .chat-messages {
   padding: 20px;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.1
-  ); /* Couleur de fond blanche avec transparence */
-  backdrop-filter: blur(10px); /* Flou sans modification de teinte */
+  background-color: rgba(255, 255, 255, 0.238); 
+  backdrop-filter: blur(10px); 
 }
 
 .chat-message {
@@ -827,6 +872,7 @@ ul li {
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 10px;
+  position: relative; /* Ajouté pour le positionnement du bouton de suppression */
 }
 
 .incoming {
@@ -840,10 +886,22 @@ ul li {
   box-shadow: var(--box-shadow);
   max-width: 70%;
   word-wrap: break-word;
+  position: relative; /* Positionnement par rapport aux éléments enfants comme le bouton de suppression */
+  
+  /* Nouveaux styles ajoutés */
+  background-color: rgba(255, 255, 255, 0.05); /* Un fond subtil pour le conteneur du message */
+  backdrop-filter: blur(10px); /* Flou subtil pour le fond */
+  transition: transform 0.2s, box-shadow 0.2s; /* Transition pour les animations */
+  
+  /* Pour un effet hover subtil */
+  &:hover {
+    transform: translateY(-3px); /* Léger déplacement vers le haut */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Shadow plus profond pour donner une sensation de "lift" */
+  }
 }
 
 .incoming .message-bubble {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color-lighter);
 }
 
 p.message-text {
@@ -862,7 +920,50 @@ p.message-text {
   color: var(--accent-color);
 }
 
+/* Position du bouton "X" à l'intérieur de la bulle */
+.message-actions .btn.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px; /* Espacement entre le texte et l'icône */
+  background-color: rgba(255, 0, 0, 0.2); /* Fond rouge transparent */
+  border: 1px solid rgba(255, 0, 0, 0.5); /* Bordure rouge transparente */
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: white;
+  box-shadow: var(--box-shadow);
+}
+
+.message-actions .btn.btn-delete:hover {
+  background-color: rgba(255, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.message-actions .btn.btn-delete i {
+  font-size: 14px; /* Taille de l'icône */
+}
+
+.message-actions .btn.btn-delete:before {
+  content: "\f1f8"; /* Icône de corbeille FontAwesome */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+@keyframes breathe {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.message-actions .btn.btn-delete {
+  animation: breathe 3s infinite;
+}
+
+
 /* Chat input styling */
+
 .chat-input {
   padding: 20px;
   border-top: 1px solid var(--accent-color);
@@ -883,40 +984,39 @@ p.message-text {
   cursor: pointer;
 }
 
-/* Style pour le textarea du formulaire */
-.form-chat textarea[name="text"] {
-  padding: 12px;
-  border: 2px solid #3498db;
-  border-radius: 6px;
-  font-size: 16px;
-  width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease-in-out;
-  resize: vertical; /* Permet de redimensionner verticalement le textarea */
+/* Position du bouton "X" à gauche et à l'intérieur de la bulle */
+.message-actions .btn.btn-delete {
+  position: absolute;
+  bottom: -15px;
+  left: -40px; /* Pour le décaler à gauche de la bulle */
+  background-color: rgba(255, 0, 0, 0);
+  border: none;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  z-index: 2; /* Pour s'assurer qu'il se trouve au-dessus des autres éléments si nécessaire */
 }
 
-/* Style pour le textarea quand il est en focus */
-.form-chat textarea[name="text"]:focus {
-  border-color: #2980b9;
-  outline: none;
-  box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+.message-actions .btn.btn-delete:hover {
+  background-color: rgba(255, 0, 0, 1);
 }
 
-/* Animation de validation après l'envoi d'un message */
-@keyframes validation {
-  0% {
-    background-color: var(--white-color);
-  }
-  50% {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-  }
-  100% {
-    background-color: var(--white-color);
-  }
+/* Ajustement pour les messages entrants */
+.incoming .message-actions .btn.btn-delete {
+  right: -25px;
+  left: auto;
 }
 
-@media screen and (max-width: 768px) {
+
+@media screen and (max-width: 850px) {
   .chat-page {
     padding: 10px;
   }
@@ -955,7 +1055,7 @@ p.message-text {
   background-color: var(--accent-color);
   box-shadow: var(--box-shadow-inset);
   transition: background-color var(--transition-speed);
-  width: 95%; 
+  width: 95%;
 }
 
 .custom-login-input:focus {
@@ -990,7 +1090,6 @@ p.message-text {
   margin-bottom: 20px;
   text-align: center;
 }
-
 
 /* CARTE GOOGLE MAP */
 

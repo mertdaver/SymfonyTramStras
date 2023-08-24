@@ -28,6 +28,7 @@ class MapController extends AbstractController
     #[Route('/map', name: 'points_map')]
     public function index(MarkerRepository $markerRepository): Response
     {
+        // https://symfony.com/doc/current/configuration/secrets.html pour cacher l'API
         // URL de l'API CTS pour récupérer les points d'arrêt
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery';
         $username = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
