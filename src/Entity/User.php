@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -35,6 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     #[ORM\Column(length: 50)]
+    #[Groups("alerte_read")]
     private ?string $pseudo = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
@@ -43,14 +46,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Topic::class)]
     private Collection $Topic;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Marker::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Marker::class, orphanRemoval: true)]
     private Collection $markers;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Subscription::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Subscription::class, orphanRemoval: true)]
     private Collection $subscriptions;
 
     #[ORM\Column(length: 255)]
     private ?string $stripeId = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserNotification::class, orphanRemoval: true)]
+    private Collection $userNotifications;
+
 
     public function __construct()
     {
@@ -58,6 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->Topic = new ArrayCollection();
         $this->markers = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
+        $this->userNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -298,6 +306,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStripeId(string $stripeId): self
     {
         $this->stripeId = $stripeId;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserNotification>
+     */
+    public function getUserNotifications(): Collection
+    {
+        return $this->userNotifications;
+    }
+
+    public function addUserNotification(UserNotification $userNotification): static
+    {
+        if (!$this->userNotifications->contains($userNotification)) {
+            $this->userNotifications->add($userNotification);
+            $userNotification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserNotification(UserNotification $userNotification): static
+    {
+        if ($this->userNotifications->removeElement($userNotification)) {
+            // set the owning side to null (unless already changed)
+            if ($userNotification->getUser() === $this) {
+                $userNotification->setUser(null);
+            }
+        }
 
         return $this;
     }

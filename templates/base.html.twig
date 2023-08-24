@@ -87,19 +87,50 @@ modal.style.display = "none";
         </ul>
     </nav>
 </body> 
-</html></div></header>{% if not app.user %}<div id="myModal" class="modal">
+</html>
+</div>
+</header>
+{% if not app.user %}
+<div id="myModal" class="modal">
 <div class="modal-content">
+
 	<span class="close" onclick="closeModal()">&times;</span>
+
 	<h2>Connectez-vous ou inscrivez-vous</h2>
+
 	<p>Vous devez être connecté pour ajouter un marqueur personnalisé.</p>
+
 	<div class="buttons">
 		<a href="{{ path('app_login') }}" class="login-button">Se connecter</a>
 		<a href="{{ path('app_register') }}" class="register-button">S'inscrire</a>
 	</div>
-</div></div>{% endif %}{% block body %}{% endblock %}<script>function closeModal() {
+
+</div></div>
+{% endif %}
+
+{% block body %}
+
+{% if notifications|length > 0 %}
+    <div class="notifications">
+        {% for notification in notifications %}
+            <div class="notification">
+                {{ notification.message }} 
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{% endblock %}
+<script>
+	function closeModal() {
 var modal = document.getElementById("myModal");
-modal.style.display = "none";
-}</script><footer class="footer parallax-footer"><div class="parallax-footer-content">
+	modal.style.display = "none";
+	}
+</script>
+
+
+<footer class="footer parallax-footer"><div class="parallax-footer-content">
 <div class="footer-column">
 	<h5>Liens rapides</h5>
 	<ul class="quick-links">

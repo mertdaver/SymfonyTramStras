@@ -1,3 +1,28 @@
+// Notifications Alerte
+
+function checkForNotifications() {
+    fetch('/get-unread-notifications')
+    .then(response => response.json())
+    .then(data => {
+        if (data.length > 0) {
+            // Afficher la fenêtre modale
+            displayModal(data);
+        }
+        // Vérifiez à nouveau après un certain délai
+        setTimeout(checkForNotifications, 5000); // 5 secondes
+    });
+}
+
+function displayModal(data) {
+    // Mettez à jour le contenu de votre fenêtre modale ici et affichez-la
+}
+
+// Commencez à vérifier dès que la page est chargée
+document.addEventListener('DOMContentLoaded', function() {
+    checkForNotifications();
+});
+
+
 // Appele la fonction lorsque l'utilisateur poste une nouvelle alerte
 var alertForm = document.getElementById('alertForm');
 if (alertForm) {

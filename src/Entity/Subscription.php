@@ -23,6 +23,9 @@ class Subscription
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $currentPeriodEnd = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $createdAt = null;
+
     #[ORM\Column]
     private ?bool $isActive = null;
 
@@ -36,7 +39,7 @@ class Subscription
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();   
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -113,6 +116,17 @@ class Subscription
     {
         $this->user = $user;
 
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 }
