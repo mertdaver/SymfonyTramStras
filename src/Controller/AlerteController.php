@@ -105,8 +105,9 @@ class AlerteController extends AbstractController
             'ligne' => $latestAlert->getLigne(),
             'alerteDate' => $latestAlert->getAlerteDate()->format('Y-m-d H:i:s'),
             'sens' => $latestAlert->getSens(),
-            // Inclure d'autres propriétés si nécessaire
+            'userId' => $latestAlert->getUser() ? $latestAlert->getUser()->getId() : null,
         ];
+
 
         // Renvoyer la réponse JSON avec les dernières données d'alerte
         return new JsonResponse($data);

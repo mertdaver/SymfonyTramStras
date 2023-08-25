@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>
-			{% block title %}Welcome!
-			{% endblock %}
-		</title>
-		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-		<link
-		rel="stylesheet" href="{{ asset('stylesheet.css') }}">
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}Bienvenu sur CTS Killer ! {% endblock %}
+    </title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><text y="1.2em" font-size="96">⚫️</text></svg>">
+    <link rel="stylesheet" href="{{ asset('stylesheet.css') }}">
+	<script src="path/to/jquery-3.6.0.min.js"></script>
+	<script src="path/to/bootstrap.min.js"></script>
+    <script src="{{ asset('notif.js') }}"></script>
 
-		<script src="{{ asset('notif.js') }}"></script>
+	
 
-		{% block stylesheets %}
+    {% block stylesheets %}
 			<style></style>
 		{% endblock %}
 
@@ -86,8 +87,8 @@ modal.style.display = "none";
             {% endif %}
         </ul>
     </nav>
-</body> 
-</html>
+
+
 </div>
 </header>
 {% if not app.user %}
@@ -110,15 +111,28 @@ modal.style.display = "none";
 
 {% block body %}
 
-{% if notifications|length > 0 %}
-    <div class="notifications">
-        {% for notification in notifications %}
-            <div class="notification">
-                {{ notification.message }} 
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Nouvelle Alerte</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        {% endfor %}
+            <div class="modal-body">
+                <p><strong>Ligne :</strong> <span class="ligne"></span></p>
+                <p><strong>Sens :</strong> <span class="sens"></span></p>
+                <p><strong>Utilisateur :</strong> <span class="user"></span></p>
+                <p><strong>Date :</strong> <span class="alerteDate"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
     </div>
-{% endif %}
+</div>
+
 
 
 {% endblock %}
@@ -128,7 +142,38 @@ var modal = document.getElementById("myModal");
 	modal.style.display = "none";
 	}
 
-
+	function checkForNewAlerts() {
+		$.ajax({
+			url: '{{ path('get_latest_alert') }}',
+			method: 'GET',
+			dataType: 'json',
+			success: function(response) {
+				if (response.id) {
+					// Afficher les détails de la nouvelle alerte dans une fenêtre modale
+					const modal = $('#alertModal');
+					modal.find('.ligne').text(response.ligne);
+					modal.find('.sens').text(response.sens);
+	  
+					// Obtenir le pseudo à partir de l'ID d'utilisateur
+					$.ajax({
+						url: '/getPseudo/' + response.userId, 
+						method: 'GET',
+						dataType: 'json',
+						success: function(pseudoResponse) {
+							modal.find('.user').text(pseudoResponse.pseudo);
+							modal.find('.alerteDate').text(response.alerteDate);
+							modal.modal('show');
+						}
+					});
+				}
+			}
+		});
+	}
+	
+	// Appeler la fonction pour vérifier les nouvelles alertes toutes les 5 secondes
+	setInterval(checkForNewAlerts, 5000); 
+	
+  
 </script>
 
 
@@ -187,35 +232,8 @@ var modal = document.getElementById("myModal");
 </div></div></footer>
 
 
-<script>
-    // Utiliser WebSocket, AJAX ou une autre méthode pour écouter les webhooks
-    // et afficher les notifications en temps réel
-    // Exemple avec WebSocket (cela nécessite un serveur WebSocket configuré)
-    const socket = new WebSocket('ws:http://127.0.0.1:8000'); // Changez l'URL en fonction de votre configuration
-
-    socket.addEventListener('message', event => {
-        const webhookData = JSON.parse(event.data);
-
-        // Vérifier si l'utilisateur actuel est différent de celui qui a créé l'alerte
-        if (webhookData.creatorId !== {{ app.user.id }}) {
-            // Créer un nouvel élément pour afficher la notification
-            const notificationElement = document.createElement('div');
-            notificationElement.className = 'notification';
-            notificationElement.innerText = webhookData.message;
-
-            // Ajouter la notification à l'endroit souhaité dans le DOM
-            const notificationsContainer = document.querySelector('.notifications');
-            if (notificationsContainer) {
-                notificationsContainer.appendChild(notificationElement);
-            }
-        }
-    });
-</script>
-
-
-
 
 
 <div id="label">
 	<img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer"><p>
-Copyright © 2023 CTS Killer</p></body></body></html></body></html>
+Copyright © 2023 CTS Killer</p></html></body></html>
