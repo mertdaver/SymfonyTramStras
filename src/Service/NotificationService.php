@@ -5,29 +5,36 @@ namespace App\Service;
 use App\Entity\User;
 use App\Entity\Alerte;
 use App\Entity\UserNotification;
-use App\Repository\AlerteRepository;
+use App\Repository\UserRepository;  
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 
 class NotificationService
 {
     private $entityManager;
-    private $alerteRepository;
+    private $userRepository;  
 
-    public function __construct(EntityManagerInterface $entityManager, AlerteRepository $alerteRepository)
+    public function __construct(EntityManagerInterface $entityManager, UserRepository $userRepository)  
     {
         $this->entityManager = $entityManager;
-        $this->alerteRepository = $alerteRepository;
+        $this->userRepository = $userRepository;  
     }
 
     public function sendAlertNotification(Alerte $alerte)
     {
-        $alertes = $this->alerteRepository->findAllUsersExcept($alerte->getUser());
+        $alertUser = $alerte->getUser();
+
+        if (!$alertUser) {
+            // Si l'utilisateur est null, lance une exception indiquant qu'il doit se connecter
+            throw new Exception('Veuillez vous connecter pour continuer.');
+        }
+
+        $users = $this->userRepository->findAllUsersExcept($alertUser);
     
-        foreach ($alertes as $alert) {
-            $user = $alert->getUser();
+        foreach ($users as $user) {
             $notification = new UserNotification();
             $notification->setUser($user);
-            $notification->setMessage('Une nouvelle alerte a été créée : ' . $alerte->getLigne());
+            $notification->setMessage('Une nouvelle alerte a été créée : ' . $alerte->getLigne(). $alerte->getSens());
             
             $this->entityManager->persist($notification);
         }

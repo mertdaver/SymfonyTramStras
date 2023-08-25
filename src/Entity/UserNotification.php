@@ -27,6 +27,13 @@ class UserNotification
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    public function __construct()
+{
+    $this->createdAt = new \DateTimeImmutable();
+    $this->isRead = false;
+}
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -56,10 +63,10 @@ class UserNotification
         return $this;
     }
 
-    public function isIsRead(): ?bool
+    public function isRead(): ?bool
     {
         return $this->isRead;
-    }
+    }    
 
     public function setIsRead(bool $isRead): static
     {

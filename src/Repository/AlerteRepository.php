@@ -51,40 +51,6 @@ class AlerteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findAllUsersExcept(User $user): array
-    {
-        return $this->createQueryBuilder('a')
-            ->innerJoin('a.user', 'u')
-            ->where('u.id != :userId')
-            ->setParameter('userId', $user->getId())
-            ->distinct(true)  // Utilisez distinct pour s'assurer que chaque utilisateur n'est sélectionné qu'une seule fois
-            ->getQuery()
-            ->getResult();
-    }
 
-
-    //    /**
-    //     * @return Alerte[] Returns an array of Alerte objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Alerte
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    
 }
