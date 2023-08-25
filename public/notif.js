@@ -1,54 +1,3 @@
-// Notifications Alerte
-
-function checkForNotifications() {
-    fetch('/get-unread-notifications')
-    .then(response => response.json())
-    .then(data => {
-        if (data.length > 0) {
-            // Afficher la fenêtre modale
-            displayModal(data);
-        }
-        // Vérifiez à nouveau après un certain délai
-        setTimeout(checkForNotifications, 5000); // 5 secondes
-    });
-}
-
-function displayModal(data) {
-    // Mettez à jour le contenu de votre fenêtre modale ici et affichez-la
-}
-
-// Commencez à vérifier dès que la page est chargée
-document.addEventListener('DOMContentLoaded', function() {
-    checkForNotifications();
-});
-
-
-// Appele la fonction lorsque l'utilisateur poste une nouvelle alerte
-var alertForm = document.getElementById('alertForm');
-if (alertForm) {
-    alertForm.addEventListener('submit', function(event) {
-        // Empêcher le comportement par défaut du formulaire
-        event.preventDefault();
-
-        // Créer une nouvelle alerte
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/alerte', false);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // L'alerte a été créée avec succès, mettre à jour la dernière alerte
-                    updateLatestAlert();
-                } else {
-                    console.error('Failed to create new alert.');
-                }
-            }
-        };
-        xhr.send(new FormData(alertForm));
-    });
-}
-
-setInterval(updateLatestAlert, 2000);
 
 // JS parallax Footer
 
@@ -115,11 +64,4 @@ function darken(color, percentage) {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
-document.querySelector('.btn').addEventListener('mouseover', function() {
-    this.style.backgroundColor = darken('--primary-color', 10);
-});
-
-document.querySelector('.btn').addEventListener('mouseout', function() {
-    this.style.backgroundColor = 'var(--primary-color)';
-});
 

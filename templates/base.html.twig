@@ -127,6 +127,8 @@ modal.style.display = "none";
 var modal = document.getElementById("myModal");
 	modal.style.display = "none";
 	}
+
+
 </script>
 
 
@@ -182,5 +184,38 @@ var modal = document.getElementById("myModal");
 		<h3>Contactez-nous</h3>
 		{{ render(controller('App\\Controller\\ContactFormController::contactForm')) }}
 	</div>
-</div></div></footer><div id="label"><img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer"><p>
+</div></div></footer>
+
+
+<script>
+    // Utiliser WebSocket, AJAX ou une autre méthode pour écouter les webhooks
+    // et afficher les notifications en temps réel
+    // Exemple avec WebSocket (cela nécessite un serveur WebSocket configuré)
+    const socket = new WebSocket('ws:http://127.0.0.1:8000'); // Changez l'URL en fonction de votre configuration
+
+    socket.addEventListener('message', event => {
+        const webhookData = JSON.parse(event.data);
+
+        // Vérifier si l'utilisateur actuel est différent de celui qui a créé l'alerte
+        if (webhookData.creatorId !== {{ app.user.id }}) {
+            // Créer un nouvel élément pour afficher la notification
+            const notificationElement = document.createElement('div');
+            notificationElement.className = 'notification';
+            notificationElement.innerText = webhookData.message;
+
+            // Ajouter la notification à l'endroit souhaité dans le DOM
+            const notificationsContainer = document.querySelector('.notifications');
+            if (notificationsContainer) {
+                notificationsContainer.appendChild(notificationElement);
+            }
+        }
+    });
+</script>
+
+
+
+
+
+<div id="label">
+	<img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer"><p>
 Copyright © 2023 CTS Killer</p></body></body></html></body></html>

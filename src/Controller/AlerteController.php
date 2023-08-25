@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Alerte;
 use App\Entity\Webhook;
 use App\Repository\AlerteRepository;
@@ -11,12 +10,14 @@ use App\Entity\Webhook as AppWebhook;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
 use \Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\UserNotificationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -50,7 +51,7 @@ class AlerteController extends AbstractController
 
         // Configurer le webhook
         $webhook = new Webhook();
-        $webhook->setUrl('https://example.com/webhook');
+        $webhook->setUrl('http://127.0.0.1:8000/webhook');
         $webhook->setEventType('alerte.created');
         $webhook->setData($data);
 
@@ -60,17 +61,18 @@ class AlerteController extends AbstractController
         // Envoyer une notification aux utilisateurs
         $notificationService->sendAlertNotification($alerte);
 
-        return new Response('Alerte créée', Response::HTTP_CREATED);
+         // Rediriger vers la vue confirmation.html.twig
+        return new RedirectResponse($this->generateUrl('confirmation'));
     }
 
 
     #[Route('/get-unread-notifications', name: 'get_unread_notifications')]
-    public function getUnreadNotifications(AlerteRepository $alerteRepository, SerializerInterface $serializer)
+    public function getUnreadNotifications(UserNotificationRepository $userNotificationRepository, SerializerInterface $serializer)
     {
         $user = $this->getUser();
 
-        // Supposez que nous avons une méthode appelée findUnreadByUser dans AlerteRepository
-        $notifications = $alerteRepository->findUnreadByUser($user);
+        // Supposez que nous avons une méthode appelée findUnreadByUser dans UserNotificationRepository
+        $notifications = $userNotificationRepository->findUnreadByUser($user);
 
         // Serialisation des objets Alerte en JSON
         $data = $serializer->serialize($notifications, 'json', ['groups' => 'alerte_read']);

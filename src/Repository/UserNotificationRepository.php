@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use Psr\Log\LoggerInterface;
 use App\Entity\UserNotification;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<UserNotification>
@@ -16,33 +17,23 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserNotificationRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $logger;
+
+    public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
         parent::__construct($registry, UserNotification::class);
+        $this->logger = $logger;
     }
 
-//    /**
-//     * @return UserNotification[] Returns an array of UserNotification objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findUnreadByUser($user)
+    {
+        $this->logger->info('Executing findUnreadByUser query for user: ' . $user->getPseudo());
 
-//    public function findOneBySomeField($value): ?UserNotification
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $this->createQueryBuilder('a')
+            ->where('a.user = :user')
+            ->andWhere('a.isRead = false') 
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }
