@@ -19,6 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['alerte_read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -37,7 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $isVerified = false;
 
     #[ORM\Column(length: 50)]
-    #[Groups("alerte_read")]
+    #[Groups(['alerte_read'])]
     private ?string $pseudo = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
@@ -55,8 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $stripeId = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserNotification::class, orphanRemoval: true)]
-    private Collection $userNotifications;
+
 
 
     public function __construct()
@@ -65,7 +65,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->Topic = new ArrayCollection();
         $this->markers = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
-        $this->userNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -310,33 +309,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserNotification>
-     */
-    public function getUserNotifications(): Collection
-    {
-        return $this->userNotifications;
+
+
     }
 
-    public function addUserNotification(UserNotification $userNotification): static
-    {
-        if (!$this->userNotifications->contains($userNotification)) {
-            $this->userNotifications->add($userNotification);
-            $userNotification->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserNotification(UserNotification $userNotification): static
-    {
-        if ($this->userNotifications->removeElement($userNotification)) {
-            // set the owning side to null (unless already changed)
-            if ($userNotification->getUser() === $this) {
-                $userNotification->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-}

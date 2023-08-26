@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Entity\Topic;
+use App\Entity\Alerte;
 use App\Form\TopicType;
 use App\Entity\Categorie;
+use App\Repository\AlerteRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,13 +51,15 @@ class TopicController extends AbstractController
         ]);
     }
 
-    public function show(Topic $topic, ManagerRegistry $doctrine): Response
+    public function show(Topic $topic, ManagerRegistry $doctrine, AlerteRepository $alerteRepo): Response
     {
+        $latestAlert = $alerteRepo->findOneBy([], ['id' => 'DESC']);
         $posts = $doctrine->getRepository(Post::class)->findBy(['topic' => $topic]);
     
         return $this->render('topic/show.html.twig', [
             'topic' => $topic,
             'posts' => $posts,
+            'latestAlert' => $latestAlert
         ]);
     }
     

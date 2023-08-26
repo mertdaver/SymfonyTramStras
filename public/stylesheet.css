@@ -488,6 +488,158 @@ textarea#post_text:focus::placeholder {
   transform: translateX(8px);
 }
 
+/* Pop-up MARKER perso */
+
+.leaflet-popup-content-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.leaflet-popup-content-wrapper:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* TEAXTAREA Marker perso */
+
+input[type="text"]#text {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 52px 12px 17px;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.5;
+  border: double 4px transparent;
+  border-radius: 16px;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+}
+
+input[type="text"]#text:focus {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), inset 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 480px) {
+  input[type="text"]#text {
+      font-size: 16px;
+      padding: 8px 40px 8px 12px;
+  }
+}
+
+input[type="text"]#text::placeholder {
+  color: var(--primary-color-lighter);
+  transition: color 0.2s;
+}
+
+input[type="text"]#text:focus::placeholder {
+  color: var(--secondary-color);
+  opacity: 0.5;
+}
+
+/* Bouton Submit stylisé */
+/* Modifiez le bouton pour lui donner une apparence épurée */
+input[type="submit"] {
+  background-color: transparent; 
+  border: 2px solid var(--primary-color); /* Une bordure fine */
+  border-radius: 4px;
+  padding: 8px 20px 8px 30px; /* Plus petit padding */
+  color: var(--primary-color);
+  cursor: pointer;
+  position: relative;
+  font-size: 14px;
+  transition: all 0.3s;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7); /* Effets d'ombre et de lumière */
+}
+
+/* Coche avant le bouton pour indiquer l'action de validation */
+input[type="submit"]::before {
+  content: '✓';
+  position: absolute;
+  left: 10px; /* Légèrement ajusté pour être plus proche du bord */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px; /* Icône plus petite */
+  color: var(--primary-color);
+  transition: transform 0.3s;
+}
+
+/* Effet de survol */
+input[type="submit"]:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.7); /* Effet d'enfoncement au survol */
+}
+
+input[type="submit"]:hover::before {
+  color: white;
+}
+
+/* Bouton close */
+
+.leaflet-popup-close-button {
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7);
+  position: relative;
+  margin-top: 15px; /* pour le déplacer plus bas */
+}
+
+.leaflet-popup-close-button:hover {
+  background-color: var(--primary-color);
+  color: var(--primary-color); 
+  border-color: var(--primary-color);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px var(--primary-color);
+  text-decoration: none;
+}
+
+.leaflet-popup-close-button span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  color: inherit; 
+}
+
+.leaflet-popup-close-button:hover span[aria-hidden="true"] {
+    color: var(--primary-color);
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  position: absolute;
+  top: 30%  !important;
+  right: 0;
+  border: none;
+  text-align: center;
+  width: 2% !important; 
+  height: 20px;
+  font: 16px/5px Tahoma, Verdana, sans-serif;
+  color: #757575;
+  text-decoration: none;
+  background: transparent;
+}
+
+.leaflet-popup-close-button span[aria-hidden="true"] {
+  color: var(--primary-color);
+}
+
+
+
 
 
 
@@ -1100,4 +1252,41 @@ iframe {
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+}
+
+/* CARD ALERTE */
+
+/* Overlay effect when an alert is shown */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9997; /* ensure it's below the card but above other elements */
+  background: rgba(0, 0, 0, 0.75); /* black semi-transparent */
+  backdrop-filter: blur(5px); /* make the content below blurry */
+}
+
+.card-alerte {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 9998; /* making sure the alert is on top */
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.card-alerte strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }

@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use Exception;
 use App\Entity\Marker;
+use App\Entity\Alerte;
 use Psr\Log\LoggerInterface;
+use App\Repository\AlerteRepository;
 use App\Repository\MarkerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
@@ -26,8 +28,11 @@ class MapController extends AbstractController
     }
 
     #[Route('/map', name: 'points_map')]
-    public function index(MarkerRepository $markerRepository): Response
+    public function index(MarkerRepository $markerRepository, AlerteRepository $alerteRepo): Response
     {
+
+        $latestAlert = $alerteRepo->findOneBy([], ['id' => 'DESC']);
+
         // https://symfony.com/doc/current/configuration/secrets.html pour cacher l'API
         // URL de l'API CTS pour récupérer les points d'arrêt
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery';
@@ -121,6 +126,7 @@ class MapController extends AbstractController
                     'markers' => $markers,
                     'lines' => $lines,
                     'polylines' => $polylines,
+                    'latestAlert' => $latestAlert
                 ]);
             } else {
                 var_dump($response);

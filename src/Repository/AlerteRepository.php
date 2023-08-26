@@ -42,7 +42,7 @@ class AlerteRepository extends ServiceEntityRepository
         }
     }
 
-    public function findLatestAlert()
+    public function findLatestAlert(): ?Alerte
     {
         return $this->createQueryBuilder('a')
             ->orderBy('a.alerteDate', 'DESC')
@@ -51,8 +51,29 @@ class AlerteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    // src/Repository/AlerteRepository.php
 
+public function findLatestAlertId(): ?array
+{
+    $entityManager = $this->getEntityManager();
 
+    $query = $entityManager->createQuery(
+        'SELECT a.id FROM App\Entity\Alerte a ORDER BY a.alerteDate DESC'
+    )->setMaxResults(1);
 
-    
+    return $query->getOneOrNullResult();
+}
+
+public function findUnreadByUser($user)
+{
+    $this->logger->info('Executing findUnreadByUser query for user: ' . $user->getPseudo());
+
+    return $this->createQueryBuilder('a')
+        ->where('a.user = :user')
+        ->andWhere('a.isRead = false') 
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
+}
+
 }

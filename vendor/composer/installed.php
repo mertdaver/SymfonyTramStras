@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'f58838a2f69c9036690dfb3766b18fab77b7bec6',
+        'reference' => '0f070b7fd6787d45a31647b83592cac6e0fa6ae6',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f58838a2f69c9036690dfb3766b18fab77b7bec6',
+            'reference' => '0f070b7fd6787d45a31647b83592cac6e0fa6ae6',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1139,15 +1139,6 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'symfony/translation' => array(
-            'pretty_version' => 'v6.2.11',
-            'version' => '6.2.11.0',
-            'reference' => '64113df3e8b009f92fad63014f4ec647e65bc927',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/translation',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'symfony/translation-contracts' => array(
             'pretty_version' => 'v3.3.0',
             'version' => '3.3.0.0',
@@ -1156,12 +1147,6 @@
             'install_path' => __DIR__ . '/../symfony/translation-contracts',
             'aliases' => array(),
             'dev_requirement' => false,
-        ),
-        'symfony/translation-implementation' => array(
-            'dev_requirement' => false,
-            'provided' => array(
-                0 => '2.3|3.0',
-            ),
         ),
         'symfony/twig-bridge' => array(
             'pretty_version' => 'v6.2.13',

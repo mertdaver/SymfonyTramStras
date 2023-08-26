@@ -3,43 +3,47 @@
 namespace App\Controller;
 
 use App\Entity\Alerte;
-use App\Entity\Webhook;
 use App\Repository\AlerteRepository;
-use App\Service\NotificationService;
-use App\Entity\Webhook as AppWebhook;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use \Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\UserNotificationRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
 class AlerteController extends AbstractController
 {
+    #[Route('/', name: 'index')]
+    public function index(AlerteRepository $alertRepository): Response
+    {
+        $latestAlert = $alertRepository->findOneBy([], ['id' => 'DESC']);
+        
+        return $this->render('base.html.twig', [
+            'latestAlert' => $latestAlert
+        ]);
+    }
+
     #[Route('/alerte', name: 'get_alerte', methods: ["GET"])]
-    public function getAlerte(CategorieRepository $categorieRepository): Response
+    public function getAlerte(CategorieRepository $categorieRepository, AlerteRepository $alertRepository): Response
     {
         $categories = $categorieRepository->findAll();
+        $latestAlert = $alertRepository->findOneBy([], ['id' => 'DESC']);
 
         return $this->render('alerte/index.html.twig', [
             'categories' => $categories,
+            'latestAlert' => $latestAlert
         ]);
     }
 
     #[Route('/alerte', name: 'alerte', methods: ["POST"])]
-    public function sendAlerte(Request $request, EntityManagerInterface $entityManager, Security $security, NotificationService $notificationService): Response
+    public function sendAlerte(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $data = $request->request->all();
         $user = $security->getUser();
 
-        // Création d'une nouvelle alerte
         $alerte = new Alerte();
         $alerte->setLigne($data['ligne']);
         $alerte->setAlerteDate(new \DateTime());
@@ -49,67 +53,88 @@ class AlerteController extends AbstractController
         $entityManager->persist($alerte);
         $entityManager->flush();
 
-        // Configurer le webhook
-        $webhook = new Webhook();
-        $webhook->setUrl('http://127.0.0.1:8000/webhook');
-        $webhook->setEventType('alerte.created');
-        $webhook->setData($data);
-
-        $entityManager->persist($webhook);
-        $entityManager->flush();
-
-        // Envoyer une notification aux utilisateurs
-        $notificationService->sendAlertNotification($alerte);
-
-         // Rediriger vers la vue confirmation.html.twig
-        return new RedirectResponse($this->generateUrl('confirmation'));
+        return $this->redirectToRoute('confirmation', [
+            'latestAlert' => $alerte
+        ]);
     }
-
-
-    #[Route('/get-unread-notifications', name: 'get_unread_notifications')]
-    public function getUnreadNotifications(UserNotificationRepository $userNotificationRepository, SerializerInterface $serializer)
-    {
-        $user = $this->getUser();
-
-        // Supposez que nous avons une méthode appelée findUnreadByUser dans UserNotificationRepository
-        $notifications = $userNotificationRepository->findUnreadByUser($user);
-
-        // Serialisation des objets Alerte en JSON
-        $data = $serializer->serialize($notifications, 'json', ['groups' => 'alerte_read']);
-
-        return new JsonResponse($data, 200, [], true);
-    }
-
-
 
     #[Route('/confirmation', name: 'confirmation', methods: ["GET"])]
-    public function confirmation(): Response
+    public function confirmation(Request $request): Response
     {
-        return $this->render('alerte/confirmation.html.twig');
+        $latestAlert = $request->query->get('latestAlert');
+
+        return $this->render('alerte/confirmation.html.twig', [
+            'latestAlert' => $latestAlert
+        ]);
     }
 
     #[Route('/get-latest-alert', name: 'get_latest_alert', methods: ['GET'])]
-    public function getLatestAlert(AlerteRepository $alerteRepository): JsonResponse
+    public function latestAlert(AlerteRepository $alerteRepository): Response
     {
-        // Récupérer la dernière alerte de la base de données
         $latestAlert = $alerteRepository->findLatestAlert();
-
-        if (!$latestAlert) {
-            // Return an empty JSON response if no alert is found
-            return new JsonResponse([]);
-        }
-
-        // Préparer les données à envoyer dans la réponse JSON
+        
         $data = [
             'id' => $latestAlert->getId(),
             'ligne' => $latestAlert->getLigne(),
             'alerteDate' => $latestAlert->getAlerteDate()->format('Y-m-d H:i:s'),
             'sens' => $latestAlert->getSens(),
-            'userId' => $latestAlert->getUser() ? $latestAlert->getUser()->getId() : null,
+            'user' => [
+                'id' => $latestAlert->getUser()->getId(),
+                'username' => $latestAlert->getUser()->getPseudo()
+            ]
         ];
 
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
+    }
 
-        // Renvoyer la réponse JSON avec les dernières données d'alerte
+    #[Route('/getAlertDetails/{alertId}', name: 'get_alert_details')]
+    public function getAlertDetails(int $alertId, AlerteRepository $alerteRepository): JsonResponse
+    {
+        $alerte = $alerteRepository->find($alertId);
+    
+        if (!$alerte) {
+            return new JsonResponse(['error' => 'Alerte non trouvée'], 404);
+        }
+    
+        $alerteData = [
+            'alertId' => $alerte->getId(),
+            'ligne' => $alerte->getLigne(),
+            'sens' => $alerte->getSens(),
+            'user' => $alerte->getUser()->getPseudo(),
+            'alerteDate' => $alerte->getAlerteDate()->format('Y-m-d H:i:s'),
+        ];
+    
+        return new JsonResponse($alerteData);
+    }
+
+    #[Route('getLatestAlertId', name: 'get_latest_alert_id')]
+    public function getLatestAlertId(AlerteRepository $repository): JsonResponse
+    {
+        $result = $repository->findLatestAlertId();
+        $alertId = $result ? $result['id'] : null;
+        return new JsonResponse(['id' => $alertId]);
+    }
+
+    #[Route('/latest-alert', name: 'latest_alert')]
+    public function getLatestAlertInfo(AlerteRepository $alerteRepository): JsonResponse
+    {
+        $latestAlert = $alerteRepository->findLatestAlert();
+
+        if (!$latestAlert) {
+            return new JsonResponse(['error' => 'Aucune alerte trouvée'], 404);
+        }
+
+        $data = [
+            'id' => $latestAlert->getId(),
+            'ligne' => $latestAlert->getLigne(),
+            'alerteDate' => $latestAlert->getAlerteDate()->format('Y-m-d H:i:s'),
+            'sens' => $latestAlert->getSens(),
+            'user' => [
+                'id' => $latestAlert->getUser()->getId(),
+                'username' => $latestAlert->getUser()->getPseudo()
+            ]
+        ];
+
         return new JsonResponse($data);
     }
 }
