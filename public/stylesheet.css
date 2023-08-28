@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+ @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 :root {
   --primary-color: #e53236;
   --primary-color-lighter: #e47577;
@@ -1291,6 +1291,25 @@ iframe {
   font-weight: bold;
 }
 
-.leaflet-control-attribution .leaflet-control{
+
+/* Leaflet */
+
+/* fait disparaitre la mention à leaflet en bas de la map */
+.leaflet-control-attribution {
   display : none;
+} 
+
+/* Rejoute du texte explicatif pour l'itinéraire */
+.leaflet-routing-geocoder:nth-child(1)::before {
+  content: "Votre point de départ :";
+  display: block;
+  margin-bottom: 5px; /* ajustez cette valeur selon vos besoins */
+  font-weight: bold; /* met le texte en gras */
+}
+
+.leaflet-routing-geocoder:nth-child(2)::before {
+  content: "Votre point d'arrivée :";
+  display: block;
+  margin-bottom: 5px; /* ajustez cette valeur selon vos besoins */
+  font-weight: bold; /* met le texte en gras */
 }

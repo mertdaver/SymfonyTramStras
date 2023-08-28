@@ -247,6 +247,7 @@ popupContent += markerData.linesDestinations[j] + '<br>';
 if (! markerData.isCustom) {
 var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
 popupContent += '<button class="loadStopTimes" data-stop-url="' + stopTimesUrl + '">Voir les horaires</button>';
+popupContent += '<button class="getDirections" data-lat="' + markerData.latitude + '" data-lng="' + markerData.longitude + '">M\'y rendre</button>';
 
 }
 
@@ -324,29 +325,65 @@ console.warn('Erreur lors de la récupération de la position : ' + err.message)
 
 
 document.addEventListener('click', function (event) {
-if (event.target && event.target.classList.contains('loadStopTimes')) {
-var stopTimesUrl = event.target.getAttribute('data-stop-url');
+	// Handler pour loadStopTimes
+	if (event.target && event.target.classList.contains('loadStopTimes')) {
+		var stopTimesUrl = event.target.getAttribute('data-stop-url');
 
-fetch(stopTimesUrl).then(response => response.json()).then(data => {
-if (data.stopTimes && data.stopTimes.length > 0) {
-var destination = data.stopTimes[0].destinationName;
-var times = data.stopTimes.map(item => item.expectedDepartureTime);
-var timesHTML = `<strong>Direction: ${destination}</strong><br>` + times.join('<br>');
+		fetch(stopTimesUrl)
+			.then(response => response.json())
+			.then(data => {
+				if (data.stopTimes && data.stopTimes.length > 0) {
+					var destination = data.stopTimes[0].destinationName;
+					var times = data.stopTimes.map(item => item.expectedDepartureTime);
+					var timesHTML = `<strong>Direction: ${destination}</strong><br>` + times.join('<br>');
 
-// Insérez les horaires à l'endroit souhaité, par exemple dans le parent du bouton
-event.target.parentNode.innerHTML = timesHTML;
-} else {
-console.warn('No stop times available');
-}
+					// Insérez les horaires à l'endroit souhaité, par exemple dans le parent du bouton
+					event.target.parentNode.innerHTML = timesHTML;
+				} else {
+					console.warn('No stop times available');
+				}
+				// Si vous voulez garder le bouton désactivé, assurez-vous de le faire ici, après avoir inséré les horaires
+				// event.target.setAttribute('disabled', 'disabled');
+			})
+			.catch(error => {
+				console.error('Erreur lors de la récupération des horaires:', error);
+			});
+	}
 
-// Si vous voulez garder le bouton désactivé, assurez-vous de le faire ici, après avoir inséré les horaires
-// event.target.setAttribute('disabled', 'disabled');
-}).catch(error => {
-console.error('Erreur lors de la récupération des horaires:', error);
+	if (event.target && event.target.classList.contains('getDirections')) {
+		if (isUserLocationKnown) {
+			var destinationLat = event.target.getAttribute('data-lat');
+			var destinationLng = event.target.getAttribute('data-lng');
+	
+			// Identifier les éléments de saisie
+			var startInput = document.querySelector('.leaflet-routing-geocoder input[placeholder="Start"]');
+			var endInput = document.querySelector('.leaflet-routing-geocoder input[placeholder="End"]');
+			
+			// Affecter les coordonnées à ces éléments de saisie
+			if (startInput && endInput) {
+				// Suppose que userLat et userLng contiennent la latitude et la longitude de l'utilisateur.
+				startInput.value = userLat + ', ' + userLng;
+				endInput.value = destinationLat + ', ' + destinationLng;
+	
+				// Simuler un appui sur la touche 'Entrer' pour soumettre le formulaire
+				var enterKeyEvent = new KeyboardEvent('keydown', {
+					key: 'Enter',
+					code: 'Enter',
+					which: 13,
+					keyCode: 13,
+					bubbles: true
+				});
+	
+				endInput.dispatchEvent(enterKeyEvent);  // Déclencher l'événement sur l'élément input "End"
+	
+			} else {
+				console.warn('Impossible de trouver les éléments de saisie du formulaire.');
+			}
+		} else {
+			alert("Votre position n'est pas encore connue. Veuillez attendre un instant et réessayer.");
+		}
+	}
+	
 });
-}
-});
-
-
-	</script>
+</script>
 {% endblock %}
