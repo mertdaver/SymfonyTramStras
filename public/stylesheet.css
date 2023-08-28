@@ -1290,3 +1290,7 @@ iframe {
   font-size: 18px;
   font-weight: bold;
 }
+
+.leaflet-control-attribution .leaflet-control{
+  display : none;
+}

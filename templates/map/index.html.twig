@@ -5,7 +5,12 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+	{# Nominatim (Leaflet Control Geocoder)  #}
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+	{# Leaflet Routing Machine #}
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+	
+	
 
     <style>
 		#map {
@@ -25,11 +30,19 @@
 	{{ parent() }}
 	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 	<script src="https://unpkg.com/leaflet-tilelayer-wms/dist/leaflet-tilelayer-wms.min.js"></script>
+	{# Nominatim (Leaflet Control Geocoder)  #}
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+	{# AJAX #}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+	{# Leaflet rooting machine #}
+	<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+	
 	<script>
 		var stopTimesUrlTemplate = "{{ path('horaires_map', {'stopCode': 'stopCode'}) }}";
 var userLat = null;
 var userLng = null;
 var isUserLocationKnown = false;
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -38,14 +51,19 @@ var mapElement = document.getElementById('map');
 if (mapElement && ! mapElement._leaflet_id) {
 var markers = {{ markers | json_encode | raw }};
 var polylines = {{ polylines | json_encode | raw }};
-var map = L.map('map').setView([
-48.5734053, 7.7521113
-], 13);
 
+// initialise le cadrage de la carte
+var map = L.map('map').setView([48.5734053, 7.7521113], 13);
+
+// Tuiles
 var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-maxZoom: 18
-}).addTo(map);
+maxZoom: 18}).addTo(map);
+
+// on active la gestion d'itinéraires 
+L.Routing.control({
+	geocoder: L.Control.Geocoder.nominatim()
+}).addTo(map)
 
 
 // AJOUT DES LIGNES - MERCI https://magosm.magellium.com/aide.html
@@ -314,5 +332,7 @@ console.error('Erreur lors de la récupération des horaires:', error);
 });
 }
 });
+
+
 	</script>
 {% endblock %}
