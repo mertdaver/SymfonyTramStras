@@ -73,7 +73,7 @@ var selectedProfile = document.getElementById("routingProfile").value;
 
 
 // on active la gestion d'itinéraires 
-L.Routing.control({
+var routingControl = L.Routing.control({
 	geocoder: L.Control.Geocoder.nominatim(),
 	// Style de la ligne d'itinéraire
 	lineOptions: {
@@ -101,10 +101,16 @@ selectClone.id = "routingProfileCloned";
 // Ajoutez le sélecteur cloné à côté des champs d'itinéraire
 document.querySelector('.leaflet-routing-geocoders').appendChild(selectClone);
 
-// Écoutez les changements du sélecteur cloné pour mettre à jour le profile de l'itinéraire
+// Écoute les changements du sélecteur cloné pour mettre à jour le profile de l'itinéraire
 selectClone.addEventListener('change', function() {
-    // Ici, vous pouvez mettre à jour le profile de l'itinéraire basé sur la valeur choisie
-    // Note: Vous aurez probablement besoin de redéfinir et de rafraîchir le contrôle d'itinéraire pour que le changement prenne effet
+    var newProfile = this.value; // obtenez la nouvelle valeur sélectionnée
+    var router = routingControl.getRouter(); // obtenez l'instance du routeur
+
+    // Mette à jour le profil
+    router.options.profile = newProfile;
+	console.log('Mise à jour de l\'itinéraire avec le profil:', newProfile);
+    routingControl.route(); // Re-traitez l'itinéraire avec le nouveau profil
+	console.log('Profil sélectionné:', newProfile);
 });
 
 

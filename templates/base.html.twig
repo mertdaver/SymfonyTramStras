@@ -56,31 +56,27 @@
 
         </div>
     </header>
-    <div id="label">
-        <img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer">
-        <p>Copyright © 2023 CTS Killer</p>
-    </div>
-
-
-<div id="latest-alert">
+    
+    
+    <div id="latest-alert">
     {% if latestAlert|default(false) %}
-        {% include 'latest_alert/_alert.html.twig' with {'alerte': latestAlert} %}
+    {% include 'latest_alert/_alert.html.twig' with {'alerte': latestAlert} %}
     {% endif %}
 </div>
 
 
-    {% block body %}
-    {% endblock %}
-    <footer class="footer parallax-footer">
-        <div class="parallax-footer-content">
-            <div class="footer-column">
-                <h5>Liens rapides</h5>
-                <ul class="quick-links">
-                    <li>
-                        <a href="#">Conditions Générales</a>
-                    </li>
-                    <li>
-                        <a href="#">Politique de Cookies</a>
+{% block body %}
+{% endblock %}
+<footer class="footer parallax-footer">
+    <div class="parallax-footer-content">
+        <div class="footer-column">
+            <h5>Liens rapides</h5>
+            <ul class="quick-links">
+                <li>
+                    <a href="#">Conditions Générales</a>
+                </li>
+                <li>
+                    <a href="#">Politique de Cookies</a>
                     </li>
                     <li>
                         <a href="#">Politique de Confidentialité</a>
@@ -126,10 +122,14 @@
                 </div>
             </div>
         </div>
+        <div id="label">
+            <img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer">
+            <p>Copyright © 2023 CTS Killer</p>
+        </div>
     </footer>
     {% block javascripts %}
-
-<script>
+    
+    <script>
 // Ouverture de la fenêtre modale
 function openModal(alerte) {
     var modal = document.getElementById("myModalAlerte");
