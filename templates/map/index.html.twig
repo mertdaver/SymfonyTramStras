@@ -62,7 +62,21 @@ maxZoom: 18}).addTo(map);
 
 // on active la gestion d'itinéraires 
 L.Routing.control({
-	geocoder: L.Control.Geocoder.nominatim()
+	geocoder: L.Control.Geocoder.nominatim(),
+	// Style de la ligne d'itinéraire
+	lineOptions: {
+		styles: [{
+			color: '#e47577',
+			opacity: 1,
+			weight: 10
+		}]
+	},
+	// met le détail de l'itinéraire à prendre en fr
+	router: new L.Routing.osrmv1({
+		language: 'fr',
+		// valeurs acceptés -> 'car', 'bike' ou 'foot'
+		profile: 'bike'
+	})
 }).addTo(map)
 
 
