@@ -1,37 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-	{{ parent() }}
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
-	{# Nominatim (Leaflet Control Geocoder)  #}
-	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-	{# Leaflet Routing Machine #}
-	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-	
-	
+{{ parent() }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/MarkerCluster.Default.css" />
+{# Nominatim (Leaflet Control Geocoder)  #}
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+{# Leaflet Routing Machine #}
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 
-    <style>
-		#map {
-			height: 100vh;
-			border: 2px solid red;
 
-		}
-	</style>
+
+<style>
+	#map {
+		height: 100vh;
+		border: 2px solid red;
+		
+	}
+</style>
 {% endblock %}
 
 {% block body %}
-	<h1>La Carte du Réseau CTS</h1>
 
-	{# selecteur mode transport #}
-	<select id="routingProfile">
-		<option value="car">Voiture</option>
-		<option value="bike" selected>Vélo</option>
-		<option value="foot">À pied</option>
-	</select>
-	
-	<div id="map"></div>
+<h1>La Carte du Réseau CTS</h1>
+<div id="map"></div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -40,8 +34,8 @@
 	<script src="https://unpkg.com/leaflet-tilelayer-wms/dist/leaflet-tilelayer-wms.min.js"></script>
 	{# Nominatim (Leaflet Control Geocoder)  #}
 	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-	{# AJAX #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+	{# Cluster #}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
 	{# Leaflet rooting machine #}
 	<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 	
@@ -54,7 +48,8 @@ var isUserLocationKnown = false;
 
 
 document.addEventListener('DOMContentLoaded', function () {
-var mapElement = document.getElementById('map');
+
+	var mapElement = document.getElementById('map');
 
 if (mapElement && ! mapElement._leaflet_id) {
 var markers = {{ markers | json_encode | raw }};
@@ -63,14 +58,13 @@ var polylines = {{ polylines | json_encode | raw }};
 // initialise le cadrage de la carte
 var map = L.map('map').setView([48.5734053, 7.7521113], 13);
 
+// Initialise le groupement de clusters
+var markersClusterGroup = L.markerClusterGroup();
+
 // Tuiles
 var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
 maxZoom: 18}).addTo(map);
-
-// récupérer la valeur actuellement sélectionnée dans le sélecteur
-var selectedProfile = document.getElementById("routingProfile").value;
-
 
 // on active la gestion d'itinéraires 
 var routingControl = L.Routing.control({
@@ -86,37 +80,14 @@ var routingControl = L.Routing.control({
 	// met le détail de l'itinéraire à prendre en fr
 	router: new L.Routing.osrmv1({
 		language: 'fr',
-		// valeurs acceptés -> 'car', 'bike' ou 'foot'
-		profile: selectedProfile
+		// valeurs acceptés -> 'car', 'bike' ou 'foot' mais pas possible car demo server
+		profile: 'car'
 	})
 }).addTo(map)
 
-// Selecteur de profile pour itinéraire
-// Sélectionnez le sélecteur de mode de transport et créez une copie
-var selectClone = document.getElementById('routingProfile').cloneNode(true);
-
-// Définissez un nouvel ID pour éviter des doublons
-selectClone.id = "routingProfileCloned";
-
-// Ajoutez le sélecteur cloné à côté des champs d'itinéraire
-document.querySelector('.leaflet-routing-geocoders').appendChild(selectClone);
-
-// Écoute les changements du sélecteur cloné pour mettre à jour le profile de l'itinéraire
-selectClone.addEventListener('change', function() {
-    var newProfile = this.value; // obtenez la nouvelle valeur sélectionnée
-    var router = routingControl.getRouter(); // obtenez l'instance du routeur
-
-    // Mette à jour le profil
-    router.options.profile = newProfile;
-	console.log('Mise à jour de l\'itinéraire avec le profil:', newProfile);
-    routingControl.route(); // Re-traitez l'itinéraire avec le nouveau profil
-	console.log('Profil sélectionné:', newProfile);
-});
 
 
-
-
-// AJOUT DES LIGNES - MERCI https://magosm.magellium.com/aide.html
+// AJOUT DES LIGNES
 
 // Créer les couches WMS pour Tram et Bus
 var wmsLayerTram = L.tileLayer.wms('https://magosm.magellium.com/geoserver/ows', {
@@ -146,17 +117,16 @@ var overlayMaps = {
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 
-var customIcon = L.icon({ // iconUrl: 'http://localhost/SymfonyTramStras/png/icons8-tram-30.png',
-iconUrl: 'http://localhost/SymfonyTramStras/public/arret-de-bus.png',
-
-iconSize: [
-20, 20
-],
-iconAnchor: [
-24, 48
-],
-popupAnchor: [-3, -76]
-});
+/* var customIcon = L.icon({
+	iconUrl: src="{{ asset('public\arret-de-bus.png) }}",
+	iconSize: [
+	  20, 20
+	],
+	iconAnchor: [
+	  24, 48
+	],
+	popupAnchor: [-3, -76]
+  }); */
 
 var userLocationIcon = L.icon({
 iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Rond_bleu.png?20140330010413',
@@ -258,22 +228,22 @@ lastMarker = null; // réinitialise la variable lastMarker
 
 function init() {
 if (Array.isArray(markers) && Array.isArray(polylines)) {
-for (var i = 0; i < markers.length; i++) {
-var markerData = markers[i];
-
-if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
-var marker;
-if (markerData.isCustom) {
-marker = L.marker([
-markerData.latitude, markerData.longitude
-], {icon: customMarkerIcon}).addTo(map);
-} else {
-marker = L.marker([
-markerData.latitude, markerData.longitude
-], {icon: customIcon}).addTo(map);
-}
-
-var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+	for (var i = 0; i < markers.length; i++) {
+		var markerData = markers[i];
+		if (markerData.latitude !== undefined && markerData.longitude !== undefined) {
+			var marker;
+			if (markerData.isCustom) {
+				marker = L.marker([
+				markerData.latitude, markerData.longitude
+				], {icon: customMarkerIcon});
+			} else {
+				marker = L.marker([
+				markerData.latitude, markerData.longitude
+				], {icon: customIcon}).addTo(map); // Ajoute directement à la carte pour ceux qui n'utilisent pas customIcon
+			}
+	
+			var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
+	
 
 for (var j = 0; j < markerData.linesDestinations.length; j++) {
 popupContent += markerData.linesDestinations[j] + '<br>';
@@ -288,8 +258,13 @@ popupContent += '<button class="getDirections" data-lat="' + markerData.latitude
 }
 
 marker.bindPopup(popupContent);
+	if (markerData.isCustom) {
+	markersClusterGroup.addLayer(marker); // Ajoute les marqueurs au groupe de clusters
 }
 }
+}
+// Ajoute le groupe de clusters à la carte après avoir terminé d'ajouter tous les marqueurs
+map.addLayer(markersClusterGroup);
 
 for (var k = 0; k < polylines.length; k++) {
 var polylineData = polylines[k];
@@ -397,20 +372,9 @@ if (event.target && event.target.classList.contains('getDirections')) {
         
         // Affecter les coordonnées à ces éléments de saisie
         if (startInput && endInput) {
-            // Suppose que userLat et userLng contiennent la latitude et la longitude de l'utilisateur.
+            // userLat et userLng contiennent la latitude et la longitude de l'utilisateur.
             startInput.value = userLat + ', ' + userLng;
             endInput.value = destinationLat + ', ' + destinationLng;
-
-            // Simuler un appui sur la touche 'Entrer' pour soumettre le formulaire
-            var enterKeyEvent = new KeyboardEvent('keydown', {
-                key: 'Enter',
-                code: 'Enter',
-                which: 13,
-                keyCode: 13,
-                bubbles: true
-            });
-
-            endInput.dispatchEvent(enterKeyEvent);  // Déclencher l'événement sur l'élément input "End"
 
         } else {
             console.warn('Impossible de trouver les éléments de saisie du formulaire.');
@@ -419,11 +383,6 @@ if (event.target && event.target.classList.contains('getDirections')) {
         alert("Votre position n'est pas encore connue. Veuillez attendre un instant et réessayer.");
     }
 }
-
-document.getElementById("routingProfile").addEventListener("change", function() {
-    var newProfile = this.value;
-    
-});
 
 });
 </script>
