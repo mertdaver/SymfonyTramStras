@@ -31,7 +31,6 @@
 {% block javascripts %}
 	{{ parent() }}
 	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-	<script src="https://unpkg.com/leaflet-tilelayer-wms/dist/leaflet-tilelayer-wms.min.js"></script>
 	{# Nominatim (Leaflet Control Geocoder)  #}
 	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 	{# Cluster #}
@@ -58,8 +57,52 @@ var polylines = {{ polylines | json_encode | raw }};
 // initialise le cadrage de la carte
 var map = L.map('map').setView([48.5734053, 7.7521113], 13);
 
+var individualMarkers = L.layerGroup();
+var customMarkersLayer = L.layerGroup();
+
+map.on('overlayadd', function(eventLayer){
+    if(eventLayer.name === 'Clusters'){
+        map.removeLayer(individualMarkers);
+    }
+});
+
+map.on('overlayremove', function(eventLayer){
+    if(eventLayer.name === 'Clusters'){
+        individualMarkers.addTo(map);
+    }
+});
+
+
+
 // Initialise le groupement de clusters
-var markersClusterGroup = L.markerClusterGroup();
+// avec des Settings avencés clusters
+
+var markersClusterGroup = L.markerClusterGroup({
+    // Personnalisez la couleur en fonction du nombre de points dans le cluster
+    iconCreateFunction: function (cluster) {
+        var count = cluster.getChildCount();
+        var size = "small";
+        var color = "green"; 
+
+        if (count > 10) {
+            color = "yellow";
+        }
+        if (count > 100) {
+            color = "red";
+            size = "large";
+        }
+        
+        // Retourne une nouvelle icône pour le cluster
+        return L.divIcon({ 
+            html: '<div><span>' + count + '</span></div>', 
+            className: 'marker-cluster marker-cluster-' + size + ' marker-cluster-' + color,
+            iconSize: L.point(40, 40) 
+        });
+    },
+    
+    // Ajustez la distance entre les marqueurs avant qu'ils ne soient regroupés
+    maxClusterRadius: 100 // par défaut, c'est 80
+});
 
 // Tuiles
 var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -109,16 +152,18 @@ var baseMaps = {
 "OpenStreetMap": osmLayer
 };
 
+// Bouton controle Map
 var overlayMaps = {
 "Tramways": wmsLayerTram,
-"Bus": wmsLayerBus
+"Bus": wmsLayerBus,
+"Clusters": markersClusterGroup
 };
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 
-/* var customIcon = L.icon({
-	iconUrl: src="{{ asset('public\arret-de-bus.png) }}",
+ var customIcon = L.icon({
+	iconUrl: "{{ asset('arret-de-bus.png') }}", 
 	iconSize: [
 	  20, 20
 	],
@@ -126,7 +171,7 @@ L.control.layers(baseMaps, overlayMaps).addTo(map);
 	  24, 48
 	],
 	popupAnchor: [-3, -76]
-  }); */
+  }); 
 
 var userLocationIcon = L.icon({
 iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Rond_bleu.png?20140330010413',
@@ -150,6 +195,8 @@ iconAnchor: [
 popupAnchor: [-3, -76]
 });
 
+
+
 function fadeMarker(marker) {
 var opacity = 1;
 var timer = setInterval(function () {
@@ -162,18 +209,24 @@ opacity -= 0.02;
 }, 10000);
 }
 
-var lastMarker = null; // ajout de la variable lastMarker
+// ajout de la variable lastMarker
+var lastMarker = null; 
 
 map.on('click', function (e) {
 {% if not app.user %}
 var modal = document.getElementById("myModal");
 modal.style.display = "block";
 {% else %}
-if (lastMarker !== null) { // supprime le dernier marqueur si existant
+// supprime le dernier marqueur si existant
+if (lastMarker !== null) { 
+	console.log("if (lastMarker !== null) { ok ");
+
 lastMarker.remove();
 }
 
 var marker = L.marker(e.latlng, {icon: customMarkerIcon}).addTo(map);
+individualMarkers.addLayer(marker);
+customMarkersLayer.addLayer(marker);
 
 lastMarker = marker; // mise à jour de la variable lastMarker
 
@@ -186,10 +239,12 @@ var popupContent = `
         `;
 marker.bindPopup(popupContent).openPopup();
 
-marker.on('popupclose', function (e) { // Supprime le marqueur seulement si l'utilisateur a fermé la popup sans soumettre
+// Supprime le marqueur seulement si l'utilisateur a fermé la popup sans soumettre
+marker.on('popupclose', function (e) { 
 if (lastMarker === marker) {
 marker.remove();
-lastMarker = null; // réinitialise la variable lastMarker
+// réinitialise la variable lastMarker
+lastMarker = null;
 }
 });
 
@@ -222,7 +277,8 @@ console.error('Erreur lors de l\'enregistrement du marqueur :', error);
 marker.remove();
 lastMarker = null; // réinitialise la variable lastMarker
 }
-});{% endif %}
+});
+{% endif %}
 });
 
 
@@ -234,35 +290,45 @@ if (Array.isArray(markers) && Array.isArray(polylines)) {
 			var marker;
 			if (markerData.isCustom) {
 				marker = L.marker([
-				markerData.latitude, markerData.longitude
+				  markerData.latitude, markerData.longitude
 				], {icon: customMarkerIcon});
-			} else {
+				customMarkersLayer.addLayer(marker);
+			  } else {
 				marker = L.marker([
-				markerData.latitude, markerData.longitude
-				], {icon: customIcon}).addTo(map); // Ajoute directement à la carte pour ceux qui n'utilisent pas customIcon
-			}
+				  markerData.latitude, markerData.longitude
+				], {icon: customIcon});
+				individualMarkers.addLayer(marker);
+			  }			  
 	
 			var popupContent = '<strong>' + markerData.stopName + '</strong><br>';
-	
+			customMarkersLayer.addTo(map);
+
 
 for (var j = 0; j < markerData.linesDestinations.length; j++) {
 popupContent += markerData.linesDestinations[j] + '<br>';
 }
 
 // Ajout de la condition
-if (! markerData.isCustom) {
+if (!markerData.isCustom) {
 var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
 popupContent += '<button class="loadStopTimes" data-stop-url="' + stopTimesUrl + '">Voir les horaires</button>';
 popupContent += '<button class="getDirections" data-lat="' + markerData.latitude + '" data-lng="' + markerData.longitude + '">M\'y rendre</button>';
 
 }
 
-marker.bindPopup(popupContent);
-	if (markerData.isCustom) {
-	markersClusterGroup.addLayer(marker); // Ajoute les marqueurs au groupe de clusters
+// Ajoute les marqueurs au groupe de clusters
+	marker.bindPopup(popupContent);
+	if (!markerData.isCustom) {
+	markersClusterGroup.addLayer(marker); 
+   }
 }
 }
-}
+
+// Ajoute tous les marqueurs au groupe de clusters
+// marker.bindPopup(popupContent);
+// markersClusterGroup.addLayer(marker); 
+
+
 // Ajoute le groupe de clusters à la carte après avoir terminé d'ajouter tous les marqueurs
 map.addLayer(markersClusterGroup);
 
@@ -279,6 +345,9 @@ polyline.bindPopup(polylineData.lineName);
 console.error('Format de données incorrect pour les marqueurs ou les polylignes.');
 }
 }
+
+
+
 
 init();
 
@@ -322,7 +391,7 @@ icon: youAreHereIcon,
 title: 'Vous êtes ici',
 alt: 'Marqueur "vous êtes ici"'
 }).addTo(map);
-// Optionnel : si vous voulez afficher la précision
+// Cercle de précisiion Optionnel
 L.circle([
 userLat, userLng
 ], {radius: accuracy}).addTo(map);
@@ -383,6 +452,23 @@ if (event.target && event.target.classList.contains('getDirections')) {
         alert("Votre position n'est pas encore connue. Veuillez attendre un instant et réessayer.");
     }
 }
+
+//  Lorsque les clusters sont désactivés (supprimés de la carte), ajoute individualMarkers à la carte
+// Lorsque les clusters sont réactivés, supprimez individualMarkers de la carte
+
+map.on('overlayadd', function(eventLayer){
+    if(eventLayer.name === 'Clusters'){
+        map.removeLayer(individualMarkers);
+        customMarkersLayer.addTo(map);  // ajoute les customMarkers à la carte lorsque les clusters sont activés
+    }
+});
+
+map.on('overlayremove', function(eventLayer){
+    if(eventLayer.name === 'Clusters'){
+        individualMarkers.addTo(map);
+    }
+});
+
 
 });
 </script>
