@@ -105,10 +105,11 @@ class MapController extends AbstractController
                     $markers[] = [
                         'latitude' => $userMarker->getLatitude(),
                         'longitude' => $userMarker->getLongitude(),
-                        'stopName' => '', // Ajoutez le nom personnalisé si nécessaire
-                        'stopCode' => '', // Ajoutez le code d'arrêt personnalisé si nécessaire
-                        'linesDestinations' => [], // Ajoutez les destinations de lignes personnalisées si nécessaire
-                        'isCustom' => true, // Marqueur personnalisé, icône spécifique utilisée
+                        'stopName' => '', // le nom personnalisé si nécessaire
+                        'stopCode' => '', // le code d'arrêt personnalisé si nécessaire
+                        'linesDestinations' => [], // les destinations de lignes personnalisées si nécessaire
+                        'isCustom' => true, // icône spécifique
+                        'text' => $userMarker->getText(),  // le texte associé au marqueur personnalisé
                     ];
                 }
 
