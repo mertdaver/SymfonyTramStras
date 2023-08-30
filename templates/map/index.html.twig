@@ -71,6 +71,9 @@
 
   var individualMarkers = L.layerGroup();
   var customMarkersLayer = L.layerGroup();
+  var customIconsLayer = L.layerGroup();
+  var individualLayerGroup = L.layerGroup(); 
+  
 
 
 
@@ -158,10 +161,39 @@
   var overlayMaps = {
   "Tramways": wmsLayerTram,
   "Bus": wmsLayerBus,
-  "Clusters": markersClusterGroup
+  "Clusters": markersClusterGroup,
+  "Custom Icons": customIconsLayer 
   };
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+// Événement lorsqu'un calque est retiré
+map.on('overlayremove', function(eventLayer) {
+    // Si le calque retiré est 'Clusters', alors ajoute les icônes personnalisées à la carte
+    if(eventLayer.name === 'Clusters') {
+        customMarkersLayer.removeFrom(map); // retirez cette ligne, elle n'est pas nécessaire ici
+        map.addLayer(individualMarkers);   // Affichez les marqueurs individuels sans les regrouper
+    }
+    // Si le calque retiré est 'Custom Icons', alors retire les icônes personnalisées
+    if(eventLayer.name === 'Custom Icons') {
+        customIconsLayer.removeFrom(map);
+    }
+});
+
+// Événement lorsqu'un calque est ajouté
+map.on('overlayadd', function(eventLayer) {
+    // Si le calque ajouté est 'Clusters', alors retire les marqueurs personnalisés
+    if(eventLayer.name === 'Clusters') {
+        customIconsLayer.addTo(map); 
+        individualMarkers.removeFrom(map);   // Ajoutez cette ligne pour retirer les marqueurs individuels
+    }
+    // Si le calque ajouté est 'Custom Icons', alors ajoute les icônes personnalisées
+    if(eventLayer.name === 'Custom Icons') {
+        customIconsLayer.addTo(map);
+    }
+});
+
+
 
 
 
@@ -297,7 +329,7 @@
   				marker = L.marker([
   				  markerData.latitude, markerData.longitude
   				], {icon: customMarkerIcon});
-  				customMarkersLayer.addLayer(marker);
+  				customIconsLayer.addLayer(marker); 
   			  } else {
   				marker = L.marker([
   				  markerData.latitude, markerData.longitude
@@ -333,7 +365,8 @@
 
   // Ajoute les marqueurs au groupe de clusters
   	if (!markerData.isCustom) {
-  	markersClusterGroup.addLayer(marker);
+  		markersClusterGroup.addLayer(marker);
+	  	individualMarkers.addLayer(marker);
      }
   }
   }
@@ -461,38 +494,6 @@
           alert("Votre position n'est pas encore connue. Veuillez attendre un instant et réessayer.");
       }
   }
-
-
-
-  map.on('overlayadd', function(eventLayer){
-      if(eventLayer.name === 'Clusters'){
-          map.removeLayer(individualMarkers);
-      }
-  });
-
-  map.on('overlayremove', function(eventLayer){
-      if(eventLayer.name === 'Clusters'){
-          individualMarkers.addTo(map);
-      }
-  });
-
-
-
-  //  Lorsque les clusters sont désactivés (supprimés de la carte), ajoute individualMarkers à la carte
-  // Lorsque les clusters sont réactivés, supprimez individualMarkers de la carte
-
-  map.on('overlayadd', function(eventLayer){
-      if(eventLayer.name === 'Clusters'){
-          map.removeLayer(individualMarkers);
-          customMarkersLayer.addTo(map);  // ajoute les customMarkers à la carte lorsque les clusters sont activés
-      }
-  });
-
-  map.on('overlayremove', function(eventLayer){
-      if(eventLayer.name === 'Clusters'){
-          individualMarkers.addTo(map);
-      }
-  });
 
 
   });
