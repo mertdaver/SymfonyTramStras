@@ -5,6 +5,13 @@
 {% block body %}
     <h1>Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
     <div class="card">
+
+        {% if 'ROLE_ADMIN' in app.user.roles %}
+        <a href="{{ path('admin') }}" class="btn btn-primary">Administration</a>
+        
+        {% endif %}
+
+
         {% if activeSub %}
             {% if activeSub.isIsActive() %}
                 <p>Votre abonnement est actif jusqu'au {{ activeSub.getCurrentPeriodEnd|date('d/m/Y') }}.</p>
