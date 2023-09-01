@@ -2,19 +2,23 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils, RateLimiterFactory $loginLimiter): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        $limiter = $loginLimiter->create('login');
+    
+        if (false === $limiter->consume()->isAccepted()) {
+            // Bloquez l'utilisateur ou renvoyez une réponse d'erreur.
+            throw $this->createAccessDeniedException('Trop de tentatives de connexion. Veuillez réessayer dans 5 minutes.');
+        }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();

@@ -2,28 +2,49 @@
 
 {% block title %}Se connecter{% endblock %}
 
-{% block body %}
-<form method="post" class="custom-login-form">
-    {% if error %}
-        <div class="custom-alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+{% block header %}
+<head>
+<script src="https://www.google.com/recaptcha/enterprise.js?render=6Lf3j-4nAAAAAG1MPtw4TwT--d38SNVpgnXrvsP6"></script>
+</head>
+{% endblock %}
 
+{% block body %}
     {% if app.user %}
         <div class="custom-login-info mb-3">
             Tu es connecté : {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
         </div>
+    {% else %}
+        <form method="post" class="custom-login-form">
+            {% if error %}
+                <div class="custom-alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <h1 class="custom-login-title h3 mb-3 font-weight-normal">Se connecter</h1>
+            <label for="inputEmail" class="custom-login-label">Email</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="custom-login-input form-control" autocomplete="email" required autofocus>
+            <label for="inputPassword" class="custom-login-label">Password</label>
+            <input type="password" name="password" id="inputPassword" class="custom-login-input form-control" autocomplete="current-password" required>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="custom-login-button btn btn-lg btn-primary" type="submit">
+                Se connecter
+            </button>
+        </form>
     {% endif %}
+{% endblock %}
 
-    <h1 class="custom-login-title h3 mb-3 font-weight-normal">Se connecter</h1>
-    <label for="inputEmail" class="custom-login-label">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="custom-login-input form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword" class="custom-login-label">Password</label>
-    <input type="password" name="password" id="inputPassword" class="custom-login-input form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-    <button class="custom-login-button btn btn-lg btn-primary" type="submit">
-        Se connecter
-    </button>
-</form>
+{% block javascript %}
+<script>
+function onClick(e) {
+  e.preventDefault();
+  grecaptcha.enterprise.ready(async () => {
+    const token = await grecaptcha.enterprise.execute('6Lf3j-4nAAAAAG1MPtw4TwT--d38SNVpgnXrvsP6', {action: 'LOGIN'});
+    // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
+    // reCAPTCHA Enterprise to the end user's browser.
+    // This token must be validated by creating an assessment.
+    // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
+  });
+}
+</script>
 {% endblock %}

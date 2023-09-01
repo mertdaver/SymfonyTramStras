@@ -18,6 +18,13 @@ framework:
     php_errors:
         log: true
 
+    
+    rate_limiter:
+        login:
+            policy: 'fixed_window'
+            limit: 50
+            interval: '5 minutes'
+
 when@test:
     framework:
         test: true
