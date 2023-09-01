@@ -700,21 +700,26 @@ input[type="submit"]:hover::before {
 }
 
 .parallax-footer {
-  /* Remplacez l'URL par l'URL de votre image de fond */
-  background-image: url("https://scontent-cdg4-1.xx.fbcdn.net/v/t1.6435-9/199225596_3987519298010031_2664001002290203175_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=e3f864&_nc_ohc=-uY5kQzT5_YAX_Yy84T&_nc_ht=scontent-cdg4-1.xx&oh=00_AfA1K58GllXY_oxiW98CLpsYoAO1EVDl_aJV3ZjQ4a5vpg&oe=64F1AAF1");
-  height: 10%;
+  /* Ajoutez la taille désirée du footer ici */
+  height: 500px; 
+
+  /* Image de fond avec effet Parallax */
+  background-image: url('chemin_vers_votre_image.jpg');
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  position: relative; /* Important pour le contenu superposé */
+  z-index: 1;
 }
 
+/* Contenu superposé du footer */
 .parallax-footer-content {
-  display: flex;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
+  position: relative;
+  z-index: 2;
+  color: white; /* ou toute autre couleur pour que le texte soit lisible */
+  background-color: rgba(0,0,0,0.5); /* Arrière-plan semi-transparent pour améliorer la lisibilité */
+  padding: 50px; /* Espace interne pour le contenu superposé */
 }
 
 .footer-column {

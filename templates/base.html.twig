@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
             navbar.classList.remove("hide");
         }
     });
-
+if (document.getElementById("mapContainer")) {
     {% if not app.user %}
     var modal = document.getElementById("myModal");
     map.on('click', function(e) {
@@ -217,6 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     {% endif %}
+    }
 
     // Vérifie régulièrement s'il y a de nouvelles alertes
     function checkForNewAlerts() {
