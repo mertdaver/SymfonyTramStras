@@ -6,6 +6,7 @@ use App\Entity\Topic;
 use App\Form\TopicType;
 use App\Entity\Categorie;
 use App\Entity\Alerte;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,6 +91,27 @@ class CategorieController extends AbstractController
             'user' => $user,
             'latestAlert' => $latestAlert,
         ]);
+    }
+
+    #[Route('/categorie/{id}/delete', name: 'delete_categorie')]
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $categorie = $entityManager->getRepository(Categorie::class)->find($id);
+
+        // Si la catégorie n'existe pas, redirigez vers la liste des catégories.
+        if (!$categorie) {
+            return $this->redirectToRoute('app_categorie');
+        }
+
+        // Vérifiez si l'utilisateur actuel est le créateur de la catégorie.
+        if ($categorie->getUser() !== $this->getUser()) {
+            throw new AccessDeniedException('Vous n\'êtes pas autorisé à supprimer cette catégorie.');
+        }
+
+        $entityManager->remove($categorie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_categorie');
     }
 
 }

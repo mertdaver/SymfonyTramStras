@@ -1,14 +1,17 @@
- @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
 :root {
-  --primary-color: #e53236;
-  --primary-color-lighter: #e47577;
-  --secondary-color: #2c2d2d;
-  --white-color: #f4f0f0;
-  --black-color: #2c2d2d;
-  --grey-color: #f4f0f0;
-  --transition-speed: 0.3s;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  --box-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    --red-color: #e53236;
+    --darkred-color: #c7353a;
+    --white-color: #f4f0f0;
+    --grey-color: #b9b5b2;
+    --black-color: #35405B;
+    --transition-speed: 0.3s;
+    --box-shadow-neumorphism: 8px 8px 16px #aea8a8, -8px -8px 16px #ffffff;
+    --shadow-light: 8px 8px 12px #bcbcbc; /* Ombre claire */
+    --shadow-dark: -8px -8px 12px #ffffff; /* Ombre sombre */
+    --box-shadow-inset-neumorphism: inset 4px 4px 8px #aea8a8, inset -4px -4px 8px #ffffff;
+    --background-color: #e4e4e4;
 }
 
 @keyframes gradient-background {
@@ -29,24 +32,25 @@ body {
   padding: 0;
   background: linear-gradient(
     -45deg,
-    var(--black-color),
-    var(--secondary-color),
-    var(--primary-color)
+    var(--red-color),
+    var(--white-color),
+    var( --grey-color)
   );
   background-size: 200% 200%;
   animation: gradient-background 15s ease infinite;
 }
 
 header, #navbar {
-  background-color: var(--primary-color);
-  padding: 10px;
-  color: var(--white-color);
-  box-shadow: var(--box-shadow);
+  background-color: var(--background-color);
+  color: var(--black-color);
+  background: linear-gradient(145deg, #cacaca, #f0f0f0);
+  box-shadow:  6px 6px 8px #b8b8b8, -6px -6px 8px #ffffff;
 }
 
 #navbar {
   position: fixed;
   top: 0;
+  height: 7%;
   width: 100%;
   z-index: 999;
   transition: top var(--transition-speed), background-color var(--transition-speed);
@@ -65,25 +69,25 @@ header, #navbar {
 }
 
 #navbar ul li a {
-  color: var(--white-color);
+  color: var(--primary-color);
   text-decoration: none;
   padding: 10px;
   font-weight: bold;
   transition: background-color var(--transition-speed), transform var(--transition-speed);
-  background-color: var(--secondary-color);
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
+  border-radius: 42px;
+  background: linear-gradient(145deg, #cacaca, #f0f0f0);
+  box-shadow:  6px 6px 8px #b8b8b8, -6px -6px 8px #ffffff;
 }
 
 #navbar ul li a:hover {
-  background-color: #8B0000;
+  background-color: var(--darkred-color);
   transform: scale(1.05);
-  color: white;
+  color: var(--primary-color);
 }
 
 #navbar ul li a:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.5);
+  box-shadow: 0 0 0 3px var(--darkred-color);
 }
 
 #menu-icon {
@@ -104,7 +108,7 @@ header, #navbar {
       left: -100%;
       top: 5%;
       flex-direction: column;
-      background-color: skyblue;
+      background-color: var(--primary-color);
       width: 100%;
       text-align: center;
       transition: 0.25s;
@@ -120,7 +124,7 @@ header, #navbar {
   }
 
   #navbar ul li:hover {
-      background: rgb(157, 217, 240);
+      background: var(--darkred-color);
   }
 
   #navbar ul[aria-hidden="true"] {
@@ -146,79 +150,71 @@ header, #navbar {
   opacity: 0;
   transition: visibility 0.3s, opacity 0.3s linear;
 }
-
-
 }
 
-.logout-link,
-.register-link {
+
+
+/* Liens de déconnexion et d'inscription */
+.logout-link, .register-link {
   float: right;
   margin-left: 10px;
-  color: var(--secondary-color);
+  color: var(--grey-color);
   text-decoration: none;
   transition: color var(--transition-speed);
-  text-align: center;
 }
 
-.logout-link:hover,
-.register-link:hover {
-  color: var(--primary-color);
+.logout-link:hover, .register-link:hover {
+  color: var(--darkred-color);
 }
 
-h1 {
+/* Titres de la page */
+h1, h2 {
   margin-top: 5%;
-  color: var(--primary-color);
-  font-size: 42px;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  color: var(--black-color);
   text-align: center;
+  text-shadow: 2px 2px 4px var(--grey-color); /* Effet d'ombre pour plus de profondeur */
 }
 
+h1 { font-size: 42px; }
+h2 { font-size: 22px; }
+
+/* Paragraphe standard */
 p {
   margin-bottom: 0;
-  color: var(--white-color);
+  color: var(--grey-color);
   font-size: 16px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   text-align: center;
 }
 
-.leaflet-container a {
-  color: var(--white-color) !important;
-}
-
-.topic-link,
-a {
+/* Liens généraux de la page avec un effet Neumorphisme */
+.topic-link, a {
   display: inline-block;
-  color: var(--white-color);
+  color: var(--black-color);
   text-decoration: none;
-  background-color: var(--primary-color);
+  background-color: var(--background-color);
   padding: 15px 30px;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow-inset), var(--box-shadow);
-  transition: transform var(--transition-speed),
-    box-shadow var(--transition-speed);
-  text-align: center;
+  border-radius: 42px; 
+  box-shadow: var(--box-shadow-neumorphism); /* Ombre Neumorphisme */
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
   font-size: 18px;
   font-weight: bold;
 }
 
-.topic-link:hover,
-a:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.2);
+/* Survol : Effet d'enfoncement avec ombre interne */
+.topic-link:hover, a:hover {
+  box-shadow: var(--box-shadow-inset-neumorphism);
 }
 
-.topic-link:focus,
-a:focus {
+/* élément est actif ou reçoit le focus */
+.topic-link:focus, a:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.5), var(--box-shadow-inset),
-    var(--box-shadow);
+  box-shadow: var(--box-shadow-inset-neumorphism); /* Effet d'enfoncement lors du focus */
 }
 
-.topic-link:active,
-a:active {
-  transform: translateY(0);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.2);
+/* clique sur l'élément : renforce l'effet d'enfoncement */
+.topic-link:active, a:active {
+  transform: translateY(2px); 
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
 }
 
 /* FENETRE MODALE */
@@ -235,15 +231,16 @@ a:active {
 }
 
 .modal-content {
-  background-color: var(--black-color);
+  background-color: var(--background-color); 
   margin: 15% auto;
   padding: 20px;
   border: 1px solid var(--black-color);
   width: 50%;
   text-align: center;
   border-radius: 5px;
-  box-shadow: var(--box-shadow);
-  color: var(--white-color);
+  /* Style Neumorphique ajouté pour la fenêtre modale */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
+  color: var(--primary-color);
 }
 
 .close {
@@ -263,51 +260,28 @@ a:active {
 }
 
 /* BOUTONS */
-.buttons {
-  margin-top: 20px;
-}
 
-button {
+.button, .login-button, .register-button {
   display: inline-block;
   padding: 10px 20px;
-  background-color: var(--primary-color);
-  color: var(--white-color);
+  background-color: var(--background-color);
+  color: var(--black-color);
   text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  border-radius: 42px;
+  box-shadow: var(--box-shadow-neumorphism); /* Ombre Neumorphisme */
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-.button:hover {
-  background-color: var(--secondary-color);
+.button:hover, .login-button:hover, .register-button:hover {
+  box-shadow: var(--box-shadow-inset-neumorphism);
 }
 
-.button:active {
-  background-color: var(--black-color);
-}
-
-.login-button,
-.register-button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: var(--primary-color);
-  color: var(--white-color);
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.login-button:hover,
-.register-button:hover {
-  background-color: var(--secondary-color);
-}
-
-.login-button:active,
-.register-button:active {
-  background-color: var(--black-color);
+.button:active, .login-button:active, .register-button:active {
+  transform: translateY(2px);
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
 }
 
 /* DEBUT DES CARD */
-
 .card-container {
   display: flex;
   justify-content: center;
@@ -316,19 +290,20 @@ button {
 }
 
 .card {
-  background-color: var(--primary-color);
+  background-color: var(--background-color);
   padding: 20px;
   border-radius: 8px;
-  box-shadow: var(--box-shadow);
+  /* Style Neumorphique standard pour les cards */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
   width: 400px;
-  color: var(--white-color);
   margin: auto;
   margin-top: 5%;
   margin-bottom: 10%;
+  color: var(--black-color);
 }
 
 .card h1 {
-  color: var(--white-color);
+  color: var(--black-color);
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -342,21 +317,25 @@ button {
   padding: 10px;
   border-radius: 4px;
   border: none;
-  background-color: var(--white-color);
+  background-color: var(--background-color);
   color: var(--black-color);
   margin-bottom: 10px;
+  /* Style Neumorphique pour les inputs */
+  box-shadow: inset 4px 4px 6px #d1cdc7, inset -4px -4px 6px #ffffff;
 }
 
 .card label {
   display: block;
   margin-bottom: 10px;
   font-weight: bold;
+  color: var(--black-color);
 }
 
 .card input[type="submit"] {
-  background-color: var(--secondary-color);
+  background-color: var(--darkred-color);
   color: var(--white-color);
   cursor: pointer;
+  box-shadow: 4px 4px 6px #d1cdc7, -4px -4px 6px #ffffff;
 }
 
 .alert-card {
@@ -365,36 +344,42 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  background: #fff;
+  background: var(--background-color);
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--black-color);
   border-radius: 10px;
+  /* Style Neumorphique standard pour les alert-cards */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
 }
 
 /* FIN DES CARD */
-
 body.darken {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--black-color);
 }
 
-/* BOUTON SUPPRIMER  */
+/* BOUTON SUPPRIMER */
+
 .btn-delete {
   display: inline-block;
   padding: 10px 20px;
-  background-color: rgba(255, 0, 0, 0);
+  background-color: var(--red-color);
   color: var(--white-color);
   text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  border-radius: 8px; /* Augmentation légère du rayon pour un rendu plus doux */
+  /* Ombres Neumorphiques */
+  box-shadow: 4px 4px 6px #d1cdc7, -4px -4px 6px #ffffff;
+  transition: background-color 0.3s, transform 0.2s; /* Ajout d'une transition pour l'effet d'enfoncement */
 }
 
 .btn-delete:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--darkred-color);
+  transform: scale(1.02); /* Léger effet de zoom au survol */
 }
 
 .btn-delete:active {
-  background-color: var(--black-color);
-  border: 1px solid var(--primary-color);
+  background-color: var(--red-color);
+  /* Ombres internes pour un effet d'enfoncement Neumorphique */
+  box-shadow: inset 6px 6px 8px #d1cdc7, inset -6px -6px 8px #ffffff;
 }
 
 /* TEXTAREA MESSAGE FORUM */
@@ -402,20 +387,20 @@ body.darken {
 .form-chat {
   position: relative;
   max-width: 800px;
-  margin: 30px auto;  /* Espacement accru autour du formulaire pour une meilleure respiration */
-  padding: 25px;  /* Légère augmentation du padding pour plus d'espace */
-  border-radius: 20px;  /* Bordures arrondies légèrement plus grandes */
+  margin: 30px auto;
+  padding: 25px;
+  border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);  /* Un flou un peu plus prononcé pour un effet esthétique */
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);  /* Ombre douce pour un effet de flottement */
-  transition: box-shadow 0.3s;  /* Transition douce pour les effets hover */
+  backdrop-filter: blur(15px);
+  /* Ombres douces Neumorphiques */
+  box-shadow: 8px 8px 12px #d1cdc7, -8px -8px 12px #ffffff; 
+  transition: box-shadow 0.3s;
 }
 
 .form-chat:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);  /* Ombre plus profonde au survol pour une sensation de "lift" */
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
 }
 
-/* Base de réinitialisation pour éliminer les styles par défaut du navigateur */
 textarea#post_text {
   box-sizing: border-box;
   width: 100%;
@@ -423,24 +408,24 @@ textarea#post_text {
   font-size: 16px;
   font-family: 'Arial', sans-serif;
   line-height: 1.5;
-  border: double 4px transparent;
+  border: none;
   border-radius: 16px;
   outline: none;
   resize: vertical;
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
   background-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Ombres internes pour un effet d'indentation Neumorphique */
+  box-shadow: inset 4px 4px 6px #d1cdc7, inset -4px -4px 6px #ffffff;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
 }
 
 textarea#post_text:focus {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), inset 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: inset 6px 6px 8px #d1cdc7, inset -6px -6px 8px #ffffff;
 }
-
 
 @media (max-width: 480px) {
   textarea#post_text {
-      font-size: 16px; /* Ajustement pour éviter un texte trop grand sur les petits écrans */
-      padding: 8px 40px 8px 12px; 
+      font-size: 14px;
+      padding: 8px 40px 8px 12px;
   }
 }
 
@@ -451,28 +436,26 @@ textarea#post_text::placeholder {
 
 textarea#post_text:focus::placeholder {
   color: var(--secondary-color);
-  opacity: 0.5; /* Légère opacité pour un effet subtil lors de la mise au point */
+  opacity: 0.5;
 }
 
-/* Animation pour le bouton */
 @keyframes btnPulse {
   0% { transform: translateY(-50%) scale(1); }
   50% { transform: translateY(-50%) scale(1.05); }
   100% { transform: translateY(-50%) scale(1); }
 }
 
-/* Bouton Ajouter transformé en flèche à l'intérieur du textarea */
 .btn.btn-primary {
   position: absolute;
   top: 50%;
-  right: 15px; /* Ajustement pour une meilleure position */
+  right: 15px;
   transform: translateY(-50%);
   background-color: transparent;
   border: none;
   color: var(--primary-color);
   cursor: pointer;
   padding: 0;
-  font-size: 26px; /* Taille légèrement augmentée */
+  font-size: 26px;
   line-height: 1;
   animation: btnPulse 1.5s infinite;
 }
@@ -497,43 +480,50 @@ textarea#post_text:focus::placeholder {
   padding: 25px;
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px); /* Effet flou pour ajouter de la profondeur */
+  
+  /* Ombres douces Neumorphiques */
+  box-shadow: 8px 8px 12px #d1cdc7, -8px -8px 12px #ffffff;
   transition: box-shadow 0.3s;
 }
 
 .leaflet-popup-content-wrapper:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
 }
 
-/* TEAXTAREA Marker perso */
+/* TEXTAREA Marker perso */
 
 input[type="text"]#text {
+  /* Configuration générale */
   box-sizing: border-box;
   width: 100%;
   padding: 12px 52px 12px 17px;
   font-size: 16px;
   font-family: 'Arial', sans-serif;
   line-height: 1.5;
-  border: double 4px transparent;
   border-radius: 16px;
   outline: none;
   background-color: rgba(255, 255, 255, 0.08);
+  
+  /* Ombres Neumorphiques */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
 }
 
 input[type="text"]#text:focus {
+  /* Augmente l'ombre lors de la mise au point pour un effet d'enfoncement */
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), inset 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 480px) {
+  /* Adaptation sur les petits écrans */
   input[type="text"]#text {
       font-size: 16px;
       padding: 8px 40px 8px 12px;
   }
 }
 
+/* Placeholder */
 input[type="text"]#text::placeholder {
   color: var(--primary-color-lighter);
   transition: color 0.2s;
@@ -545,38 +535,41 @@ input[type="text"]#text:focus::placeholder {
 }
 
 /* Bouton Submit stylisé */
-/* Modifiez le bouton pour lui donner une apparence épurée */
 input[type="submit"] {
+  /* Apparence générale du bouton */
   background-color: transparent; 
-  border: 2px solid var(--primary-color); /* Une bordure fine */
+  border: 2px solid var(--primary-color);
   border-radius: 4px;
-  padding: 8px 20px 8px 30px; /* Plus petit padding */
+  padding: 8px 20px 8px 30px;
   color: var(--primary-color);
   cursor: pointer;
-  position: relative;
   font-size: 14px;
   transition: all 0.3s;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7); /* Effets d'ombre et de lumière */
+
+  /* Effet neumorphique pour le bouton */
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7);
 }
 
 /* Coche avant le bouton pour indiquer l'action de validation */
 input[type="submit"]::before {
   content: '✓';
   position: absolute;
-  left: 10px; /* Légèrement ajusté pour être plus proche du bord */
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 14px; /* Icône plus petite */
+  font-size: 14px;
   color: var(--primary-color);
   transition: transform 0.3s;
 }
 
-/* Effet de survol */
 input[type="submit"]:hover {
+  /* Style au survol */
   background-color: var(--primary-color);
   color: white;
   border-color: var(--primary-color);
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.7); /* Effet d'enfoncement au survol */
+  
+  /* Effet d'enfoncement au survol */
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.7);
 }
 
 input[type="submit"]:hover::before {
@@ -584,8 +577,8 @@ input[type="submit"]:hover::before {
 }
 
 /* Bouton close */
-
 .leaflet-popup-close-button {
+  /* Apparence générale */
   background-color: transparent;
   border: 2px solid var(--primary-color);
   border-radius: 4px;
@@ -594,30 +587,31 @@ input[type="submit"]:hover::before {
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s;
-  text-decoration: none;
-  display: inline-block;
+
+  /* Ombres Neumorphiques */
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1), -3px -3px 10px rgba(255, 255, 255, 0.7);
-  position: relative;
-  margin-top: 15px; /* pour le déplacer plus bas */
+  margin-top: 15px;
 }
 
 .leaflet-popup-close-button:hover {
+  /* Style au survol */
   background-color: var(--primary-color);
-  color: var(--primary-color); 
+  color: white;
   border-color: var(--primary-color);
+  
+  /* Effet d'enfoncement */
   box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px var(--primary-color);
-  text-decoration: none;
 }
 
 .leaflet-popup-close-button span {
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  color: inherit; 
+  color: inherit;
 }
 
 .leaflet-popup-close-button:hover span[aria-hidden="true"] {
-    color: var(--primary-color);
+    color: white;
 }
 
 .leaflet-container a.leaflet-popup-close-button {
@@ -642,13 +636,11 @@ input[type="submit"]:hover::before {
 
 
 
-
 /* PIED DE PAGE */
-
 .footer {
   background-color: var(--primary-color);
-  color: var(--white-color);
-  padding: 5px 0;
+  color: var(--black-color);
+  padding: 20px 0;
 }
 
 .footer .container {
@@ -666,7 +658,7 @@ input[type="submit"]:hover::before {
 
 .footer h5 {
   font-size: 18px;
-  color: var(--white-color);
+  color: var(--black-color);
   margin-bottom: 30px;
 }
 
@@ -676,50 +668,40 @@ input[type="submit"]:hover::before {
 }
 
 .footer ul li a {
-  color: var(--white-color);
+  color: var(--black-color);
   transition: color 0.2s;
 }
 
 .footer ul li a:hover {
-  color: var(--primary-color);
+  color: var(--secondary-color);
   text-decoration: none;
 }
 
 .copy {
   margin-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 20px;
 }
-/* PARALLAXE  */
-.footer {
-  background-color: #f2f2f2;
-  color: #333;
-  padding: 5px 0;
-  margin-top: 100px;
-  margin-bottom: 100px;
-}
 
+/* PARALLAXE */
 .parallax-footer {
-  /* Ajoutez la taille désirée du footer ici */
-  height: 500px; 
-
-  /* Image de fond avec effet Parallax */
+  height: 500px;
   background-image: url('chemin_vers_votre_image.jpg');
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  position: relative; /* Important pour le contenu superposé */
+  position: relative;
   z-index: 1;
 }
 
-/* Contenu superposé du footer */
 .parallax-footer-content {
   position: relative;
   z-index: 2;
-  color: white; /* ou toute autre couleur pour que le texte soit lisible */
-  background-color: rgba(0,0,0,0.5); /* Arrière-plan semi-transparent pour améliorer la lisibilité */
-  padding: 50px; /* Espace interne pour le contenu superposé */
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 50px;
+  box-shadow: var(--box-shadow);
 }
 
 .footer-column {
@@ -730,17 +712,6 @@ h5 {
   font-size: 18px;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-ul li {
-  margin-bottom: 10px;
-  display: inline-block;
-}
-
 .social-icons li {
   display: inline-block;
   margin-right: 10px;
@@ -748,7 +719,12 @@ ul li {
 
 .social-icons i {
   font-size: 20px;
-  color: #333;
+  color: var(--black-color);
+  transition: color 0.2s;
+}
+
+.social-icons i:hover {
+  color: var(--primary-color);
 }
 
 /* CARD FORMULAIRE DE CONTACTE DANS LE FOOTER */
@@ -757,24 +733,16 @@ ul li {
   padding: 20px;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
-  width: 100%; /* Set the card width to 100% */
-  max-width: 400px; /* Set a maximum width for the card */
-  color: var(--white-color);
+  width: 100%;
+  max-width: 400px;
+  color: var(--black-color);
   margin: auto;
   margin-top: 5%;
   margin-bottom: 10%;
 }
 
-/* Add responsive CSS for the card */
-@media screen and (max-width: 768px) {
-  .card-form-footer {
-    margin-top: 2%;
-    margin-bottom: 5%;
-  }
-}
-
 .card-form-footer h1 {
-  color: var(--white-color);
+  color: var(--black-color);
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -788,9 +756,10 @@ ul li {
   padding: 10px;
   border-radius: 4px;
   border: none;
-  background-color: var(--white-color);
+  background-color: var(--primary-color);
   color: var(--black-color);
   margin-bottom: 10px;
+  box-shadow: 4px 4px 6px #bcbcbc, -4px -4px 6px #ffffff;
 }
 
 .card-form-footer label {
@@ -801,35 +770,8 @@ ul li {
 
 .card-form-footer input[type="submit"] {
   background-color: var(--secondary-color);
-  color: var(--white-color);
+  color: var(--primary-color);
   cursor: pointer;
-  width: auto;
-}
-
-.card-form-footer .form-group {
-  margin-bottom: 15px;
-}
-
-.card-form-footer .form-group:last-child {
-  margin-bottom: 0;
-}
-
-.card-form-footer .form-group input[type="submit"] {
-  width: 100%;
-}
-
-.card-form-footer .form-group input[type="submit"]:hover {
-  background-color: var(--black-color);
-}
-
-.card-form-footer .form-group input[type="submit"]:active {
-  background-color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-}
-
-.card-form-footer .form-group input[type="text"]::placeholder {
-  color: var(--black-color);
-  opacity: 0.6;
 }
 
 .card-form-footer .alert {
@@ -848,7 +790,6 @@ ul li {
   width: 75%;
   align-items: center;
   justify-content: center;
-  align-content: center;
 }
 
 #logoRondCTSKiller {
@@ -857,51 +798,45 @@ ul li {
   padding-right: 1%;
 }
 
-/* CSS pour écrans de tablettes et plus petits */
+/* Responsive */
 @media screen and (max-width: 1024px) {
   .parallax-footer-content {
-    flex-direction: column;
+      flex-direction: column;
   }
-
   .footer-column {
-    width: 100%;
-    padding: 20px 0;
+      width: 100%;
+      padding: 20px 0;
   }
 }
 
-/* CSS pour écrans de smartphones et plus petits */
 @media screen and (max-width: 768px) {
   .parallax-footer-content {
-    padding: 20px;
+      padding: 20px;
   }
 
   .card-form-footer {
-    margin-top: 2%;
-    margin-bottom: 5%;
-    max-width: 90%;
+      margin-top: 2%;
+      margin-bottom: 5%;
+      max-width: 90%;
   }
 
   ul {
-    text-align: center;
-    padding: 0;
-  }
-
-  ul li {
-    display: inline-block;
-    margin-bottom: 10px;
+      text-align: center;
+      padding: 0;
   }
 }
+
+
 
 /* MENU */
 
 .card-menu {
-  text-shadow: #292929;
-  background-color: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ombre du texte pour le relief */
+  background-color: var(--primary-color); /* Utilisation de la couleur principale */
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Ajoute une ombre portée pour donner un effet 3D */
-  color: var(--white-color);
+  box-shadow: var(--shadow-light), var(--shadow-dark); /* Ombres douces pour un effet "en relief" */
+  color: #333; /* Couleur de texte foncée pour un contraste avec le fond clair */
   margin: auto;
   margin-top: 5%;
   margin-bottom: 10%;
@@ -909,58 +844,51 @@ ul li {
   perspective: 1000px;
   height: 200px;
   transform-style: preserve-3d;
-  transition: transform 0.2s, box-shadow 0.2s; /* Ajoute une transition à l'ombre */
-  z-index: 1; /* Définir le z-index plus bas que celui du texte et de l'image */
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 1;
   width: 100%;
   max-width: 400px;
 }
 
 .card-menu p {
-  color: var(--white-color);
+  color: #333; /* Couleur de texte foncée */
   font-size: 24px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .card-menu:hover {
-  transform: translateZ(130px) scale(1.05); /* Ajoute une translation en Z lors du survol pour l'effet de profondeur */
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+  /* Accentuation de l'effet 3D au survol */
+  transform: translateZ(130px) scale(1.05);
+  box-shadow: 4px 4px 6px #bcbcbc, -4px -4px 6px #ffffff;
   z-index: 3;
 }
 
-.card-menu p,
 .card-menu img {
   position: relative;
-  z-index: 2; /* Définir un z-index plus élevé pour le texte et l'image */
-}
-
-.card-menu p {
-  color: var(--white-color);
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  transform: translateZ(3000px);
+  z-index: 2;
+  width: 50%;
+  height: auto;
+  max-height: 1000px;
+  object-fit: cover;
+  margin: 0 auto;
+  transform: translateZ(10px);
+  filter: drop-shadow(0 20px 30px rgb(0, 0, 0));
 }
 
 .card-wrapper {
   display: grid;
-  grid-template-columns: repeat(
-    2,
-    1fr
-  ); /* Crée une grille avec deux colonnes */
-  gap: 1rem; /* Espacement entre les cards */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
   justify-content: center;
   align-items: center;
   padding: 2rem 0;
 }
 
 .card-wrapper > .card:nth-child(5) {
-  grid-column: 1 / span 2; /* Cette règle permet à la card de s'étendre sur les deux colonnes */
-  justify-self: center; /* Centre la card sur sa ligne */
+  grid-column: 1 / span 2;
+  justify-self: center;
 }
 
 .card-face {
@@ -972,31 +900,17 @@ ul li {
 
 .back-face {
   transform: rotateY(180deg);
-  /* ajoutez vos styles pour la "tranche" ici, par exemple une couleur de fond différente */
-}
-
-.card-image {
-  width: 50%;
-  height: auto;
-  max-height: 1000px; /* Réglez ici la hauteur maximale souhaitée pour toutes les images */
-  object-fit: cover; /* Ajuste l'image pour qu'elle remplisse complètement le conteneur tout en préservant son rapport hauteur/largeur */
-  display: block; /* Pour éviter les espaces vides en dessous des images */
-  margin: 0 auto; /* Centre l'image horizontalement */
-  transform: translateZ(10px);
-  filter: drop-shadow(
-    0 20px 30px rgb(0, 0, 0)
-  ); /* Utilisez drop-shadow() pour l'effet d'ombre portée */
 }
 
 @media screen and (max-width: 768px) {
   .card-menu {
-    width: 90%;
+      width: 90%;
   }
 }
 
 @media screen and (max-width: 1000px) {
   .card-wrapper {
-    grid-template-columns: 1fr; /* Une seule colonne */
+      grid-template-columns: 1fr; /* Adaptation pour une seule colonne sur petits écrans */
   }
 }
 
@@ -1065,6 +979,7 @@ p.message-text {
   color: var(--accent-color) !important;
   margin: 0;
   color: var(--black-color);
+  text-align: left;
 }
 
 .username {
@@ -1082,15 +997,18 @@ p.message-text {
   display: inline-flex;
   align-items: center;
   gap: 5px; /* Espacement entre le texte et l'icône */
-  background-color: rgba(255, 0, 0, 0.2); /* Fond rouge transparent */
-  border: 1px solid rgba(255, 0, 0, 0.5); /* Bordure rouge transparente */
+  background-color: var(--red-color); /* Fond rouge transparent */
+  border: 1px solid var(--darkred-color); /* Bordure rouge transparente */
   padding: 5px 10px;
   border-radius: 20px;
   font-size: 12px;
   transition: all 0.3s;
   text-decoration: none;
-  color: white;
   box-shadow: var(--box-shadow);
+}
+
+.message-actions .btn.btn-delete::before {
+  color: red;
 }
 
 .message-actions .btn.btn-delete:hover {
@@ -1133,7 +1051,7 @@ p.message-text {
 
 .btn-primary {
   background-color: var(--primary-color);
-  color: var(--white-color);
+  color: var(--primary-color);
   border: none;
   border-radius: 4px;
   padding: 8px 12px;
@@ -1153,7 +1071,7 @@ p.message-text {
   height: 20px;
   text-align: center;
   line-height: 20px;
-  color: white;
+  color: var(--black-color);
   font-size: 10px;
   font-weight: bold;
   cursor: pointer;
@@ -1163,7 +1081,7 @@ p.message-text {
 }
 
 .message-actions .btn.btn-delete:hover {
-  background-color: rgba(255, 0, 0, 1);
+  background-color: var(--darkred-color);
 }
 
 /* Ajustement pour les messages entrants */
@@ -1183,8 +1101,7 @@ p.message-text {
   }
 }
 
-/* CONNEXION */
-/* Styles spécifiques à la page de connexion */
+/* PAGE DE CONNEXION */
 
 .custom-login-form {
   display: flex;
@@ -1192,14 +1109,14 @@ p.message-text {
   max-width: 500px;
   margin: 50px auto;
   padding: 20px;
-  border-radius: 5px;
-  background-color: var(--white-color);
-  box-shadow: var(--box-shadow);
+  border-radius: 10px;
+  background-color: var(--background-color);
+  box-shadow: var(--shadow-light), var(--shadow-dark);
   width: 99%;
 }
 
 .custom-login-title {
-  color: var(--primary-color);
+  color: var(--black-color);
   margin-bottom: 20px;
   text-align: center;
 }
@@ -1208,39 +1125,43 @@ p.message-text {
   padding: 10px;
   margin: 10px 0;
   border: none;
-  border-radius: 5px;
-  background-color: var(--accent-color);
-  box-shadow: var(--box-shadow-inset);
-  transition: background-color var(--transition-speed);
+  border-radius: 10px;
+  background-color: var(--background-color);
+  box-shadow: var(--box-shadow-inset-neumorphism);
+  transition: all var(--transition-speed);
   width: 95%;
 }
 
 .custom-login-input:focus {
-  background-color: var(--white-color);
   outline: none;
+  box-shadow: inset 6px 6px 12px #bcbcbc, inset -6px -6px 12px #ffffff;
 }
 
 .custom-login-button {
   margin-top: 20px;
+  padding: 10px 15px;
   color: var(--white-color);
-  background-color: var(--primary-color);
-  transition: background-color var(--transition-speed),
-    transform var(--transition-speed);
+  border: none;
+  border-radius: 10px;
+  background-color: var(--background-color);
+  box-shadow: var(--shadow-light), var(--shadow-dark);
+  transition: all var(--transition-speed);
   cursor: pointer;
 }
 
 .custom-login-button:hover {
-  background-color: var(--secondary-color);
-  transform: scale(1.05);
+  background-color: var(--grey-color);
+  box-shadow: inset 4px 4px 8px #aea8a8, inset -4px -4px 8px #ffffff;
 }
 
 .custom-alert {
   margin-bottom: 20px;
   padding: 10px;
-  border-radius: 5px;
-  color: var(--white-color);
-  background-color: var(--primary-color);
+  border-radius: 10px;
+  color: var(--black-color);
+  background-color: var(--red-color);
   text-align: center;
+  box-shadow: var(--shadow-light), var(--shadow-dark);
 }
 
 .custom-login-info {
@@ -1261,16 +1182,16 @@ iframe {
 
 /* CARD ALERTE */
 
-/* Overlay effect when an alert is shown */
+/* Effet d'overlay lorsque l'alerte est affichée */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 9997; /* ensure it's below the card but above other elements */
-  background: rgba(0, 0, 0, 0.75); /* black semi-transparent */
-  backdrop-filter: blur(5px); /* make the content below blurry */
+  z-index: 9997; /* Assure qu'il est en-dessous de la carte mais au-dessus des autres éléments */
+  background: rgba(0, 0, 0, 0.75); /* Noir semi-transparent */
+  backdrop-filter: blur(5px); /* Floute le contenu en dessous */
 }
 
 .card-alerte {
@@ -1282,10 +1203,14 @@ iframe {
   max-width: 400px;
   padding: 20px;
   border-radius: 10px;
-  z-index: 9998; /* making sure the alert is on top */
-  background-color: var(--primary-color);
-  color: var(--white-color);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 9998; /* Assure que l'alerte est au-dessus */
+  
+  /* Couleurs et styles pour le néomorphisme */
+  background-color: var(--background-color); 
+  color: var(--black-color);
+  
+  /* Ombres pour l'effet néomorphisme */
+  box-shadow: 8px 8px 16px #aea8a8, -8px -8px 16px #ffffff; 
   text-align: center;
 }
 
@@ -1295,6 +1220,7 @@ iframe {
   font-size: 18px;
   font-weight: bold;
 }
+
 
 
 /* Leaflet */

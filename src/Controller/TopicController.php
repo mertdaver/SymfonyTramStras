@@ -67,6 +67,19 @@ class TopicController extends AbstractController
     #[Route('/topic/{id}/delete', name: 'delete_topic')]
     public function delete(ManagerRegistry $doctrine, Topic $topic): Response
     {
+
+        $currentUser = $this->getUser();
+
+            // Vérifier si l'utilisateur est connecté
+        if (!$currentUser) {
+            throw new AccessDeniedException('Vous devez être connecté pour supprimer un topic.');
+        }
+
+        // Vérifier si l'utilisateur actuel est l'auteur du topic ou a un rôle d'administrateur
+        if ($currentUser !== $topic->getAuthor() && !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('Vous n\'avez pas les autorisations nécessaires pour supprimer ce topic.');
+        }
+
         $entityManager = $doctrine->getManager();
     
         // Récupérer tous les posts associés au topic

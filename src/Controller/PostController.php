@@ -97,8 +97,15 @@ class PostController extends AbstractController
     #[Route('/post/{id}/delete', name: 'delete_post')]
     public function deletePost(EntityManagerInterface $entityManager, Post $post): Response
     {
+
+        $currentUser = $this->getUser();
+
+        if (!$currentUser) {
+            throw new AccessDeniedException('Vous devez être connecté.');
+        }
+
         // Vérifier si l'utilisateur actuel est l'auteur du post
-        if ($post->getUser() !== $this->getUser()) {
+        if ($post->getUser() !== $this->getUser() && !$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException('Vous n\'êtes pas autorisé à supprimer ce post.');
         }
     
