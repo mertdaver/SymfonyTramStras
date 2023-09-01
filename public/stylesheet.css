@@ -1,19 +1,34 @@
+/* Importation de la police Poppins */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
 
 :root {
-    --red-color: #e53236;
-    --darkred-color: #c7353a;
-    --white-color: #f4f0f0;
-    --grey-color: #b9b5b2;
-    --black-color: #35405B;
-    --transition-speed: 0.3s;
-    --box-shadow-neumorphism: 8px 8px 16px #aea8a8, -8px -8px 16px #ffffff;
-    --shadow-light: 8px 8px 12px #bcbcbc; /* Ombre claire */
-    --shadow-dark: -8px -8px 12px #ffffff; /* Ombre sombre */
-    --box-shadow-inset-neumorphism: inset 4px 4px 8px #aea8a8, inset -4px -4px 8px #ffffff;
-    --background-color: #e4e4e4;
+  /* Variables de couleur */
+  --red-color: #e53236;
+  --darkred-color: #c7353a;
+  --white-color: #f4f0f0;
+  --grey-color: #b9b5b2;
+  --black-color: #35405B;
+  
+  /* Variables pour les transitions */
+  --transition-speed: 0.3s;
+  
+  /* Variables pour les ombres */
+  --shadow-light: 8px 8px 12px #bcbcbc; /* Ombre claire */
+  --shadow-dark: -8px -8px 12px #ffffff; /* Ombre sombre */
+  
+  /* Variables pour le Neumorphisme des cards */
+  --card-shadow-neumorphism: 8px 8px 16px #aea8a8, -8px -8px 16px #ffffff;
+  --card-shadow-inset-neumorphism: inset 4px 4px 8px #aea8a8, inset -4px -4px 8px #ffffff;
+  
+  /* Variables pour le Neumorphisme des boutons */
+  --btn-shadow-neumorphism: 4px 4px 8px #aea8a8, -4px -4px 8px #ffffff;
+  --btn-shadow-inset-neumorphism: inset 2px 2px 4px #aea8a8, inset -2px -2px 4px #ffffff;
+  
+  /* Autres variables */
+  --background-color: #e4e4e4;
 }
 
+/* Animation pour le fond */
 @keyframes gradient-background {
   0% {
     background-position: 0 50%;
@@ -30,12 +45,7 @@ body {
   font-family: "Poppins", Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: linear-gradient(
-    -45deg,
-    var(--red-color),
-    var(--white-color),
-    var( --grey-color)
-  );
+  background: linear-gradient(-45deg, var(--red-color), var(--white-color), var(--grey-color));
   background-size: 200% 200%;
   animation: gradient-background 15s ease infinite;
 }
@@ -43,10 +53,10 @@ body {
 header, #navbar {
   background-color: var(--background-color);
   color: var(--black-color);
-  background: linear-gradient(145deg, #cacaca, #f0f0f0);
-  box-shadow:  6px 6px 8px #b8b8b8, -6px -6px 8px #ffffff;
+  box-shadow: var(--box-shadow-neumorphism);
 }
 
+/* Fond de la barre de navigation */
 #navbar {
   position: fixed;
   top: 0;
@@ -54,10 +64,14 @@ header, #navbar {
   width: 100%;
   z-index: 999;
   transition: top var(--transition-speed), background-color var(--transition-speed);
+  background-color: var(--white-color); 
+  box-shadow: var(--card-shadow-neumorphism); /* Ajout d'une ombre pour l'effet neumorphique */
+  border-radius: 15px; /* Ajout d'un léger arrondi pour l'effet neumorphique */
 }
 
 #navbar:hover {
-  background-color: var(--secondary-color);
+  background-color: transparent;
+  backdrop-filter: blur(1px); /* Vous pouvez ajuster la valeur pour augmenter/diminuer le niveau de flou */
 }
 
 #navbar ul {
@@ -68,26 +82,35 @@ header, #navbar {
   justify-content: space-between;
 }
 
+/* Style neumorphique pour les liens de la barre de navigation */
 #navbar ul li a {
-  color: var(--primary-color);
+  font-family: 'Poppins', sans-serif;
+  color: var(--black-color);
   text-decoration: none;
-  padding: 10px;
   font-weight: bold;
-  transition: background-color var(--transition-speed), transform var(--transition-speed);
-  border-radius: 42px;
-  background: linear-gradient(145deg, #cacaca, #f0f0f0);
-  box-shadow:  6px 6px 8px #b8b8b8, -6px -6px 8px #ffffff;
-}
+  transition: color var(--transition-speed), transform var(--transition-speed), background-color var(--transition-speed);
+  padding: 10px 15px;
+  border-radius: 15px;
+  background: var(--white-color);
+  box-shadow: var(--btn-shadow-neumorphism);
 
-#navbar ul li a:hover {
-  background-color: var(--darkred-color);
-  transform: scale(1.05);
-  color: var(--primary-color);
-}
+  /* Lors du survol du lien, le fond devient --darkred-color et le texte devient --white-color */
+  &:hover {
+    color: var(--white-color);
+    background-color: var(--darkred-color);
+    transform: translateY(2px) scale(1.05);
+    box-shadow: 3px 3px 6px #aea8a8, -3px -3px 6px #ffffff;
+  }
 
-#navbar ul li a:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--darkred-color);
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--darkred-color);
+  }
+
+  @media screen and (max-width: 600px) {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
 }
 
 #menu-icon {
@@ -108,16 +131,12 @@ header, #navbar {
       left: -100%;
       top: 5%;
       flex-direction: column;
-      background-color: var(--primary-color);
+      background-color: var(--red-color);
       width: 100%;
       text-align: center;
       transition: 0.25s;
       z-index: 1000;
   }
-
-  #navbar ul[aria-hidden="false"] {
-    left: 0;
-}
 
   #navbar ul li {
       padding: 3px 0;
@@ -127,29 +146,22 @@ header, #navbar {
       background: var(--darkred-color);
   }
 
-  #navbar ul[aria-hidden="true"] {
-    left: -100%;
-}
+  #menu-icon[aria-expanded="true"]::before {
+      content: '\2715'; /* Unicode pour la croix de fermeture */
+  }
 
-/* Style pour le bouton du menu burger lorsqu'il est activé (fermé) */
-#menu-icon[aria-expanded="true"]::before {
-  content: '\2715'; /* Unicode pour la croix de fermeture */
-}
+  #menu[aria-hidden="false"] {
+      left: 0;
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0.3s, opacity 0.3s linear;
+  }
 
-/* Style pour le menu lorsqu'il est activé (visible) */
-#menu[aria-hidden="false"] {
-  left: 0;
-  visibility: visible;
-  opacity: 1;
-  transition: visibility 0.3s, opacity 0.3s linear;
-}
-
-/* Style de base pour le menu (caché) */
-#menu {
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0.3s, opacity 0.3s linear;
-}
+  #menu {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.3s, opacity 0.3s linear;
+  }
 }
 
 
@@ -181,7 +193,7 @@ h2 { font-size: 22px; }
 /* Paragraphe standard */
 p {
   margin-bottom: 0;
-  color: var(--grey-color);
+  color: var(--black-color);
   font-size: 16px;
   text-align: center;
 }
@@ -632,226 +644,169 @@ input[type="submit"]:hover::before {
   color: var(--primary-color);
 }
 
-
-
-
-
-/* PIED DE PAGE */
+/* FOOTER */
+/* Style général du footer */
 .footer {
   background-color: var(--primary-color);
   color: var(--black-color);
   padding: 20px 0;
+  border-radius: 15px;
+  box-shadow: var(--card-shadow-neumorphism);
 }
 
-.footer .container {
-  max-width: 1170px;
-  margin: auto;
-}
-
-.footer .row {
-  margin: 0 -15px;
-}
-
-.footer .col-md-4 {
-  padding: 0 15px;
-}
-
-.footer h5 {
-  font-size: 18px;
-  color: var(--black-color);
-  margin-bottom: 30px;
-}
-
-.footer ul {
-  padding-left: 0;
-  list-style-type: none;
-}
-
+/* Style pour les liens du footer */
 .footer ul li a {
-  color: var(--black-color);
-  transition: color 0.2s;
+  box-shadow: var(--btn-shadow-neumorphism);
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: var(--transition-speed);
 }
 
 .footer ul li a:hover {
-  color: var(--secondary-color);
-  text-decoration: none;
+  box-shadow: var(--btn-shadow-inset-neumorphism);
 }
 
-.copy {
-  margin-top: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding-top: 20px;
+.footer ul {
+  list-style-type: none;
+  padding-left: 0; /* Supprime le padding par défaut des listes pour garantir qu'elles sont centrées */
 }
 
-/* PARALLAXE */
-.parallax-footer {
-  height: 500px;
-  background-image: url('chemin_vers_votre_image.jpg');
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  z-index: 1;
-}
 
-.parallax-footer-content {
-  position: relative;
-  z-index: 2;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 50px;
-  box-shadow: var(--box-shadow);
-}
-
-.footer-column {
-  flex: 1;
-}
-
-h5 {
-  font-size: 18px;
-}
-
-.social-icons li {
-  display: inline-block;
-  margin-right: 10px;
-}
-
+/* Style pour les icônes des réseaux sociaux */
 .social-icons i {
-  font-size: 20px;
-  color: var(--black-color);
-  transition: color 0.2s;
+  border-radius: 50%;
+  padding: 10px;
+  background-color: var(--primary-color);
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
 }
 
 .social-icons i:hover {
-  color: var(--primary-color);
+  box-shadow: var(--btn-shadow-inset-neumorphism);
 }
 
-/* CARD FORMULAIRE DE CONTACTE DANS LE FOOTER */
+/* Style pour le formulaire de contact */
 .card-form-footer {
-  background-color: var(--primary-color);
+  border-radius: 15px;
+  box-shadow: var(--card-shadow-neumorphism);
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  width: 100%;
-  max-width: 400px;
-  color: var(--black-color);
-  margin: auto;
-  margin-top: 5%;
-  margin-bottom: 10%;
-}
-
-.card-form-footer h1 {
-  color: var(--black-color);
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.card-form-footer select,
-.card-form-footer input[type="text"],
-.card-form-footer input[type="submit"] {
-  width: 90%;
-  padding: 10px;
-  border-radius: 4px;
-  border: none;
-  background-color: var(--primary-color);
-  color: var(--black-color);
-  margin-bottom: 10px;
-  box-shadow: 4px 4px 6px #bcbcbc, -4px -4px 6px #ffffff;
+  background-color: var(--primary-color); /* Donne un fond correspondant au thème */
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacement entre les éléments du formulaire */
 }
 
 .card-form-footer label {
-  display: block;
-  margin-bottom: 10px;
   font-weight: bold;
+  margin-bottom: 8px;
+  display: block; /* Afin que les labels prennent toute la largeur */
+}
+
+.card-form-footer input[type="text"],
+.card-form-footer select,
+.card-form-footer textarea { /* Ajouté pour prendre en charge les zones de texte éventuelles */
+  width: 100%; /* Utilise toute la largeur disponible */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: var(--btn-shadow-neumorphism);
+  border: none; /* Supprime la bordure par défaut */
+  background-color: rgba(255, 255, 255, 0.1); /* Une légère transparence pour correspondre au thème */
+  color: var(--black-color);
+  transition: var(--transition-speed);
+  font-size: 16px; /* Ajuste la taille du texte pour une meilleure lisibilité */
+}
+
+.card-form-footer input[type="text"]:focus,
+.card-form-footer select:focus,
+.card-form-footer textarea:focus { /* Ajouté pour prendre en charge les zones de texte éventuelles lorsqu'elles sont focalisées */
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+  outline: none; /* Supprime le contour par défaut lors de la mise au point */
 }
 
 .card-form-footer input[type="submit"] {
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
-  cursor: pointer;
+  align-self: center; /* Centre le bouton horizontalement */
+  cursor: pointer; /* Affiche un curseur de pointeur pour indiquer la clicabilité */
+  background-color: rgba(255, 255, 255, 0.2); /* Légère transparence pour le bouton */
 }
 
-.card-form-footer .alert {
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
-  background-color: #ffd700;
-  color: var(--black-color);
-  text-align: center;
+.card-form-footer input[type="submit"]:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+  background-color: rgba(255, 255, 255, 0.3); /* Augmente la transparence au survol */
 }
 
-#label {
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
-  align-items: center;
-  justify-content: center;
-}
-
-#logoRondCTSKiller {
-  height: 75px;
-  width: 75px;
-  padding-right: 1%;
-}
-
-/* Responsive */
-@media screen and (max-width: 1024px) {
-  .parallax-footer-content {
+  /* Style pour le bandeau du bas */
+  #label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-direction: column;
+      margin-top: 20px;
   }
-  .footer-column {
-      width: 100%;
-      padding: 20px 0;
+
+  #logoRondCTSKiller {
+      margin-bottom: 10px;
+      max-height: 5%;
+      max-width: 5%;
   }
+
+/* Ajout du style pour les colonnes du footer */
+.parallax-footer-content {
+  display: flex;
+  justify-content: space-between;
 }
 
+.footer-column {
+  flex: 0 0 33%;
+  max-width: 33%;
+  padding: 0 15px; /* Pour une petite marge entre les colonnes */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrer les éléments horizontalement */
+  justify-content: center; /* Centrer les éléments verticalement */
+}
+
+/* Pour rendre les colonnes plus réactives, vous pouvez ajouter une règle media pour les plus petits écrans */
 @media screen and (max-width: 768px) {
+  .footer-column {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
   .parallax-footer-content {
-      padding: 20px;
-  }
-
-  .card-form-footer {
-      margin-top: 2%;
-      margin-bottom: 5%;
-      max-width: 90%;
-  }
-
-  ul {
-      text-align: center;
-      padding: 0;
+    flex-direction: column;
   }
 }
 
 
 
-/* MENU */
 
+/* Card Menu */
 .card-menu {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Ombre du texte pour le relief */
-  background-color: var(--primary-color); /* Utilisation de la couleur principale */
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: var(--shadow-light), var(--shadow-dark); /* Ombres douces pour un effet "en relief" */
-  color: #333; /* Couleur de texte foncée pour un contraste avec le fond clair */
-  margin: auto;
-  margin-top: 5%;
-  margin-bottom: 10%;
-  position: relative;
+  /* Fond, ombre et couleurs de base */
+  background-color: var(--white-color);
+  box-shadow: var(--card-shadow-neumorphism);
+  color: var(--black-color);
+  
+  /* Positionnement et dimensions */
+  margin: 5% auto 10%;
+  position: relative; /* Important pour positionner l'image par rapport à cette carte */
   perspective: 1000px;
   height: 200px;
   transform-style: preserve-3d;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
   z-index: 1;
   width: 100%;
   max-width: 400px;
+  
+  /* Forme */
+  border-radius: 8px;
+  padding: 20px;
+  overflow: visible; /* Permet à l'image de dépasser */
 }
 
 .card-menu p {
-  color: #333; /* Couleur de texte foncée */
+  color: var(--black-color);
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -859,25 +814,24 @@ h5 {
 }
 
 .card-menu:hover {
-  /* Accentuation de l'effet 3D au survol */
   transform: translateZ(130px) scale(1.05);
   box-shadow: 4px 4px 6px #bcbcbc, -4px -4px 6px #ffffff;
   z-index: 3;
 }
 
 .card-menu img {
-  position: relative;
+  position: absolute; /* Positionnement absolu pour positionner l'image par rapport à la carte */
+  bottom: -30%; 
+  left: 50%; /* Pour centrer l'image horizontalement */
+  transform: translateX(-50%); /* Décaler l'image pour la centrer correctement */
   z-index: 2;
-  width: 50%;
-  height: auto;
-  max-height: 1000px;
+  width: 48%; /* Diminuer la taille de l'image */
   object-fit: cover;
-  margin: 0 auto;
-  transform: translateZ(10px);
   filter: drop-shadow(0 20px 30px rgb(0, 0, 0));
 }
 
 .card-wrapper {
+  /* Grid pour afficher les cartes en deux colonnes */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
@@ -891,17 +845,7 @@ h5 {
   justify-self: center;
 }
 
-.card-face {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-}
-
-.back-face {
-  transform: rotateY(180deg);
-}
-
+/* Adaptations pour petits écrans */
 @media screen and (max-width: 768px) {
   .card-menu {
       width: 90%;
@@ -910,7 +854,7 @@ h5 {
 
 @media screen and (max-width: 1000px) {
   .card-wrapper {
-      grid-template-columns: 1fr; /* Adaptation pour une seule colonne sur petits écrans */
+      grid-template-columns: 1fr; /* Une seule colonne pour écrans plus petits */
   }
 }
 
