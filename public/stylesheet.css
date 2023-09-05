@@ -369,6 +369,50 @@ body.darken {
   background-color: var(--black-color);
 }
 
+/* DEBUT DES CARDS MESSAGES CTS */
+
+/* Styles de card */
+.card-messageCTS {
+  background-color: var(--background-color);
+  border-radius: 15px; /* Bordures arrondies */
+  box-shadow: var(--card-shadow-neumorphism); /* Ombres extérieures */
+  overflow: hidden; /* Pour garantir que le contenu ne dépasse pas */
+  margin: 2em 0; /* Espace entre les cards */
+  transition: var(--transition-speed); /* Transition pour l'effet de survol */
+  padding: 1.5em; /* Augmenter l'espace intérieur */
+  font-family: 'Arial', sans-serif; /* Police de caractères pour une meilleure lisibilité */
+}
+
+.card-messageCTS:hover {
+  box-shadow: var(--card-shadow-inset-neumorphism); /* Ombre interne au survol */
+}
+
+.card-body-messageCTS h3 {
+  font-size: 1.5em; /* Augmenter la taille du titre */
+  margin-bottom: 1em; /* Espacer les éléments */
+}
+
+.priority-badge {
+  background-color: var(--background-color);
+  padding: 0.3em 0.7em;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: var(--btn-shadow-neumorphism);
+}
+
+/* Style pour la card avec priorité "Urgent" */
+.urgent-card .priority-badge {
+  background-color: var(--red-color);
+  color: var(--white-color);
+}
+
+.card-messageCTS p {
+  margin-bottom: 0.5em; /* Espacer les paragraphes */
+  font-size: 1.2em; /* Augmenter la taille du texte */
+}
+
+/* FIN DES CARDS MESSAGES CTS */
+
 /* BOUTON SUPPRIMER */
 
 .btn-delete {
