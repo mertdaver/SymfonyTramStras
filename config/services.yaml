@@ -40,3 +40,8 @@ services:
             $entityManager: '@doctrine.orm.default_entity_manager'
         tags:
             - { name: twig.extension }
+
+    App\Controller\MapController:
+        arguments:
+            $usernameCTS: '%env(USERNAME_CTS)%'
+            $passwordCTS: '%env(PASSWORD_CTS)%'

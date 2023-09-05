@@ -21,28 +21,30 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 class MapController extends AbstractController
 {
     private $logger;
+    private $usernameCTS;
+    private $passwordCTS;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, string $usernameCTS, string $passwordCTS)
     {
         $this->logger = $logger;
+        $this->usernameCTS = $usernameCTS;
+        $this->passwordCTS = $passwordCTS;   
     }
 
     #[Route('/map', name: 'points_map')]
     public function index(MarkerRepository $markerRepository, AlerteRepository $alerteRepo): Response
     {
-
         $latestAlert = $alerteRepo->findOneBy([], ['id' => 'DESC']);
 
-        // https://symfony.com/doc/current/configuration/secrets.html pour cacher l'API
         // URL de l'API CTS pour récupérer les points d'arrêt
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery';
-        $username = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
-        $password = 'Mry78(5kmM_d';
+        $usernameCTS = $this->usernameCTS;
+        $passwordCTS = $this->passwordCTS;
 
         // Options pour la requête HTTP
         $options = [
             'http' => [
-                'header' => "Authorization: Basic " . base64_encode($username . ':' . $password) . "\r\n",
+                'header' => "Authorization: Basic " . base64_encode($usernameCTS . ':' .$passwordCTS) . "\r\n",
                 'ignore_errors' => true
             ]
         ];
@@ -147,7 +149,7 @@ class MapController extends AbstractController
         try {
             // URL de l'API CTS pour récupérer les horaires d'un point d'arrêt spécifique
             $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
-            $requestorRef = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
+            $requestorRef =  $this->getParameter('usernameCTS');
             $previewInterval = 'PT2H';
             $includeGeneralMessage = 'true';
             $includeFLUO67 = 'false';
@@ -165,8 +167,8 @@ class MapController extends AbstractController
     
             $url .= '&' . http_build_query($queryParameters);
     
-            $username = 'f7e899aa-b4b3-4e27-bdb3-48ff97432546';
-            $password = 'Mry78(5kmM_d';
+            $username =  $this->getParameter('usernameCTS');
+            $password =  $this->getParameter('passwordCTS');
     
             $client = HttpClient::create([
                 'auth_basic' => [$username, $password],
