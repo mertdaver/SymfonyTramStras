@@ -149,7 +149,9 @@ class MapController extends AbstractController
         try {
             // URL de l'API CTS pour récupérer les horaires d'un point d'arrêt spécifique
             $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
-            $requestorRef =  $this->getParameter('usernameCTS');
+            $usernameCTS = $this->usernameCTS;
+            $passwordCTS = $this->passwordCTS;
+            $requestorRef =  $usernameCTS;
             $previewInterval = 'PT2H';
             $includeGeneralMessage = 'true';
             $includeFLUO67 = 'false';
@@ -167,11 +169,9 @@ class MapController extends AbstractController
     
             $url .= '&' . http_build_query($queryParameters);
     
-            $username =  $this->getParameter('usernameCTS');
-            $password =  $this->getParameter('passwordCTS');
     
             $client = HttpClient::create([
-                'auth_basic' => [$username, $password],
+                'auth_basic' => [$usernameCTS, $passwordCTS],
             ]);
     
             $response = $client->request('GET', $url);
