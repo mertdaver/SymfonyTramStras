@@ -16,22 +16,30 @@ class ContactMessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null, [
+            ->add('name', TextType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(['max' => 100]),
+                    new Assert\Regex([
+                        'pattern' => '/^[a-zA-Z\s]+$/',
+                        'message' => 'Le nom ne doit contenir que des lettres et des espaces.'
+                    ]),
                 ],
+                'trim' => true,
             ])
-            ->add('email', null, [
+            ->add('email', EmailType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Email(),
                 ],
+                'trim' => true,
             ])
-            ->add('message', null, [
+            ->add('message', TextareaType::class, [
                 'constraints' => [
                     new Assert\NotBlank(),
+                    new Assert\Length(['max' => 1000]),
                 ],
+                'trim' => true,
             ])
         ;
     }
