@@ -353,6 +353,7 @@ map.on('overlayadd', function(eventLayer) {
   // Ajout de la condition
   if (!markerData.isCustom) {
   var stopTimesUrl = stopTimesUrlTemplate.replace('stopCode', markerData.stopCode);
+  popupContent += '<strong>' + markerData.stopName + ' : </strong><br>';
   popupContent += '<button class="loadStopTimes" data-stop-url="' + stopTimesUrl + '">Voir les horaires</button>';
   popupContent += '<button class="getDirections" data-lat="' + markerData.latitude + '" data-lng="' + markerData.longitude + '">M\'y rendre</button>';
 

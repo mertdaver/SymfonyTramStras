@@ -38,6 +38,7 @@ class MapController extends AbstractController
 
         // URL de l'API CTS pour récupérer les points d'arrêt
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery';
+        // variables d'environnement dans .env.local
         $usernameCTS = $this->usernameCTS;
         $passwordCTS = $this->passwordCTS;
 
