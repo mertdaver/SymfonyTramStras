@@ -20,12 +20,13 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 class MapController extends AbstractController
 {
-    private $logger;
-    private $usernameCTS;
-    private $passwordCTS;
+    private $logger;           // Logger pour tracer les messages d'application.
+    private $usernameCTS;      // Nom d'utilisateur pour l'API CTS.
+    private $passwordCTS;      // Mot de passe pour l'API CTS.
 
     public function __construct(LoggerInterface $logger, string $usernameCTS, string $passwordCTS)
     {
+        // Initialisation des propriétés du contrôleur.
         $this->logger = $logger;
         $this->usernameCTS = $usernameCTS;
         $this->passwordCTS = $passwordCTS;   
@@ -34,15 +35,15 @@ class MapController extends AbstractController
     #[Route('/map', name: 'points_map')]
     public function index(MarkerRepository $markerRepository, AlerteRepository $alerteRepo): Response
     {
+        // Récupération de la dernière alerte depuis la base de données
         $latestAlert = $alerteRepo->findOneBy([], ['id' => 'DESC']);
 
-        // URL de l'API CTS pour récupérer les points d'arrêt
+        // Initialisation des variables avec les informations d'authentification pour l'API CTS
         $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery';
-        // variables d'environnement dans .env.local
         $usernameCTS = $this->usernameCTS;
         $passwordCTS = $this->passwordCTS;
 
-        // Options pour la requête HTTP
+         // Configuration des options de la requête HTTP pour l'API
         $options = [
             'http' => [
                 'header' => "Authorization: Basic " . base64_encode($usernameCTS . ':' .$passwordCTS) . "\r\n",
@@ -50,13 +51,15 @@ class MapController extends AbstractController
             ]
         ];
 
-        // Création du contexte pour la requête HTTP
+        // Envoi de la requête HTTP à l'API
         $context = stream_context_create($options);
         $response = file_get_contents($url, false, $context);
 
+        // Si la réponse n'est pas fausse, on traite les données
         if ($response !== false) {
             $data = json_decode($response, true);
 
+            // Vérification de l'existence des points d'arrêt dans la réponse
             if (isset($data['StopPointsDelivery']['AnnotatedStopPointRef'])) {
                 $apiStopPoints = $data['StopPointsDelivery']['AnnotatedStopPointRef'];
 
@@ -66,6 +69,7 @@ class MapController extends AbstractController
 
                 // Parcourir les points d'arrêt de l'API
                 foreach ($apiStopPoints as $apiStopPoint) {
+                    // Extraction des données pour chaque arrêt
                     $latitude = $apiStopPoint['Location']['Latitude'];
                     $longitude = $apiStopPoint['Location']['Longitude'];
                     $coordinates[] = [$latitude, $longitude];
@@ -89,10 +93,11 @@ class MapController extends AbstractController
                         'isCustom' => false, // Marqueur de l'API, icône par défaut utilisée
                     ];
 
-                    // Récupérer les lignes de tram
+                    // Traitement des noms de lignes, suppression du préfixe "Ligne "
                     $lineName = $apiStopPoint['Lines'] ?? '';
                     $lineName = str_replace('Ligne ', '', $lineName); // Supprimer le préfixe "Ligne "
 
+                    // Groupement des points par nom de ligne
                     if (!isset($lines[$lineName])) {
                         $lines[$lineName] = [];
                     }
@@ -126,6 +131,7 @@ class MapController extends AbstractController
                     $polylines[] = $polyline;
                 }
 
+                // Rendu de la vue avec les données préparées
                 return $this->render('map/index.html.twig', [
                     'markers' => $markers,
                     'lines' => $lines,
@@ -138,6 +144,7 @@ class MapController extends AbstractController
                 return new Response('Échec de récupération des données depuis l\'API', 500);
             }
         } else {
+            // Si la requête à l'API échoue, retourner une erreur
             return new Response('Échec de récupération des données depuis l\'API', 500);
         }
     }
@@ -148,8 +155,10 @@ class MapController extends AbstractController
     public function horaires_map(string $stopCode): Response
     {
         try {
-            // URL de l'API CTS pour récupérer les horaires d'un point d'arrêt spécifique
+            // Construction de l'URL pour interroger l'API CTS sur les horaires d'un point d'arrêt spécifique
             $url = 'https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable?StopPointRef=' . $stopCode;
+            
+            // Paramètres d'authentification pour l'API
             $usernameCTS = $this->usernameCTS;
             $passwordCTS = $this->passwordCTS;
             $requestorRef =  $usernameCTS;
@@ -159,6 +168,7 @@ class MapController extends AbstractController
             $removeCheckOut = 'false';
             $getStopIdInsteadOfStopCode = 'false';
     
+            // Paramètres additionnels pour la requête à l'API
             $queryParameters = [
                 'RequestorRef' => $requestorRef,
                 'PreviewInterval' => $previewInterval,
@@ -168,21 +178,26 @@ class MapController extends AbstractController
                 'GetStopIdInstedOfStopCode' => $getStopIdInsteadOfStopCode,
             ];
     
+            // Ajout des paramètres à l'URL
             $url .= '&' . http_build_query($queryParameters);
     
-    
+            // Création du client HTTP avec authentification
             $client = HttpClient::create([
                 'auth_basic' => [$usernameCTS, $passwordCTS],
             ]);
     
+            // Exécution de la requête GET
             $response = $client->request('GET', $url);
             $data = $response->toArray();
     
+            // Initialisation du tableau qui contiendra les horaires
             $stopTimes = [];
 
+            // Vérification de la présence de données d'horaire dans la réponse
             if (isset($data['ServiceDelivery']['EstimatedTimetableDelivery'])) {
                 $timetableDelivery = $data['ServiceDelivery']['EstimatedTimetableDelivery'];
     
+                // Parcours des trames de version pour extraire les données d'horaire
                 foreach ($timetableDelivery as $versionFrame) {
                     if (isset($versionFrame['EstimatedJourneyVersionFrame'])) {
                         $journeyFrames = $versionFrame['EstimatedJourneyVersionFrame'];
@@ -194,6 +209,7 @@ class MapController extends AbstractController
                             }
                         }
     
+                        // Parcours des voyages estimés pour obtenir les heures d'appel
                         foreach ($estimatedJourneys as $estimatedJourney) {
                             if (isset($estimatedJourney['EstimatedCalls'])) {
                                 $estimatedCalls = $estimatedJourney['EstimatedCalls'];
@@ -220,14 +236,14 @@ class MapController extends AbstractController
                 }
             }
     
-            // Instead of rendering a twig template, return the data as a JSON response
+            // Retourne les horaires sous forme de JSON
             return $this->json([
                 'stopTimes' => $stopTimes,
                 'stopCode' => $stopCode,
             ]);
     
         } catch (\Exception $e) {
-            // In case of any exceptions, return an error message as JSON
+            // En cas d'exception, retourne un message d'erreur sous forme de JSON
             return $this->json([
                 'error' => $e->getMessage()
             ], 500);
@@ -238,33 +254,35 @@ class MapController extends AbstractController
     #[Route("/post/create", name: "post_create", methods: ["POST"])]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $latitude = floatval($request->request->get('lat'));
-        $longitude = floatval($request->request->get('lng'));
-        $text = $request->request->get('text');
-
-        // Création d'un nouveau marqueur
+        // Récupération des données de la requête
+        $latitude = floatval($request->request->get('lat'));      // Conversion en flottant de la latitude
+        $longitude = floatval($request->request->get('lng'));     // Conversion en flottant de la longitude
+        $text = $request->request->get('text');                   // Récupération du texte associé au marqueur
+    
+        // Instanciation et initialisation d'un nouvel objet Marqueur
         $marker = new Marker();
         $marker->setLatitude($latitude);
         $marker->setLongitude($longitude);
         $marker->setText($text);
-        $marker->setUser($this->getUser());
-        $marker->setCreationDate(new \DateTime()); // Ajout de la date de création
-
-        // Enregistrement du marqueur dans la base de données
+        $marker->setUser($this->getUser());  // Récupère et assigne l'utilisateur actuellement authentifié
+        $marker->setCreationDate(new \DateTime());  // Assignation de la date et heure actuelle comme date de création
+    
+        // Persistance et enregistrement du nouvel objet Marqueur dans la base de données
         $entityManager->persist($marker);
         $entityManager->flush();
-
-        // Retourne les données au format JSON
+    
+        // Construction du tableau contenant les données du marqueur pour la réponse JSON
         $data = [
-            'id' => $marker->getId(),
-            'user_id' => $marker->getUser()->getId(),  // Assurez-vous que la méthode getId() existe dans l'entité User
+            'id' => $marker->getId(),  // Récupération de l'ID généré par la BDD pour le nouveau marqueur
+            'user_id' => $marker->getUser()->getId(),  // Récupération de l'ID de l'utilisateur associé
             'latitude' => $marker->getLatitude(),
             'longitude' => $marker->getLongitude(),
             'text' => $marker->getText(),
             'creation_date' => $marker->getCreationDate(),
         ];
-
+    
+        // Retour de la réponse contenant les données du marqueur au format JSON
         return new Response(json_encode($data));
-}
+    }
 
 }

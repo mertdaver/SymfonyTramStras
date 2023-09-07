@@ -1,263 +1,428 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        {% block title %}Bienvenue sur CTS Killer ! {% endblock %}
-    </title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>⚫️</text></svg>">
-    <link rel="stylesheet" href="{{ asset('stylesheet.css') }}">
-    <script src="{{ asset('jquery-3.7.0.min.js') }}"></script>
-    <script src="{{ asset('notif.js') }}"></script>
-    {% block stylesheets %}
-        <style></style>
-    {% endblock %}
-</head>
-<body>
-    <nav id="navbar">
-        <div id="menu-icon" aria-controls="menu" aria-expanded="false">&#9776;</div>
-        <ul id="menu" aria-hidden="true">
-            <li><a href="/">Accueil</a></li>
-            <li><a href="{{ path('messageCTS') }}">Messages CTS</a></li>
-            <li><a href="{{ path('app_categorie') }}">Forum</a></li>
-            <li><a href="{{ path('points_map') }}">Carte</a></li>
-            <li><a href="{{ path('get_alerte') }}">Demander de l'aide</a></li>
-            <li><a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a></li>
-            {% if app.user %}
-                <li>
-                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
-                    <a href="{{ path('app_account') }}">{{ app.user.pseudo }}</a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{{ path('app_login') }}">Se connecter</a>
-                </li>
-                <li>
-                    <a href="{{ path('app_register') }}">S'inscrire</a>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-    <header>
-        <div class="container">
-            {% if not app.user %}
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close" onclick="closeModal()">&times;</span>
-                    <h2>Connectez-vous ou inscrivez-vous</h2>
-                    <p>Vous devez être connecté pour ajouter un marqueur personnalisé.</p>
-                    <div class="buttons">
-                        <a href="{{ path('app_login') }}" class="login-button">Se connecter</a>
-                        <a href="{{ path('app_register') }}" class="register-button">S'inscrire</a>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			{% block title %}Bienvenue sur CTS Killer !
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>⚫️</text></svg>">
+		<link rel="stylesheet" href="{{ asset('stylesheet.css') }}">
+		<script src="{{ asset('jquery-3.7.0.min.js') }}"></script>
+		<script src="{{ asset('notif.js') }}"></script>
+		{% block stylesheets %}
+			<style></style>
+		{% endblock %}
+	</head>
+    <style>
+    /* Style du switch - boîte */
 
-        </div>
-    </header>
+    body[data-theme='dark'] {
+    background-color: black;
+    color: white;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Cacher la checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Style du curseur */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+/* Couleur de fond du switch lorsque activé */
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+/* Déplacement du curseur lors de l'activation */
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Style arrondi */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+    </style>
+	<body data-theme="light-mode">
+		<nav id="navbar">
+			<div id="menu-icon" aria-controls="menu" aria-expanded="false">&#9776;</div>
+			<ul id="menu" aria-hidden="true">
+				<li>
+					<a href="/">Accueil</a>
+				</li>
+				<li>
+					<a href="{{ path('messageCTS') }}">Messages CTS</a>
+				</li>
+				<li>
+					<a href="{{ path('app_categorie') }}">Forum</a>
+				</li>
+				<li>
+					<a href="{{ path('points_map') }}">Carte</a>
+				</li>
+				<li>
+					<a href="{{ path('get_alerte') }}">Demander de l'aide</a>
+				</li>
+				<li>
+					<a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a>
+				</li>
+				{% if app.user %}
+					<li>
+						<a href="{{ path('app_logout') }}">Se déconnecter</a>
+						<a href="{{ path('app_account') }}">{{ app.user.pseudo }}</a>
+					</li>
+				{% else %}
+					<li>
+						<a href="{{ path('app_login') }}">Se connecter</a>
+					</li>
+					<li>
+						<a href="{{ path('app_register') }}">S'inscrire</a>
+					</li>
+				{% endif %}
+				<li>
+					<div class="switch-container text-center my-5">
+						<label class="switch">
+							<input type="checkbox" id="mode">
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</li>
+
+			</ul>
+		</nav>
+		<header>
+			<div class="container">
+				{% if not app.user %}
+					<div id="myModal" class="modal">
+						<div class="modal-content">
+							<span class="close" onclick="closeModal()">&times;</span>
+							<h2>Connectez-vous ou inscrivez-vous</h2>
+							<p>Vous devez être connecté pour ajouter un marqueur personnalisé.</p>
+							<div class="buttons">
+								<a href="{{ path('app_login') }}" class="login-button">Se connecter</a>
+								<a href="{{ path('app_register') }}" class="register-button">S'inscrire</a>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+
+			</div>
+		</header>
+
+
+		<div id="latest-alert">
+			{% if latestAlert|default(false) %}
+				{% include 'latest_alert/_alert.html.twig' with {'alerte': latestAlert} %}
+			{% endif %}
+		</div>
+
+
+		{% block body %}{% endblock %}
+		<footer class="footer parallax-footer">
+			<div
+				class="parallax-footer-content">
+
+				<!-- 1. Colonne Liens rapides -->
+				<div class="footer-column">
+					<h5>Liens rapides</h5>
+					<ul class="quick-links">
+						<li>
+							<a href="#">Conditions Générales</a>
+						</li>
+						<li>
+							<a href="#">Politique de Cookies</a>
+						</li>
+						<li>
+							<a href="#">Politique de Confidentialité</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- 2. Colonne Réseaux sociaux -->
+				<div class="footer-column">
+					<h5>Réseaux sociaux</h5>
+					<ul class="social-icons">
+						<li>
+							<a href="#">
+								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
+									...
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
+									...
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
+									...
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
+									...
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- 3. Colonne Formulaire de contact -->
+				<div class="footer-column">
+					<div class="card-form-footer">
+						<h3>Contactez-nous</h3>
+						{{ render(controller('App\\Controller\\ContactFormController::contactForm')) }}
+					</div>
+				</div>
+
+			</div>
+
+			<!-- Logo et Copyright -->
+			<div id="label">
+
+				<p>Copyright © 2023 TramStras
+					<img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer"></p>
+			</div>
+		</footer>
+
+
+		{% block javascripts %}
+
+			<script>
+
+
+// SWITCH DARKMODE
+
+document.getElementById("mode").addEventListener("change", function () {
+    console.log("Changement détecté sur le switch du dark mode");
     
-    
-    <div id="latest-alert">
-    {% if latestAlert|default(false) %}
-    {% include 'latest_alert/_alert.html.twig' with {'alerte': latestAlert} %}
-    {% endif %}
-</div>
-
-
-{% block body %}
-{% endblock %}
-<footer class="footer parallax-footer">
-    <div class="parallax-footer-content">
-
-        <!-- 1. Colonne Liens rapides -->
-        <div class="footer-column">
-            <h5>Liens rapides</h5>
-            <ul class="quick-links">
-                <li><a href="#">Conditions Générales</a></li>
-                <li><a href="#">Politique de Cookies</a></li>
-                <li><a href="#">Politique de Confidentialité</a></li>
-            </ul>
-        </div>
-
-        <!-- 2. Colonne Réseaux sociaux -->
-        <div class="footer-column">
-            <h5>Réseaux sociaux</h5>
-            <ul class="social-icons">
-                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#black"> ... </svg></a></li>
-                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#black"> ... </svg></a></li>
-                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#black"> ... </svg></a></li>
-                <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#black"> ... </svg></a></li>
-            </ul>
-        </div>
-
-        <!-- 3. Colonne Formulaire de contact -->
-        <div class="footer-column">
-            <div class="card-form-footer">
-                <h3>Contactez-nous</h3>
-                {{ render(controller('App\\Controller\\ContactFormController::contactForm')) }}
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Logo et Copyright -->
-    <div id="label">
-        
-        <p>Copyright © 2023 TramStras <img id="logoRondCTSKiller" src="/LogoCTSKillerRondRedim.png" alt="Logo CTS Killer"></p>
-    </div>
-</footer>
-
-    
-    {% block javascripts %}
-    
-    <script>
-// Ouverture de la fenêtre modale
-function openModal(alerte) {
-    var modal = document.getElementById("myModalAlerte");
-    if (modal) {
-        var modalContent = modal.querySelector(".modal-content");
-        modalContent.querySelector('.ligne').textContent = alerte.ligne;
-        modalContent.querySelector('.sens').textContent = alerte.sens;
-        modalContent.querySelector('.user').textContent = alerte.user;
-        modalContent.querySelector('.alerteDate').textContent = alerte.alerteDate;
-        modal.style.display = "block";
+    // Toggle dark mode class
+    if (document.body.getAttribute('data-theme') === 'dark') {
+        console.log("Dark mode désactivé");
+        document.body.removeAttribute('data-theme');
+    } else {
+        console.log("Dark mode activé");
+        document.body.setAttribute('data-theme', 'dark');
     }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Initialiser le switch en fonction de la valeur dans localStorage
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        document.getElementById("mode").checked = true;
+    }
+
+    // Ajouter un événement sur le switch pour gérer le changement de thème
+    document.getElementById("mode").addEventListener("change", function () {
+        if (document.body.getAttribute('data-theme') === 'dark') {
+            document.body.removeAttribute('data-theme');
+            localStorage.removeItem('theme');
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+});
+
+
+
+
+				// Ouverture de la fenêtre modale
+function openModal(alerte) {
+var modal = document.getElementById("myModalAlerte");
+if (modal) {
+var modalContent = modal.querySelector(".modal-content");
+modalContent.querySelector('.ligne').textContent = alerte.ligne;
+modalContent.querySelector('.sens').textContent = alerte.sens;
+modalContent.querySelector('.user').textContent = alerte.user;
+modalContent.querySelector('.alerteDate').textContent = alerte.alerteDate;
+modal.style.display = "block";
+}
 }
 
 // Fonction pour créer un cookie
 function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+var expires = "";
+if (days) {
+var date = new Date();
+date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+expires = "; expires=" + date.toUTCString();
+}
+document.cookie = name + "=" + (
+value || ""
+) + expires + "; path=/";
 }
 
 // Fonction pour obtenir la valeur d'un cookie
 function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-    }
-    return null;
+var nameEQ = name + "=";
+var ca = document.cookie.split(';');
+for (var i = 0; i < ca.length; i++) {
+var c = ca[i];
+while (c.charAt(0) === ' ') 
+c = c.substring(1, c.length);
+
+
+
+if (c.indexOf(nameEQ) === 0) 
+return c.substring(nameEQ.length, c.length);
+
+
+
+}
+return null;
 }
 
 // Gestionnaire d'événement pour fermer la fenêtre modale d'alerte
 function attachCloseHandlers() {
-    var cardAlerte = document.querySelector(".card-alerte");
-    if (cardAlerte) {
-        var closeButton = cardAlerte.querySelector(".close-alerte");
-        closeButton.addEventListener("click", function() {
-            cardAlerte.style.display = "none";
-            var overlay = document.querySelector(".overlay");
-            if (overlay) {
-                overlay.style.display = "none";
-            }
-        });
-
-        // En option : Fermer la fenêtre modale d'alerte en cliquant en dehors
-        var overlay = document.querySelector(".overlay");
-        if (overlay) {
-            overlay.addEventListener("click", function() {
-                cardAlerte.style.display = "none";
-                overlay.style.display = "none";
-            });
-        }
-    }
+var cardAlerte = document.querySelector(".card-alerte");
+if (cardAlerte) {
+var closeButton = cardAlerte.querySelector(".close-alerte");
+closeButton.addEventListener("click", function () {
+cardAlerte.style.display = "none";
+var overlay = document.querySelector(".overlay");
+if (overlay) {
+overlay.style.display = "none";
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-    attachCloseHandlers();
-
-    // Cache la navbar lors du scroll
-    window.addEventListener("scroll", function() {
-        var navbar = document.querySelector("#navbar");
-        if (window.pageYOffset > 100) {
-            navbar.classList.add("hide");
-        } else {
-            navbar.classList.remove("hide");
-        }
-    });
-if (document.getElementById("mapContainer")) {
-    {% if not app.user %}
-    var modal = document.getElementById("myModal");
-    map.on('click', function(e) {
-        e.preventDefault();
-        if (app.user) {
-            var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
-            if (isConfirmed) {
-                modal.style.display = "block";
-            }
-        } else {
-            alert("Vous devez être connecté pour ajouter un marqueur personnalisé.");
-        }
-    });
-    {% endif %}
-    }
-
-    // Vérifie régulièrement s'il y a de nouvelles alertes
-    function checkForNewAlerts() {
-        $.ajax({
-            url: '/getLatestAlertId',
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                const alertId = response.id;
-                if (alertId) {
-                    getAlertDetails(alertId);
-                }
-            }
-        });
-    }
-
-    function getAlertDetails(alertId) {
-        if (!alertId) return;
-
-        $.ajax({
-            url: '/getAlertDetails/' + alertId,
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.alertId) {
-                    openModal(response);
-                }
-            }
-        });
-    }
-
-    // Vérifie si l'alerte a déjà été montrée
-    var alerteCookie = getCookie("alerteShown");
-    if (!alerteCookie) {
-        setCookie("alerteShown", "true", 1);
-        setInterval(checkForNewAlerts, 5000);
-    }
-
-    // Ferme la fenêtre modale d'alerte
-    var modalAlerte = document.getElementById("myModalAlerte");
-    if (modalAlerte) {
-        var closeButton = modalAlerte.querySelector(".close");
-        closeButton.addEventListener("click", function() {
-            modalAlerte.style.display = "none";
-        });
-
-        window.addEventListener("click", function(event) {
-            if (event.target === modalAlerte) {
-                modalAlerte.style.display = "none";
-            }
-        });
-    }
 });
 
+// En option : Fermer la fenêtre modale d'alerte en cliquant en dehors
+var overlay = document.querySelector(".overlay");
+if (overlay) {
+overlay.addEventListener("click", function () {
+cardAlerte.style.display = "none";
+overlay.style.display = "none";
+});
+}
+}
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+attachCloseHandlers();
+
+// Cache la navbar lors du scroll
+window.addEventListener("scroll", function () {
+var navbar = document.querySelector("#navbar");
+if (window.pageYOffset > 100) {
+navbar.classList.add("hide");
+} else {
+navbar.classList.remove("hide");
+}
+});
+if (document.getElementById("mapContainer")) {
+    {% if not app.user %}
+var modal = document.getElementById("myModal");
+map.on('click', function (e) {
+e.preventDefault();
+if (app.user) {
+var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+if (isConfirmed) {
+modal.style.display = "block";
+}
+} else {
+alert("Vous devez être connecté pour ajouter un marqueur personnalisé.");
+}
+});{% endif %}
+}
+
+// Vérifie régulièrement s'il y a de nouvelles alertes
+function checkForNewAlerts() {
+$.ajax({
+url: '/getLatestAlertId',
+method: 'GET',
+dataType: 'json',
+success: function (response) {
+const alertId = response.id;
+if (alertId) {
+getAlertDetails(alertId);
+}
+}
+});
+}
+
+function getAlertDetails(alertId) {
+if (! alertId) 
+return;
+
+
+
+$.ajax({
+url: '/getAlertDetails/' + alertId,
+method: 'GET',
+dataType: 'json',
+success: function (response) {
+if (response.alertId) {
+openModal(response);
+}
+}
+});
+}
+
+// Vérifie si l'alerte a déjà été montrée
+var alerteCookie = getCookie("alerteShown");
+if (! alerteCookie) {
+setCookie("alerteShown", "true", 1);
+setInterval(checkForNewAlerts, 5000);
+}
+
+// Ferme la fenêtre modale d'alerte
+var modalAlerte = document.getElementById("myModalAlerte");
+if (modalAlerte) {
+var closeButton = modalAlerte.querySelector(".close");
+closeButton.addEventListener("click", function () {
+modalAlerte.style.display = "none";
+});
+
+window.addEventListener("click", function (event) {
+if (event.target === modalAlerte) {
+modalAlerte.style.display = "none";
+}
+});
+}
+});
 
 </script>
 
-		{% endblock %}
-
-</body></html>
+		{% endblock %}</body> </html>

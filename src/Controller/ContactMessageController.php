@@ -4,29 +4,43 @@ namespace App\Controller;
 
 use App\Entity\ContactMessage;
 use App\Form\ContactMessageType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContactMessageController extends AbstractController
 {
-
     #[Route('/contact_message', name: 'contact_message')]
-    public function new(Request $request): Response
+    public function new(Request $request, ManagerRegistry $doctrine ): Response
     {
-        $contactMessage = new ContactMessage();
-        $form = $this->createForm(ContactMessageType::class, $contactMessage);
-        $form->handleRequest($request);
+        // Récupération du gestionnaire d'entités
+        $entityManager = $doctrine->getManager();
 
+        // Instanciation d'un nouvel objet ContactMessage.
+        $contactMessage = new ContactMessage();
+
+        // Création du formulaire associé à l'entité ContactMessage.
+        $form = $this->createForm(ContactMessageType::class, $contactMessage);
+
+        // Traitement et vérification de la soumission du formulaire.
+        $form->handleRequest($request);
+        
+        // Pour le débogage, vous pouvez afficher les erreurs du formulaire
+        // N'oubliez pas de retirer le dump après le débogage.
+        dump($form->getErrors(true, true));
+
+        // Si le formulaire est soumis et valide...
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($contactMessage);
             $entityManager->flush();
 
+            // Redirection vers la page d'accueil après l'enregistrement réussi du message de contact.
             return $this->redirectToRoute('home');
         }
 
+        // Rendu de la vue associée au formulaire de création d'un message de contact.
         return $this->render('contact_message/new.html.twig', [
             'form' => $form->createView(),
         ]);

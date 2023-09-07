@@ -129,4 +129,6 @@ class Subscription
         $this->createdAt = $createdAt;
         return $this;
     }
+
+
 }

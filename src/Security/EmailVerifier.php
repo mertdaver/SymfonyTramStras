@@ -2,13 +2,17 @@
 
 namespace App\Security;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Security\AppAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class EmailVerifier
 {

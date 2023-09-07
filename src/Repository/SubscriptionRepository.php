@@ -110,4 +110,5 @@ class SubscriptionRepository extends ServiceEntityRepository
 
         return $qb->getOneOrNullResult();
     }
+
 }

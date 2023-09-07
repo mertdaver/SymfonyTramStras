@@ -28,6 +28,32 @@
   --background-color: #e4e4e4;
 }
 
+/* Darkmode variables */
+[data-theme="dark"] {
+  /* Dark mode colors */
+  --red-color: #a50000; /* Remplacez par la couleur souhaitée */
+  --darkred-color: #850000; /* Remplacez par la couleur souhaitée */
+  --white-color: black;
+  --grey-color: #666666; /* Remplacez par la couleur souhaitée */
+  --black-color: #f4f0f0; /* Remplacez par la couleur souhaitée */
+  --background-color: #202020; /* Remplacez par la couleur souhaitée */
+}
+
+body[data-theme="dark"] {
+  background-color: var(--background-color);
+  color: var(--white-color);
+  /* Et ainsi de suite pour les autres éléments de votre site web */
+}
+
+/* Mettez à jour d'autres éléments en fonction de vos besoins. Par exemple: */
+body[data-theme="dark"] .navbar {
+  background-color: var(--grey-color);
+}
+body[data-theme="dark"] h1, body[data-theme="dark"] h2, body[data-theme="dark"] p {
+  color: var(--black-color);
+}
+
+
 /* Animation pour le fond */
 @keyframes gradient-background {
   0% {
@@ -547,6 +573,9 @@ textarea#post_text:focus::placeholder {
   box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
 }
 
+/* Routing machine */
+
+
 /* TEXTAREA Marker perso */
 
 input[type="text"]#text {
@@ -688,6 +717,12 @@ input[type="submit"]:hover::before {
   color: var(--primary-color);
 }
 
+/* cache les boutons de zoom  */
+.leaflet-control-zoom.leaflet-bar.leaflet-control {
+  display: none;
+}
+
+
 /* FOOTER */
 /* Style général du footer */
 .footer {
@@ -733,6 +768,7 @@ input[type="submit"]:hover::before {
 .card-form-footer {
   border-radius: 15px;
   box-shadow: var(--card-shadow-neumorphism);
+  background-color: var(--background-color);
   padding: 20px;
   background-color: var(--primary-color); /* Donne un fond correspondant au thème */
   display: flex;
@@ -746,10 +782,11 @@ input[type="submit"]:hover::before {
   display: block; /* Afin que les labels prennent toute la largeur */
 }
 
-.card-form-footer input[type="text"],
+.card-form-footer input,
 .card-form-footer select,
 .card-form-footer textarea { /* Ajouté pour prendre en charge les zones de texte éventuelles */
   width: 100%; /* Utilise toute la largeur disponible */
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.1);
   padding: 10px;
   border-radius: 8px;
   box-shadow: var(--btn-shadow-neumorphism);
@@ -760,11 +797,24 @@ input[type="submit"]:hover::before {
   font-size: 16px; /* Ajuste la taille du texte pour une meilleure lisibilité */
 }
 
-.card-form-footer input[type="text"]:focus,
+.card-form-footer input:focus,
 .card-form-footer select:focus,
 .card-form-footer textarea:focus { /* Ajouté pour prendre en charge les zones de texte éventuelles lorsqu'elles sont focalisées */
   box-shadow: var(--btn-shadow-inset-neumorphism);
   outline: none; /* Supprime le contour par défaut lors de la mise au point */
+}
+
+.card-form-footer input:hover,
+.card-form-footer select:hover,
+.card-form-footer textarea:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+
+.card-form-footer input::placeholder,
+.card-form-footer textarea::placeholder {
+  color: var(--grey-color);
+  opacity: 0.7; /* Légèrement transparent pour un look désactivé */
 }
 
 .card-form-footer input[type="submit"] {
@@ -777,6 +827,12 @@ input[type="submit"]:hover::before {
   box-shadow: var(--btn-shadow-inset-neumorphism);
   background-color: rgba(255, 255, 255, 0.3); /* Augmente la transparence au survol */
 }
+
+.card-form-footer input[type="submit"]:active {
+  box-shadow: var(--btn-shadow-neumorphism);
+  background-color: rgba(255, 255, 255, 0.25); 
+}
+
 
   /* Style pour le bandeau du bas */
   #label {
@@ -1232,3 +1288,57 @@ iframe {
   margin-bottom: 5px; /* ajustez cette valeur selon vos besoins */
   font-weight: bold; /* met le texte en gras */
 }
+
+/* DEBUT DU SWITCH DARKMODE */
+
+/* Le conteneur du switch - positionne le label et l'input du switch */
+.form-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Masque le input par défaut */
+.form-switch input {
+  display: none;
+}
+
+/* Le cercle glissant - avant le changement */
+.form-switch label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 52px;
+  height: 28px;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: .4s;
+  cursor: pointer;
+}
+
+/* Le cercle glissant - après le changement (lorsque l'utilisateur clique dessus) */
+.form-switch label:before {
+  content: "";
+  position: absolute;
+  height: 26px;
+  width: 26px;
+  left: 1px;
+  bottom: 1px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+/* Si l'input est coché, cela modifie l'arrière-plan du label */
+input:checked + .form-check-label {
+  background-color: #2196F3;
+}
+
+/* Déplace le cercle glissant vers la droite quand il est coché */
+input:checked + .form-check-label:before {
+  transform: translateX(26px);
+}
+
+
+/* FIN DU SWITCH DARKMODE */
