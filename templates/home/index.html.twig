@@ -35,33 +35,26 @@
         <div class="card-face back-face"></div>
     </a>
 
-        <a href="/SymfonyTramStras/templates/tarifs/menuTarif.html.twig" class="card-menu">
-        <div class="card-face front-face">
+    <a href="{{ path('messageCTS') }}" class="card-menu">
+        <div class="card-face front-face" data-card="messagesCTS">
             <div class="card-content">
-                <p>Tarifs CTS</p>
-                <img class="card-image" id="Forum" src="/ticketCTS.png" alt="un ticket de tram CTS">
+                <p>messages CTS</p>
             </div>
         </div>
         <div class="card-face back-face"></div>
     </a>
-            <a href="/SymfonyTramStras/templates/tarifs/menuTarif.html.twig" class="card-menu">
-        <div class="card-face front-face">
+
+        <a href="{{ path('app_menu_tarif') }}" class="card-menu">
+        <div class="card-face front-face" data-card="tarifsCTS">
             <div class="card-content">
                 <p>Tarifs CTS</p>
-                <img class="card-image" id="Forum" src="/ticketCTS.png" alt="un ticket de tram CTS">
             </div>
         </div>
         <div class="card-face back-face"></div>
     </a>
-            <a href="/SymfonyTramStras/templates/tarifs/menuTarif.html.twig" class="card-menu">
-        <div class="card-face front-face">
-            <div class="card-content">
-                <p>Tarifs CTS</p>
-                <img class="card-image" id="Forum" src="/ticketCTS.png" alt="un ticket de tram CTS">
-            </div>
-        </div>
-        <div class="card-face back-face"></div>
-    </a>
+
+
+
 </div>
 
 {% endblock %}
@@ -88,8 +81,8 @@ window.addEventListener('mousemove', (event) => {
             let deltaX = event.clientX - x;
             let deltaY = event.clientY - y;
             // Inverse les valeurs des rotations pour les axes haut-bas et gauche-droite
-            let rotationX = Math.max(Math.min(deltaY / -3, 30), -30);
-            let rotationY = Math.max(Math.min(deltaX / 3, 30), -30);
+            let rotationX = Math.max(Math.min(deltaY / -10, 30), -30); // Changé ici
+            let rotationY = Math.max(Math.min(deltaX / 10, 30), -30); // Et ici
             // Utilise la fonction d'interpolation pour adoucir l'effet
             let distanceFactor = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             distanceFactor = Math.min(distanceFactor, 100) / 100; // Limite le facteur entre 0 et 1
