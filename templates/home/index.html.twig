@@ -6,33 +6,35 @@
 <h1>Bienvenue sur TramStras</h1>
 <h2> Le site par et pour les Strasbourgeois ! </h2>
 <div class="card-wrapper">
-    <a href="{{ path('points_map') }}" class="card-menu">
-        <div class="card-face front-face">
-            <div class="card-content">
-                <p>Carte du réseau</p>
-                <img class="card-image" id="MapPNG" src="/tramRouge.png" alt="Aperçu de la carte">
-            </div>
+
+<a href="{{ path('points_map') }}" class="card-menu">
+  <div class="card-face front-face" data-card="network"> 
+    <div class="card-content">
+        <p>Carte du réseau</p>
+    </div>
+  </div>
+  <div class="card-face back-face"></div>
+</a>
+
+<a href="{{ path('get_alerte') }}" class="card-menu">
+    <div class="card-face front-face" data-card="help">
+        <div class="card-content">
+            <p>Demander de l'aide</p>
         </div>
-        <div class="card-face back-face"></div>
-    </a>
-    <a href="{{ path('get_alerte') }}" class="card-menu">
-        <div class="card-face front-face">
-            <div class="card-content">
-                <p>Demander de l'aide</p>
-                <img class="card-image" id="AlertePNG" src="/Alerte.png" alt="Icone d'aide">
-            </div>
-        </div>
-        <div class="card-face back-face"></div>
-    </a>
+    </div>
+    <div class="card-face back-face"></div>
+</a>
+
+ 
     <a href="{{ path('app_categorie') }}" class="card-menu">
-        <div class="card-face front-face">
+        <div class="card-face front-face" data-card="forum">
             <div class="card-content">
                 <p>Forum</p>
-                <img class="card-image" id="Forum" src="/ForumLogo.png" alt="Aperçu du Forum">
             </div>
         </div>
         <div class="card-face back-face"></div>
     </a>
+
         <a href="/SymfonyTramStras/templates/tarifs/menuTarif.html.twig" class="card-menu">
         <div class="card-face front-face">
             <div class="card-content">

@@ -139,52 +139,54 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
     </style>
-	<body data-theme="light-mode">
-		<nav id="navbar">
-			<div id="menu-icon" aria-controls="menu" aria-expanded="false">&#9776;</div>
-			<ul id="menu" aria-hidden="true">
-				<li>
-					<a href="/">Accueil</a>
-				</li>
-				<li>
-					<a href="{{ path('messageCTS') }}">Messages CTS</a>
-				</li>
-				<li>
-					<a href="{{ path('app_categorie') }}">Forum</a>
-				</li>
-				<li>
-					<a href="{{ path('points_map') }}">Carte</a>
-				</li>
-				<li>
-					<a href="{{ path('get_alerte') }}">Demander de l'aide</a>
-				</li>
-				<li>
-					<a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a>
-				</li>
-				{% if app.user %}
-					<li>
-						<a href="{{ path('app_logout') }}">Se déconnecter</a>
-						<a href="{{ path('app_account') }}">{{ app.user.pseudo }}</a>
-					</li>
-				{% else %}
-					<li>
-						<a href="{{ path('app_login') }}">Se connecter</a>
-					</li>
-					<li>
-						<a href="{{ path('app_register') }}">S'inscrire</a>
-					</li>
-				{% endif %}
-				<li>
-					<div class="switch-container text-center my-5">
-						<label class="switch">
-							<input type="checkbox" id="mode">
-							<span class="slider round"></span>
-						</label>
-					</div>
-				</li>
-
-			</ul>
-		</nav>
+<body data-theme="light-mode">
+<nav id="navbar">
+    <div id="menu-icon" aria-controls="menu" aria-expanded="false">&#9776;</div>
+    <img id="navbar-logo" src="/TramStrasLogoRed.png" alt="Logo de TramStras">
+    <ul id="menu" aria-hidden="true">
+        <div class="navbar-left">
+            <ul id="menu-left" aria-hidden="true">
+                <li><a href="/">Accueil</a></li>
+                <li><a href="{{ path('messageCTS') }}">Messages CTS</a></li>
+                <li><a href="{{ path('app_categorie') }}">Forum</a></li>
+                <li><a href="{{ path('points_map') }}">Carte</a></li>
+                <li><a href="{{ path('get_alerte') }}">Demander de l'aide</a></li>
+                <li><a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <ul id="menu-right" aria-hidden="true">
+                <li class="user-dropdown">
+                    {% if app.user %}
+                        <a href="#" id="user-icon">
+                            <img src="\utilisateur (1).png" alt="User">
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="{{ path('app_account') }}">Profil</a>
+                            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                        </div>
+                    {% else %}
+                        <a href="#" id="user-icon">
+                            <img src="\utilisateur (1).png" alt="User">
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="{{ path('app_login') }}">Se connecter</a>
+                            <a href="{{ path('app_register') }}">S'inscrire</a>
+                        </div>
+                    {% endif %}
+                </li>
+                <li>
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" id="mode">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </ul>
+</nav>
 		<header>
 			<div class="container">
 				{% if not app.user %}
