@@ -20,9 +20,9 @@ class PostCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInPlural('Utilisateurs')
-            ->setEntityLabelInSingular('Utilisateur')
-            ->setPageTitle("index", "TramStras - Administration des utilisateurs")
+            ->setEntityLabelInPlural('Postes')
+            ->setEntityLabelInSingular('Poste')
+            ->setPageTitle("index", "TramStras - Administration des Postes")
            
             ->setPaginatorPageSize(50)
 

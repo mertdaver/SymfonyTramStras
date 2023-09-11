@@ -33,8 +33,7 @@ class CategorieCrudController extends AbstractCrudController
             IdField::new('id')
                 ->hideOnForm() 
                 ->hideOnIndex(),
-            TextField::new('nom_categorie')
-                ->setFormTypeOption('disabled', 'disabled'), // empêche la modificacion
+            TextField::new('nom_categorie'),
             AssociationField::new('topics')
                 ->setFormTypeOption('disabled', 'disabled') // empêche la modificacion
                 ->hideOnIndex(), // cache dans l'index

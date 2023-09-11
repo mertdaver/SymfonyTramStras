@@ -44,7 +44,7 @@ class MarkerCrudController extends AbstractCrudController
                 ->hideOnForm(), // cache l'input du form de modification
             TextField::new('User')
                 ->setFormTypeOption('disabled', 'disabled'), // empêche la modificacion
-            ArrayField::new('text'),
+            TextField::new('text'),
         ];
     }
 }
