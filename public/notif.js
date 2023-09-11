@@ -106,10 +106,25 @@ document.querySelectorAll('.gravityButton').forEach(btn => {
 document.addEventListener("DOMContentLoaded", function() {
   var menuIcon = document.getElementById('menu-icon');
   var menu = document.getElementById('menu');
-
+  var backgroundBlur = document.getElementById('background-blur');
+  
   menuIcon.addEventListener('click', function() {
       menuIcon.classList.toggle('active');
       menu.classList.toggle('open');
+      backgroundBlur.classList.toggle('open');
+
+      if (menu.classList.contains('open')) {
+          backgroundBlur.style.display = 'block'; // Affichez le fond flouté
+      } else {
+          backgroundBlur.style.display = 'none'; // Cachez le fond flouté
+      }
+  });
+
+  // Fermez le menu lorsque vous cliquez en dehors
+  backgroundBlur.addEventListener('click', function() {
+      menuIcon.classList.remove('active');
+      menu.classList.remove('open');
+      backgroundBlur.style.display = 'none'; // Cachez le fond flouté
   });
 });
 
