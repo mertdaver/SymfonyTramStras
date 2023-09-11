@@ -2,16 +2,24 @@
 
 namespace App\Entity;
 
+use App\Entity\Post;
+use App\Entity\Topic;
+use App\Entity\Marker;
+use Stripe\Subscription as StripeSubscription;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-
+/**
+ * @ORM\Entity
+ * @Vich\Uploadable
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -28,9 +36,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -55,6 +60,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeId = null;
+
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImageName;
+    
+    #[Vich\UploadableField(mapping: "profile_image", fileNameProperty: "profileImageName")]
+    private $profileImageFile;
+
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private ?\DateTimeInterface $updatedAt;
+
 
 
 
@@ -84,27 +100,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
-
-    /**
-     * @see UserInterface
-     */
+    
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
+    
         return array_unique($roles);
     }
+    
 
     public function setRoles(array $roles): self
     {
@@ -113,9 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
+
     public function getPassword(): string
     {
         return $this->password;
@@ -128,9 +134,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -177,9 +181,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
     
 
-    /**
-     * @return Collection<int, Post>
-     */
+
     public function getPost(): Collection
     {
         return $this->Post;
@@ -207,9 +209,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Topic>
-     */
+
     public function getTopic(): Collection
     {
         return $this->Topic;
@@ -237,9 +237,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Marker>
-     */
+
     public function getMarkers(): Collection
     {
         return $this->markers;
@@ -267,9 +265,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Subscription>
-     */
     public function getSubscriptions(): Collection
     {
         return $this->subscriptions;
@@ -307,6 +302,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->stripeId = $stripeId;
 
         return $this;
+    }
+
+        public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getProfileImageFile()
+    {
+        return $this->profileImageFile;
+    }
+    
+    public function setProfileImageFile($imageFile)
+    {
+        $this->profileImageFile = $imageFile;
+        
+        if ($imageFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 
 

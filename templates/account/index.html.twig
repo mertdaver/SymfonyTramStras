@@ -4,6 +4,7 @@
 
 {% block body %}
     <h1>Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
+    <img src="{{ asset('uploads/profiles/' ~ app.user.profileImageName) }}" alt="Image de profil">
     <div class="card">
 
         {% if 'ROLE_ADMIN' in app.user.roles %}
