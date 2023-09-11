@@ -141,7 +141,7 @@ input:checked + .slider:before {
     </style>
 <body data-theme="light-mode">
 <nav id="navbar">
-    <div id="menu-icon" aria-controls="menu" aria-expanded="false">&#9776;</div>
+    <div id="menu-icon" aria-controls="menu" aria-expanded="false"></div>
 
     <a href="/">
     <img id="navbar-logo" src="/TramStrasLogoRed.png" alt="Logo de TramStras">
@@ -299,6 +299,8 @@ input:checked + .slider:before {
 			<script>
 
 
+
+
 // SWITCH DARKMODE
 
 document.getElementById("mode").addEventListener("change", function () {
@@ -406,18 +408,15 @@ overlay.style.display = "none";
 }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-attachCloseHandlers();
 
-// Cache la navbar lors du scroll
-window.addEventListener("scroll", function () {
-var navbar = document.querySelector("#navbar");
-if (window.pageYOffset > 100) {
-navbar.classList.add("hide");
-} else {
-navbar.classList.remove("hide");
-}
-});
+
+attachCloseHandlers();
+    
+
+
+
+
+// Vérifie que l'user est connecté pour poser un marqueur sinon modale de connexion/inscription
 if (document.getElementById("mapContainer")) {
     {% if not app.user %}
 var modal = document.getElementById("myModal");
@@ -488,7 +487,12 @@ modalAlerte.style.display = "none";
 }
 });
 }
-});
+
+
+
+} //Fin DOMLOADED
+
+);
 
 </script>
 

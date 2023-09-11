@@ -88,11 +88,32 @@ header, #navbar {
   box-shadow: var(--box-shadow-neumorphism);
 }
 
+/* Styles pour les écrans en dessous de 850px */
+@media (max-width: 850px) {
+  /* Simplification de l'animation de fond pour une meilleure performance sur mobile */
+  body {
+      /* Si vous souhaitez garder l'animation, vous pouvez réduire sa durée ou supprimer cette règle */
+      animation: none;
+      /* Ajuster le dégradé pour un meilleur rendu sur mobile */
+      background: linear-gradient(-45deg, var(--red-color), var(--white-color));
+  }
+  
+  /* Autres ajustements pour mobile */
+  /* Vous pouvez ajuster la taille des polices, les marges, les rembourrages, etc. pour qu'ils soient mieux adaptés aux petits écrans */
+  header, #navbar {
+      padding: 10px; /* Exemple: Réduire le rembourrage */
+  }
+}
+
 #navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+  position: sticky;
+  top : -6%;
+  z-index: 10;
+  transition: top 1s ease-in-out;
 }
 
 .navbar-left, .navbar-right {
@@ -134,7 +155,7 @@ header, #navbar {
 }
 
 #navbar ul li a:hover {
-  color: var(--darkred-color);
+  background-color: var(--white-color);
 }
 
 /* Position de l'icône utilisateur */
@@ -179,41 +200,81 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
 }
 
 /* Ajustements pour les vues mobiles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 850px) {
   #navbar ul {
       flex-direction: column;
   }
 }
 
 #menu-icon {
-  display: none;
-  cursor: pointer;
-  font-size: 30px;
-  z-index: 1001;
+    display: none;
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 1001;
+    background-color: #20202000;
+    padding: 10px; /* providing some space around the icon */
+    border-radius: 8px; /* rounded corners */
+    box-shadow: -5px -5px 10px rgba(255, 255, 255, 0), 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
+
+#menu-icon::before {
+  content: '☰'; /* Default appearance */
+}
+
+#menu-icon.active::before {
+  content: '\2715'; /* Appearance when active */
+}
+
 
 /* Ajustements pour les petits écrans */
 @media (max-width: 850px) {
   #menu-icon {
       display: block;
+      color: var(--black-color);
+      transition: color var(--transition-speed);
+  }
+
+  #menu-icon:hover {
+      color: var(--darkred-color);
+  }
+
+  #navbar-logo {
+      width: 50%;
+      height: 50%;
+  }
+
+  .navbar-left {
+    background-color: var(--neumorphic-bg, #e0e0e0); /* Couleur de fond neutre pour le neumorphism */
+    border-radius: 10px; /* Arrondis doux */
+    padding: 10px; /* Espace interne pour séparer le contenu des bords */
+    box-shadow: 
+        -8px -8px 16px rgba(255, 255, 255, 0.7), /* Ombre claire, augmentée pour plus de profondeur */
+         8px  8px 16px rgba(0, 0, 0, 0.15); /* Ombre foncée, augmentée pour plus de profondeur */
+}
+
+
+  header, #navbar {
+      background-color: #20202000;
+      color: var(--black-color);
+      box-shadow: var(--box-shadow-neumorphism);
+  }
+
+  #menu-left{
+    background-color: var(--white-color);
   }
 
   #navbar ul {
-      position: fixed;
+      position: sticky;
       left: -100%;
       top: 5%;
       flex-direction: column;
-      background-color: var(--red-color);
-      width: 100%;
       text-align: center;
       transition: 0.25s;
       z-index: 1000;
-      display: inline-flex;
-      align-items: center;
-      list-style-type: none;
-      width: 100%;
       justify-content: space-between;
-}
+      border-radius: 15px; /* Soft edges */
+      padding: 15px; /* Space inside the menu */
+  }
 
   #navbar ul li {
       padding: 3px 0;
@@ -221,17 +282,17 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
 
   #navbar ul li:hover {
       background: var(--darkred-color);
+      box-shadow: inset -3px -3px 7px rgba(255, 255, 255, 0.5), inset 3px 3px 7px rgba(0, 0, 0, 0.15); /* Inset shadow for hover to create a pressed effect */
   }
 
-  #menu-icon[aria-expanded="true"]::before {
+  #menu-icon.active::before {
       content: '\2715';
   }
 
-  #menu[aria-hidden="false"] {
+  #menu.open {
       left: 0;
       visibility: visible;
       opacity: 1;
-      transition: visibility var(--transition-speed), opacity var(--transition-speed) linear;
   }
 
   #menu {

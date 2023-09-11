@@ -1,7 +1,64 @@
-//  NOTIF ALERTE MODAL
+//  Sticky-MENU 
 
+document.addEventListener("DOMContentLoaded", function() {
+  (function() {
 
+          // Si la largeur de l'écran est inférieure à 850px, désactivez cette fonction.
+          if (window.innerWidth <= 850) {
+            console.log("La largeur de l'écran est inférieure à 850px, donc la fonction a été désactivée.");
+            return;
+        }
+      
+      let lastScrollTop = 0;
+      const navbar = document.getElementById('navbar');
+      const header = document.getElementById('header');
+      const menu = document.getElementById('menu');
+      const menuIcon = document.getElementById('menu-icon');
 
+      if (navbar && menu && menuIcon) {
+          console.log("La navbar, l'en-tête, le menu et l'icône de menu ont été trouvés");
+      } else {
+          console.log("Un ou plusieurs éléments n'ont PAS été trouvés");
+          return;
+      }
+
+      navbar.addEventListener('mouseover', function() {
+          navbar.style.top = '0';
+      });
+
+      navbar.addEventListener('mouseout', function() {
+          navbar.style.top = '-6%';
+      });
+
+      window.addEventListener('scroll', function() {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+          if (scrollTop > lastScrollTop) {
+              navbar.style.top = '-100%';
+              menu.style.display = "none";
+
+              if (window.innerWidth <= 850) {
+                  menu.style.left = '-100%';
+                  menuIcon.setAttribute("aria-expanded", "false");
+              }
+
+          } else {
+              navbar.style.top = '0';
+              menu.style.display = "";
+              if (window.innerWidth <= 850) {
+                  menu.style.left = "0";
+                  menuIcon.setAttribute("aria-expanded", "true");
+              }
+          }
+          
+          lastScrollTop = scrollTop;
+      });
+
+  })(); 
+});
+
+    
+    
 // JS parallax Footer
 
 window.addEventListener('scroll', function() {
@@ -47,15 +104,15 @@ document.querySelectorAll('.gravityButton').forEach(btn => {
 //   BURGER MENU
 
 document.addEventListener("DOMContentLoaded", function() {
-    var menuIcon = document.getElementById('menu-icon');
-    var menu = document.getElementById('menu');
+  var menuIcon = document.getElementById('menu-icon');
+  var menu = document.getElementById('menu');
 
-    menuIcon.addEventListener('click', function() {
-        var expanded = this.getAttribute("aria-expanded") === "true";
-        this.setAttribute("aria-expanded", !expanded);
-        menu.setAttribute("aria-hidden", expanded);
-    });
+  menuIcon.addEventListener('click', function() {
+      menuIcon.classList.toggle('active');
+      menu.classList.toggle('open');
+  });
 });
+
 
 
 
