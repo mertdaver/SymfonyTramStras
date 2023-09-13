@@ -500,7 +500,7 @@ p {
 }
 
 .card h1 {
-  color: var(--black-color);
+  color: white;
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -694,29 +694,31 @@ textarea#post_text:focus::placeholder {
   100% { transform: translateY(-50%) scale(1); }
 }
 
+/* Style du bouton */
 .btn.btn-primary {
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  background-color: transparent;
+  background-color: var(--background-color);
   border: none;
-  color: var(--primary-color);
+  border-radius : 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: var(--black-color);
   cursor: pointer;
-  padding: 0;
-  font-size: 26px;
-  line-height: 1;
-  animation: btnPulse 1.5s infinite;
+  transition: all var(--transition-speed);
+  box-shadow: var(--btn-shadow-neumorphism);
 }
 
 .btn.btn-primary:after {
   content: '→';
   display: inline-block;
-  transition: color 0.3s, transform 0.3s;
+  margin-left: 8px; /* Ajout d'un espace entre le texte du bouton et l'icône */
+  transition: transform var(--transition-speed);
+}
+
+.btn.btn-primary:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
 }
 
 .btn.btn-primary:hover:after {
-  color: var(--secondary-color);
   transform: translateX(8px);
 }
 
@@ -1156,7 +1158,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/EntraideMains.png'); /* Assurez-vous que le chemin est correct par rapport à votre dossier CSS */
+  background-image: url('/Logo Ligne/2.jpg'); /* Assurez-vous que le chemin est correct par rapport à votre dossier CSS */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1196,8 +1198,106 @@ input[type="submit"]:hover::before {
   overflow: hidden;
 }
 
+/* CARD CATEGORIE */
+
+.card-face[data-card="Bus"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/44080662_1881085461986769_6668733005386743808_n.jpg'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="general"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/postaleStrasbourg.jpg'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="A"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/A.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="B"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/B.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="C"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/C.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="D"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/D.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.card-face[data-card="E"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/E.png'); 
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
 
 
+.card-face[data-card="F"] {
+  height: 200px; 
+  width: 100%;
+  border-radius: 8px;
+  background-image: url('/Logo Ligne/F.png'); 
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center 20% !important;
+  overflow: hidden;
+}
+
+.tcardCat {
+  color: white;
+  font-size: 72px;
+  text-align: center;
+  text-shadow: none;
+  margin-top: 11%;
+  text-decoration : none !important;
+}
 
 .card-wrapper {
   /* Grid pour afficher les cartes en deux colonnes */
@@ -1361,16 +1461,6 @@ p.message-text {
 .form-chat {
   display: flex;
   flex-direction: column;
-}
-
-.btn-primary {
-  background-color: var(--primary-color);
-  color: var(--primary-color);
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  margin-top: 10px;
-  cursor: pointer;
 }
 
 /* Position du bouton "X" à gauche et à l'intérieur de la bulle */

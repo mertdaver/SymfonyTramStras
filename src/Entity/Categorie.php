@@ -21,6 +21,9 @@ class Categorie
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Topic::class)]
     private Collection $topics;
 
+    #[ORM\Column(length: 255)]
+    public ?string $dataCard = null;
+
     public function __construct()
     {
         $this->topics = new ArrayCollection();
@@ -69,6 +72,18 @@ class Categorie
                 $topic->setCategorie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDataCard(): ?string
+    {
+        return $this->dataCard;
+    }
+
+    public function setDataCard(?string $dataCard): self
+    {
+        $this->dataCard = $dataCard;
 
         return $this;
     }

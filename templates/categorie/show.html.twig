@@ -1,8 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{% endblock %}
+{% block style %}
+<style>
+
+
+</style>
+{% endblock %}
+
 
 {% block body %}
+<div id="neumorphic-container">
     <h1>
         <a href="{{ path('app_categorie') }}">La liste des topics de {{ categorie.getNomCategorie() }}</a>
     </h1>
@@ -50,6 +58,7 @@
                 <a href="{{ path('app_register') }}">S'inscrire</a>
             </li>
         </ul>
+</div>
     {% endif %}
     
     <script>

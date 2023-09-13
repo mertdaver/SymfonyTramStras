@@ -3,30 +3,6 @@
 {% block style %}
 <style>
 
-.container {
-    width: 220px;
-    height: 220px;
-    perspective: 1000px;
-    margin: 100px auto;  /* Pour centrer le carrousel */
-}
-
-.line-A { background-color: red; color: white; }
-.line-B { background-color: lightblue; color: white; }
-.line-C { background-color: orange; color: white; }
-.line-D { background-color: darkgreen; color: white; }
-.line-E { background-color: darkblue; color: white; }
-.line-F { background-color: lightgreen; color: white; }
-
-.carousel-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100px;
-    height: 100px;
-    font-size: 2rem;
-    text-decoration: none;
-}
-
 </style>
 {% endblock %}
 
@@ -34,27 +10,28 @@
 <h1>La liste des catégories</h1>
 
 <div class="container">
-    {% for categorie in categories %}
-        <a href="{{ path('show_categorie', {'id': categorie.id}) }}" class="carousel-item line-{{ categorie.nom_categorie|first|upper }}">
-            {{ categorie.nom_categorie|first|upper }}
-        </a>
-    {% endfor %}
+ </a>
+
+<div class="card-wrapper">
+
+{% for categorie in categories %}
+
+<a href="{{ path('show_categorie', {'id': categorie.id}) }}" class="card-menu">
+  <div class="card-face front-face" data-card="{{ categorie.dataCard }}"> 
+    <div class="card-content">
+        <h1 class="tcardCat" >{{ categorie.nom_categorie }}</h1>
+    </div>
+  </div>
+  <div class="card-face back-face"></div>
+</a>
+{% endfor %}
+
 </div>
 
+</div>
 {% endblock %}
 
 {% block script %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://www.jqueryscript.net/demo/Simple-3D-Carousel-Slider-Plugin-jQuery-3d-Carousel/jquery-3d-carousel.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $('.container').carousel({
-            perspective: 0,
-            interval: 2000,
-            direction: "horizontal",
-            autoplay: false
-        });
-    });
-</script>
+
 {% endblock %}

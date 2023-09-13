@@ -27,9 +27,8 @@ class ContactMessageController extends AbstractController
         // Traitement et vérification de la soumission du formulaire.
         $form->handleRequest($request);
         
-        // Pour le débogage, vous pouvez afficher les erreurs du formulaire
-        // N'oubliez pas de retirer le dump après le débogage.
-        dump($form->getErrors(true, true));
+        // débogage.
+        // dump($form->getErrors(true, true));
 
         // Si le formulaire est soumis et valide...
         if ($form->isSubmitted() && $form->isValid()) {

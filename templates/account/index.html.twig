@@ -18,7 +18,7 @@
 	{% endif %}
 
 	{% if app.user.roles is defined %}
-		<p>Rôles : {{ app.user.roles|join(', ') }}</p>
+		<p>Rôles : {{ app.user.roles|join(', ') }}</p></br>
 	{% endif %}
 
 	{# {% if app.user.Post is defined %}
@@ -35,11 +35,11 @@
 
 	
 		{% if 'ROLE_ADMIN' in app.user.roles %}
-			<a href="{{ path('admin') }}" class="btn btn-primary">Administration</a>
+			<a href="{{ path('admin') }}" class="btn btn-primary">Administration</a></br>
 		{% endif %}
 
 		{% if app.user.imagesUsers and app.user.imagesUsers.imageName %}
-			<img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil">
+			<img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil"></br>
 		{% else %}
 			<p>Pas d'image de profil</p>
 		{% endif %}
