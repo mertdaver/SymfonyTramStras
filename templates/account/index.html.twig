@@ -3,34 +3,63 @@
 {% block title %}Mon Compte{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
-    <img src="{{ asset('uploads/profiles/' ~ app.user.profileImageName) }}" alt="Image de profil">
-    <div class="card">
 
-        {% if 'ROLE_ADMIN' in app.user.roles %}
-        <a href="{{ path('admin') }}" class="btn btn-primary">Administration</a>
-        
-        {% endif %}
+{% if app.user is defined %}
+	<h1>Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
 
+	<div class="card">
 
-        {% if activeSub %}
-            {% if activeSub.isIsActive() %}
-                <p>Votre abonnement est actif jusqu'au {{ activeSub.getCurrentPeriodEnd|date('d/m/Y') }}.</p>
-                <p>Votre abonnement sera renouvelé le {{ activeSub.getCurrentPeriodEnd|date('d F Y') }}.</p>
-            {% else %}
-                <p>Votre abonnement a expiré, veuillez renouveler pour continuer à profiter des avantages.</p>
-                {# Bouton pour renouveler l'abonnement #}
-                <a href="{{ path('route_pour_payer_abonnement') }}" class="btn btn-primary">Renouveler l'abonnement</a>
-            {% endif %}
-        {% else %}
-    {% if activeSub %}
-        Votre abonnement {{ activeSub.plan.name }} est actif et sera renouvelé {{ activeSub.currentPeriodEnd|date('d/m/Y') }}.<br /><br />
-    {% else %}
-        {% for plan in plans %}
-            <a target="_blank" href="{{ plan.paymentLink }}">{{ plan.name }}</a>
-        {% endfor %}
-    {% endif %}
-        {% endif %}
-    </div>
+	<p>Email : {{ app.user.email }}</p>
+
+	{% if app.user.isVerified is defined %}
+		<p>Votre adresse e-mail est vérifiée.</p>
+	{% else %}
+		<p>Votre adresse e-mail n'est pas vérifiée.</p>
+	{% endif %}
+
+	{% if app.user.roles is defined %}
+		<p>Rôles : {{ app.user.roles|join(', ') }}</p>
+	{% endif %}
+
+	{# {% if app.user.Post is defined %}
+		<p>Nombre de publications : {{ app.user.Post|length }}</p>
+	{% endif %} #}
+
+	{# {% if app.user.Topic is defined %}
+		<p>Nombre de sujets : {{ app.user.Topic|length }}</p>
+	{% endif %} #}
+
+	{# {% if app.user.markers is defined %}
+		<p>Nombre de marqueurs : {{ app.user.markers|length }}</p>
+	{% endif %} #}
+
+	
+		{% if 'ROLE_ADMIN' in app.user.roles %}
+			<a href="{{ path('admin') }}" class="btn btn-primary">Administration</a>
+		{% endif %}
+
+		{% if app.user.imagesUsers and app.user.imagesUsers.imageName %}
+			<img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil">
+		{% else %}
+			<p>Pas d'image de profil</p>
+		{% endif %}
+
+		{% if activeSub %}
+			{% if activeSub.isIsActive() %}
+				<p>Votre abonnement est actif jusqu'au {{ activeSub.getCurrentPeriodEnd|date('d/m/Y') }}.</p>
+				<p>Votre abonnement sera renouvelé le {{ activeSub.getCurrentPeriodEnd|date('d F Y') }}.</p>
+			{% else %}
+				<p>Votre abonnement a expiré, veuillez renouveler pour continuer à profiter des avantages.</p>
+				<a href="{{ path('route_pour_payer_abonnement') }}" class="btn btn-primary">Renouveler l'abonnement</a>
+			{% endif %}
+		{% else %}
+			{% for plan in plans %}
+				<a target="_blank" href="{{ plan.paymentLink }}">Passer à l'abonnement premium</a>
+			{% endfor %}
+		{% endif %}
+	</div>
+{% else %}
+	<p>L'utilisateur n'est pas connecté.</p>
+{% endif %}
 
 {% endblock %}

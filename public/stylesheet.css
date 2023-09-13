@@ -193,6 +193,16 @@ header, #navbar {
   display: block;
 }
 
+/* Image de profile user */
+#ImgProfile {
+  width: 100px; /* ou la dimension que vous voulez */
+  height: 100px;
+  border-radius: 50%; /* ceci crée le cercle */
+  object-fit: cover; /* pour s'assurer que l'image couvre tout l'espace */
+  overflow: hidden; /* au cas où l'image serait plus grande que les dimensions définies */
+}
+
+
 /* Icône utilisateur pour états connecté et déconnecté */
 li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"] {
   background-image: url('path_to_icon.png');
@@ -611,6 +621,14 @@ body.darken {
   background-color: var(--red-color);
   /* Ombres internes pour un effet d'enfoncement Neumorphique */
   box-shadow: inset 6px 6px 8px #d1cdc7, inset -6px -6px 8px #ffffff;
+}
+
+#ImgProfileMess {
+  width: 40px; /* ou la dimension que vous voulez */
+  height: 40px;
+  border-radius: 50%; /* ceci crée le cercle */
+  object-fit: cover; /* pour s'assurer que l'image couvre tout l'espace */
+  overflow: hidden; /* au cas où l'image serait plus grande que les dimensions définies */
 }
 
 /* TEXTAREA MESSAGE FORUM */
@@ -1489,6 +1507,11 @@ iframe {
   background: rgba(0, 0, 0, 0.75); /* Noir semi-transparent */
   backdrop-filter: blur(5px); /* Floute le contenu en dessous */
 }
+
+.overlay, .card-alerte {
+  display: none;
+}
+
 
 .card-alerte {
   position: fixed;

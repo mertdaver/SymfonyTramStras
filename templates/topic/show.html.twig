@@ -18,8 +18,14 @@
             <div class="chat-messages">
                 {% if posts|length > 0 %}
                     {% for post in posts %}
+                        {# Affichage de l'image de profil de l'utilisateur #}
                         <div class="chat-message {% if post.user == app.user %}outgoing{% else %}incoming{% endif %}">
                             <div class="message-bubble {% if post.user == app.user %}outgoing-bubble{% else %}incoming-bubble{% endif %}">
+                        {% if post.user.imagesUsers and post.user.imagesUsers.imageName %}
+                            <img id="ImgProfileMess" class="user-profile-image" src="{{ vich_uploader_asset(post.user.imagesUsers, 'imageFile') }}" alt="{{ post.user.pseudo }}'s profile image">
+                        {% else %}
+                            <img class="user-profile-image" src="\utilisateur (1).png" alt="Default profile image">
+                        {% endif %}
                                 <span class="username">
                                     {# Afficher le rôle "ROLE_ADMIN" comme "admin" #}
                                     {% if 'ROLE_ADMIN' in post.user.roles %}

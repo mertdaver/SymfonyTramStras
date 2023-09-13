@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230911144628 extends AbstractMigration
+final class Version20230912143423 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,13 @@ final class Version20230911144628 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD updated_at DATETIME DEFAULT NULL, DROP profile_image_file');
+        $this->addSql('CREATE TABLE categorie (id INT AUTO_INCREMENT NOT NULL, nom_categorie VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user ADD profile_image_file VARCHAR(255) DEFAULT NULL, DROP updated_at');
+        $this->addSql('ALTER TABLE topic DROP FOREIGN KEY FK_9D40DE1BBCF5E72D');
+        $this->addSql('DROP TABLE categorie');
     }
 }

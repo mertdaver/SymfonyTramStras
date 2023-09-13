@@ -3,12 +3,12 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Form\ImagesUsersType;
 use Symfony\Component\Form\AbstractType;
 use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -66,11 +66,8 @@ class RegistrationFormType extends AbstractType
                 'constraints' => new Recaptcha3(),
                 'action_name' => 'register',
             ])
-
-            ->add('profileImageFile', VichImageType::class, [
-                'required' => false,
-                'label' => 'Image de profil',
-            ]);
+            
+            ->add('imagesUsers', ImagesUsersType::class);
         ;
     }
 

@@ -50,21 +50,22 @@ class File extends Constraint
     public $binaryFormat;
     public $mimeTypes = [];
     public array|string|null $extensions = [];
-    public $notFoundMessage = 'The file could not be found.';
-    public $notReadableMessage = 'The file is not readable.';
-    public $maxSizeMessage = 'The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}.';
-    public $mimeTypesMessage = 'The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.';
-    public string $extensionsMessage = 'The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}.';
-    public $disallowEmptyMessage = 'An empty file is not allowed.';
-
-    public $uploadIniSizeErrorMessage = 'The file is too large. Allowed maximum size is {{ limit }} {{ suffix }}.';
-    public $uploadFormSizeErrorMessage = 'The file is too large.';
-    public $uploadPartialErrorMessage = 'The file was only partially uploaded.';
-    public $uploadNoFileErrorMessage = 'No file was uploaded.';
-    public $uploadNoTmpDirErrorMessage = 'No temporary folder was configured in php.ini.';
-    public $uploadCantWriteErrorMessage = 'Cannot write temporary file to disk.';
-    public $uploadExtensionErrorMessage = 'A PHP extension caused the upload to fail.';
-    public $uploadErrorMessage = 'The file could not be uploaded.';
+    public $notFoundMessage = 'Le fichier est introuvable.';
+    public $notReadableMessage = 'Le fichier n\'est pas lisible.';
+    public $maxSizeMessage = 'Le fichier est trop volumineux ({{ size }} {{ suffix }}). La taille maximale autorisée est {{ limit }} {{ suffix }}.';
+    public $mimeTypesMessage = 'Le type MIME du fichier est invalide ({{ type }}). Les types MIME autorisés sont {{ types }}.';
+    public string $extensionsMessage = 'L\'extension du fichier est invalide ({{ extension }}). Les extensions autorisées sont {{ extensions }}.';
+    public $disallowEmptyMessage = 'Un fichier vide n\'est pas autorisé.';
+    
+    public $uploadIniSizeErrorMessage = 'Le fichier est trop volumineux. La taille maximale autorisée est {{ limit }} {{ suffix }}.';
+    public $uploadFormSizeErrorMessage = 'Le fichier est trop volumineux.';
+    public $uploadPartialErrorMessage = 'Le fichier a été téléchargé partiellement.';
+    public $uploadNoFileErrorMessage = 'Aucun fichier n\'a été téléchargé.';
+    public $uploadNoTmpDirErrorMessage = 'Aucun dossier temporaire n\'a été configuré dans php.ini.';
+    public $uploadCantWriteErrorMessage = 'Impossible d\'écrire le fichier temporaire sur le disque.';
+    public $uploadExtensionErrorMessage = 'Une extension PHP a provoqué l\'échec du téléchargement.';
+    public $uploadErrorMessage = 'Le fichier n\'a pas pu être téléchargé.';
+    
 
     protected $maxSize;
 

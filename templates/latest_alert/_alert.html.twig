@@ -8,10 +8,11 @@
 <div class="overlay"></div>
 <div class="card-alerte">
     <h2>Nouvelle Alerte le {{ alerte.alerteDate|date('d') ~ ' ' ~ mois[alerte.alerteDate|date('n')] ~ ' ' ~ alerte.alerteDate|date('Y') }} à {{ alerte.alerteDate|date('H:i:s') }}</h2><br>
-    L'utilisateur {{ alerte.user.pseudo }} a posté une nouvelle alerte 
+    L'utilisateur {{ (alerte.user is not null and alerte.user.pseudo is not null) ? alerte.user.pseudo : 'Anonyme' }} a posté une nouvelle alerte 
     dans le tram ligne {{ alerte.ligne }} direction {{ alerte.sens }}
     <button class="close-alerte">Fermer</button>
 </div>
+
 
 
 
@@ -23,14 +24,15 @@
 <script>
     // Fonction pour créer un cookie
     function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
     }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/; secure"; // Ajout de "secure" pour HTTPS
+}
+
 
     // Fonction pour obtenir la valeur d'un cookie
     function getCookie(name) {
@@ -72,19 +74,21 @@
 
 
     document.addEventListener("DOMContentLoaded", function() {
-            // Vérifie si l'alerte a déjà été vue
-            var alerteSeen = getCookie("alerteSeen");
-            if (alerteSeen !== "{{ alerte.id }}") {
-                setTimeout(function() {
-                attachCloseHandlers();
-                 }, 10000); 
-            } else {
-                var cardAlerte = document.querySelector(".card-alerte");
-                var overlay = document.querySelector(".overlay");
-                if (cardAlerte) cardAlerte.style.display = "none";
-                if (overlay) overlay.style.display = "none";
-            }
-    }); 
+    var cardAlerte = document.querySelector(".card-alerte");
+    var overlay = document.querySelector(".overlay");
+    
+    // Vérifie si l'alerte a déjà été vue
+    var alerteSeen = getCookie("alerteSeen");
+
+    if (alerteSeen !== "{{ alerte.id }}") {
+        setTimeout(function() {
+            if (cardAlerte) cardAlerte.style.display = "block";
+            if (overlay) overlay.style.display = "block";
+            attachCloseHandlers();
+        }, 10000); 
+    } 
+});
+
 </script>
 {% endblock %}
 {% endif  %}

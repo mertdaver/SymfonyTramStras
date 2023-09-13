@@ -3,19 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\ImagesUsers;
+use App\Security\EmailVerifier;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
-use App\Security\EmailVerifier;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 
@@ -32,30 +34,49 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-        // Initialisation d'une nouvelle instance d'utilisateur.
         $user = new User();
-
-        // Création du formulaire d'inscription basé sur le type RegistrationFormType.
         $form = $this->createForm(RegistrationFormType::class, $user);
-
-        // Traitement de la requête et mise à jour de l'objet $form.
         $form->handleRequest($request);
-
-        // Si le formulaire est soumis et valide...
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hashage du mot de passe saisi en clair par l'utilisateur.
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
+    
+           // Récupérez le fichier du sous-formulaire
+           $imageFile = $form->get('imagesUsers')->get('imageFile')->getData();
 
-            // Persistance de l'utilisateur en base de données.
+           // Si un fichier a été téléchargé
+            if ($imageFile) {
+                // Récupérer la taille du fichier avant de le déplacer
+                $fileSize = $imageFile->getSize();
+
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors du téléchargement de votre image. Veuillez réessayer.');
+                    return $this->redirectToRoute('app_register');
+                }
+
+                $imagesUsers = new ImagesUsers();
+                $imagesUsers->setImageName($newFilename);
+                
+                // Utiliser la taille du fichier que nous avons récupérée précédemment
+                $imagesUsers->setImageSize($fileSize);
+                
+                $user->setImagesUsers($imagesUsers); // Associez ImagesUsers à User
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // Génération d'une URL signée et envoi par e-mail à l'utilisateur pour confirmer son inscription.
+    
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('symfonytramstras@proton.me', 'TramStras'))
@@ -63,16 +84,14 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            
-            // Authentification automatique de l'utilisateur après son inscription.
+    
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
                 $request
             );
         }
-
-        // Si le formulaire n'est pas soumis ou non valide, affichage du formulaire.
+    
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
