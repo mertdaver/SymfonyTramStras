@@ -6,9 +6,10 @@ namespace App\Form;
 use App\Entity\ImagesUsers;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\File;
 
 
 class ImagesUsersType extends AbstractType
@@ -16,9 +17,8 @@ class ImagesUsersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('imageFile', FileType::class, [
+            ->add('imageFile', VichImageType::class, [
                 'label' => 'Image (fichier PNG ou JPEG)',
-                'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File([
@@ -30,6 +30,7 @@ class ImagesUsersType extends AbstractType
                     ]),
                 ],
             ])
+        
         ;
     }
 

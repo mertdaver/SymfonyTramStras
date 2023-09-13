@@ -5,12 +5,12 @@ namespace App\Entity;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ThumbnailRepository;
-use App\Repository\User\ImagesUsersRepository;
+use App\Repository\ImagesUsersRepository;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
-#[ORM\Entity(repositoryClass: ImagesUsersRepository::class)]
+#[ORM\Entity(repositoryClass: \App\Repository\ImagesUsersRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class ImagesUsers
@@ -21,7 +21,7 @@ class ImagesUsers
     private ?int $id = null;
 
     // Image en elle même
-    #[Vich\UploadableField(mapping: 'images_users', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Vich\UploadableField(mapping: 'images_users', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
     // Nom de l'image
@@ -45,6 +45,7 @@ class ImagesUsers
     {
         $this->updatedAt = new \DateTimeImmutable();
         $this->createdAt = new \DateTimeImmutable();
+
     }
 
     #[ORM\PreUpdate]

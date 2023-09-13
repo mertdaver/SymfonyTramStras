@@ -2,12 +2,13 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Alerte;
-use App\Entity\Categorie;
-use App\Entity\Marker;
 use App\Entity\Post;
-use App\Entity\Topic;
 use App\Entity\User;
+use App\Entity\Topic;
+use App\Entity\Alerte;
+use App\Entity\Marker;
+use App\Entity\Categorie;
+use App\Entity\ImagesUsers;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -39,5 +40,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Topics', 'fa-solid fa-list', Topic::class);
         yield MenuItem::linkToCrud('Posts', 'fa-solid fa-paragraph', Post::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('Images Users', 'fa fa-images', ImagesUsers::class);
     }
 }
