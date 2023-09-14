@@ -94,7 +94,8 @@ body {
   /* Autres ajustements pour mobile */
   /* Vous pouvez ajuster la taille des polices, les marges, les rembourrages, etc. pour qu'ils soient mieux adaptés aux petits écrans */
   header, #navbar {
-      padding: 10px; /* Exemple: Réduire le rembourrage */
+      padding: 10px;
+      display: flex;
   }
 }
 
@@ -308,7 +309,16 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
     box-shadow: 
         -8px -8px 16px rgba(255, 255, 255, 0.7), /* Ombre claire, augmentée pour plus de profondeur */
          8px  8px 16px rgba(0, 0, 0, 0.15); /* Ombre foncée, augmentée pour plus de profondeur */
+
+  justify-content: flex-start;
+  padding-left: 1%;
+  width: 100vh;  /* Si vous souhaitez que cela soit la hauteur, c'est correct. Sinon, changez à 100% pour la largeur. */
+  position: fixed;
+  top: 50%;
+  left: 50%;  /* le point de départ au centre */
+  transform: translateX(-50%);  /* déplace le bloc de 50% de sa largeur vers la gauche pour le centrer */
 }
+
 
 
   header, #navbar {
@@ -334,7 +344,7 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
       z-index: 1000;
       justify-content: space-between;
       padding: 15px; /* Space inside the menu */
-      z-index: 9999;
+      z-index: 999;
   }
 
   #navbar ul li {
@@ -354,6 +364,8 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
       left: 0;
       visibility: visible;
       opacity: 1;
+      width: 100%;  /* prend toute la largeur */
+      height: 100vh;  /* prend toute la hauteur de l'écran */
   }
 
   #menu {
@@ -361,6 +373,63 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
       opacity: 0;
       transition: visibility var(--transition-speed), opacity var(--transition-speed) linear;
   }
+}
+
+/* Styles pour smartphones (inférieur à 600px) */
+@media (max-width: 600px) {
+
+  /* Rembourrage réduit pour la barre de navigation */
+  #navbar {
+    padding: 0 10px;
+    top: -20%; 
+  }
+
+  /* Logo de la barre de navigation réduit */
+  #navbar-logo {
+    width: 30%;
+    height: 30%;
+  }
+
+  /* Augmenter la taille de l'icône du menu pour une meilleure accessibilité */
+  #menu-icon {
+    font-size: 40px;
+    padding: 15px;
+  }
+
+  /* Optimiser le menu pour les petits écrans, comme les smartphones */
+  #navbar ul {
+    padding: 10px;
+  }
+
+  #navbar ul li {
+    padding: 5px 0;
+  }
+
+  /* Réduire la taille des liens pour s'adapter aux petits écrans */
+  #navbar ul li a {
+    font-size: 39px;
+  }
+
+  /* Réduire l'image de profil pour les smartphones */
+  #ImgProfile {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Réduire les liens de déconnexion et d'inscription */
+  .logout-link, .register-link {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
+  #menu-icon {
+    font-size: 40px;
+    padding: 15px;
+    position: fixed;
+    top: 90%;
+    bottom: auto;
+    left: 80%;
+}
 }
 
 /* Liens de déconnexion et d'inscription */
@@ -973,53 +1042,7 @@ input[type="submit"]:hover::before {
 }
 
 /* Icônes des réseaux sociaux */
-.social-icons li {
-  display: inline-block;
-  margin-right: 15px;
-}
 
-.social-icons svg {
-  transition: fill var(--transition-speed);
-}
-
-.social-icons a:hover svg {
-  fill: var(--red-color);
-}
-
-
-/* Logo et copyright */
-#label {
-  text-align: center;
-  margin-top: 50px;
-  color: var(--black-color);
-  font-size: 18px;
-}
-
-/* Liens rapides */
-.quick-links, .social-icons {
-  list-style-type: none;
-  padding: 0;
-}
-
-.quick-links li, .social-icons li {
-  margin-bottom: 15px;
-}
-
-.quick-links a, .social-icons a {
-  color: var(--grey-color);
-  text-decoration: none;
-  transition: color var(--transition-speed);
-}
-
-.quick-links a:hover, .social-icons a:hover {
-  color: var(--red-color);
-}
-
-/* Icônes des réseaux sociaux */
-.social-icons li {
-  display: inline-block;
-  margin-right: 15px;
-}
 
 
 
@@ -1083,6 +1106,33 @@ input[type="submit"]:hover::before {
 
 
 /* FIN DU FOOTER */
+/* Début DU FOOTER -850 */
+
+@media (max-width: 850px) {
+  
+  .parallax-footer-content {
+    flex-direction: column;
+    gap: 15px; /* Ajustez le gap pour qu'il soit adapté aux écrans plus petits */
+  }
+
+  .footer-column {
+    /* Si vous voulez que chaque carte prenne la pleine largeur de l'écran, définissez width à 100%. Sinon, ajustez en conséquence. */
+    width: 100%;
+  }
+
+  /* Icônes des réseaux sociaux */
+  .social-icons li {
+    /* Cela permettra aux icônes de s'étaler en colonne plutôt qu'en ligne */
+    display: block;
+    margin-right: 0; 
+    margin-bottom: 10px;
+  }
+
+}
+
+
+
+/* FIN DU FOOTER -850*/
 
 
 
