@@ -21,7 +21,7 @@ class MessageCTSController extends AbstractController
         $this->client = $client;
         $this->logger = $logger;
         $this->usernameCTS = $usernameCTS;
-        $this->passwordCTS = $passwordCTS;  // Corrigé pour initialiser le mot de passe
+        $this->passwordCTS = $passwordCTS;
     }
 
     #[Route('/messageCTS', name: 'messageCTS')]

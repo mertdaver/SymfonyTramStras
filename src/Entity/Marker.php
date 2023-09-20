@@ -30,8 +30,6 @@ class Marker
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $text = null;
 
-    #[ORM\Column(length: 255)]
-
 
     public function __construct()
     {

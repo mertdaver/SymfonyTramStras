@@ -25,7 +25,6 @@ class CategorieController extends AbstractController
     private $doctrine;
 
     /**
-     * Constructeur du CategorieController.
      *
      * @param ManagerRegistry $doctrine Une instance de ManagerRegistry, injectée automatiquement par Symfony.
      */

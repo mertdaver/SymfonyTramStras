@@ -67,7 +67,6 @@ class Categorie
     public function removeTopic(Topic $topic): self
     {
         if ($this->topics->removeElement($topic)) {
-            // set the owning side to null (unless already changed)
             if ($topic->getCategorie() === $this) {
                 $topic->setCategorie(null);
             }

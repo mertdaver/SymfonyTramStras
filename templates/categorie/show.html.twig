@@ -21,7 +21,8 @@
             <p>
                 <a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
                 {% if is_authenticated and topic.user == user %}
-                    <a class="btn btn-delete" href="{{ path('delete_topic', {'id': topic.id}) }}" onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Clôturer le Sujet</a>
+                    <a class="btn btn-delete" href="{{ path('delete_topic', {'id': topic.id}) }}" 
+                    onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Clôturer le Sujet</a>
                 {% endif %}
             </p>
             <p>
@@ -50,15 +51,15 @@
         </div>
     {% else %}
         <p>Vous devez être connecté pour ajouter un nouveau topic.</p>
-        <ul>
-            <li>
-                <a href="{{ path('app_login') }}">Se connecter</a>
-            </li>
-            <li>
-                <a href="{{ path('app_register') }}">S'inscrire</a>
-            </li>
-        </ul>
-</div>
+            <ul>
+                <li>
+                    <a href="{{ path('app_login') }}">Se connecter</a>
+                </li>
+                <li>
+                    <a href="{{ path('app_register') }}">S'inscrire</a>
+                </li>
+            </ul>
+        </div>
     {% endif %}
     
     <script>
