@@ -18,9 +18,11 @@
     {% if categorie.topics|length > 0 %}
         {% for topic in categorie.topics %}
             <br>
+            <div class="card">
             <p>
                 <a href="{{ path('app_topic_show', {'id': topic.id}) }}">{{ topic }}</a>
                 {% if is_authenticated and topic.user == user %}
+                </br>
                     <a class="btn btn-delete" href="{{ path('delete_topic', {'id': topic.id}) }}" 
                     onclick="return confirmDelete('{{ path('delete_topic', {'id': topic.id}) }}');">Clôturer le Sujet</a>
                 {% endif %}
@@ -33,6 +35,7 @@
                     Utilisateur inconnu
                 {% endif %}
             </p>
+            </div>
             <br>
         {% endfor %}
     {% else %}

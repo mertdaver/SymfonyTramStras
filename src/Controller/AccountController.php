@@ -17,11 +17,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class AccountController extends AbstractController
 {
-    /**
-    * @IsGranted("ROLE_USER")
-    */
     #[Route('/account', name: 'app_account')]
-    public function index(ManagerRegistry $doctrine, AlerteRepository $alerteRepository): Response // Ajout de AlerteRepository
+    public function index(ManagerRegistry $doctrine, AlerteRepository $alerteRepository): Response 
     {
         $plans = $doctrine->getRepository(Plan::class)->findAll();
         $activeSub = $doctrine->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());

@@ -14,6 +14,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            login_throttling: true
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\AppAuthenticator
@@ -49,16 +50,7 @@ when@test:
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        firewalls:
+                # configuring the maximum login attempts (per minute)
+                login_throttling:
+                    max_attempts: 2

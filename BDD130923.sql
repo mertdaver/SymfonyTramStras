@@ -309,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `topic` (
   KEY `IDX_9D40DE1BBCF5E72D` (`categorie_id`),
   KEY `IDX_9D40DE1BA76ED395` (`user_id`),
   CONSTRAINT `FK_9D40DE1BA76ED395` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `FK_9D40DE1BBCF5E72D` FOREIGN KEY (`categorie_id`) REFERENCES `tramstrasold`.`categorie` (`id`)
+  CONSTRAINT `FK_9D40DE1BBCF5E72D` FOREIGN KEY (`categorie_id`) REFERENCES `tramstras`.`categorie` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage des données de la table tramstras.topic : ~0 rows (environ)

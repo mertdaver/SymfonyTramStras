@@ -41,7 +41,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     #[Groups(['alerte_read'])]
     private ?string $pseudo = null;
-
     
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
     private Collection $Post;
