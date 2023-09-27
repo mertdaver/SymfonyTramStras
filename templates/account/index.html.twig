@@ -136,6 +136,9 @@ a[target="_blank"]:hover {
 		{% else %}
 			<p>Pas d'image de profil</p>
 		{% endif %}</br>
+		{{ form_start(deleteForm, {'attr': {'onsubmit': "return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');"}}) }}
+		{{ form_widget(deleteForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
+		{{ form_end(deleteForm) }}
 	</div>
 {% else %}
 	<p>L'utilisateur n'est pas connecté.</p>

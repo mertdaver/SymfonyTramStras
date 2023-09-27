@@ -24,7 +24,7 @@ class Marker
     private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\ManyToOne(inversedBy: 'markers')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $User = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

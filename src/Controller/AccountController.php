@@ -13,6 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -24,23 +26,27 @@ class AccountController extends AbstractController
     {
         $plans = $doctrine->getRepository(Plan::class)->findAll();
         $activeSub = $doctrine->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());
-
-        // Ajout de cette partie pour obtenir la dernière alerte
         $latestAlert = $alerteRepository->findLatestAlert();
-
         $user = $this->getUser();
         if (!$user) {
-            // Handle not logged-in scenario, e.g., redirect to login page
             return $this->redirectToRoute('app_login');
         }
-
+        
+        $deleteForm = $this->createFormBuilder()
+            ->setAction($this->generateUrl('user_delete'))
+            ->setMethod('POST')
+            ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
+            ->getForm();
+    
         return $this->render('account/index.html.twig', [
             'user' => $user,
             'plans' => $plans,
             'activeSub' => $activeSub,
-            'latestAlert' => $latestAlert, // Ajout de cette ligne pour fenêtre modal alerte
+            'latestAlert' => $latestAlert,
+            'deleteForm' => $deleteForm->createView(),
         ]);
     }
+    
 
     #[Route('/getPseudo/{id}', name: 'get_user_pseudo', methods: ['GET'])]
     public function getPseudo(User $user = null): JsonResponse
@@ -70,6 +76,62 @@ class AccountController extends AbstractController
         return $this->render('account/mes_topics.html.twig', ['topics' => $topics]);
     }
     
+
+
+    #[Route('/user/delete', name: 'user_delete', methods: ['POST'])]
+    public function deleteAccount(Request $request): Response
+    {
+        $user = $this->getUser();
+        
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour supprimer votre compte.');
+        }
+        
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        // Anonymisation des posts
+        foreach ($user->getPosts() as $post) {
+            $post->setUser(null);
+            $post->setContent('Ce contenu a été anonymisé');
+            $entityManager->persist($post);
+        }
+        
+        // Anonymisation des topics
+        foreach ($user->getTopics() as $topic) {
+            $topic->setUser(null);
+            $topic->setTitle('Topic anonymisé');
+            $entityManager->persist($topic);
+        }
+        
+        // Anonymisation des markers
+        foreach ($user->getMarkers() as $marker) {
+            $marker->setUser(null);
+            $marker->setName('Marker anonymisé');
+            $entityManager->persist($marker);
+        }
+        
+        // Suppression du compte utilisateur
+        $entityManager->remove($user);
+        $entityManager->flush();
+        
+        $this->get('security.token_storage')->setToken(null);
+        $request->getSession()->invalidate();
+        
+        return $this->redirectToRoute('homepage');
+    }
+
+    public function profile(): Response
+    {
+        $deleteForm = $this->createFormBuilder()
+            ->setAction($this->generateUrl('user_delete'))
+            ->setMethod('POST')
+            ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
+            ->getForm();
+
+        return $this->render('user/account.html.twig', [
+            'deleteForm' => $deleteForm->createView(),
+        ]);
+    }
 
     
 }
