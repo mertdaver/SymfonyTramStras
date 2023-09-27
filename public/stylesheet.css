@@ -1580,7 +1580,7 @@ p.message-text {
   margin: 10px 0;
   border: none;
   border-radius: 10px;
-  background-color: var(--background-color);
+  background-color: #f1f1f1;
   box-shadow: var(--box-shadow-inset-neumorphism);
   transition: all var(--transition-speed);
   width: 95%;

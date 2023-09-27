@@ -9,6 +9,7 @@
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>⚫️</text></svg>">
 		<link rel="stylesheet" href="{{ asset('stylesheet.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" />
 		<script src="{{ asset('jquery-3.7.0.min.js') }}"></script>
 		<script src="{{ asset('notif.js') }}"></script>
 		<script src="\tarteaucitron.js-1.14.0\tarteaucitron.js"></script>
@@ -140,6 +141,118 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* social */
+
+.btn-social {
+    position: relative;
+    height: 100px; 
+    width: 100px; 
+    background: rgb(214, 214, 214);
+    border-radius: 40%;
+    box-shadow: -7px -7px 20px 0 rgba(255, 255, 255, 0.9),
+    7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+    transition: 0.2s;
+}
+
+.btn-social i{
+    color: var(--black-color) !important;
+}
+
+.btn-social a {
+    padding: 30px;
+}
+
+.btn-social:hover {
+    transform: scale(1.1);
+}
+
+.btn-social::before {
+    content: "";
+    position: absolute;
+    height: 80%;
+    width: 80%;
+    background: rgb(214, 214, 214);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.btn-social:hover::before {
+    box-shadow: inset -7px -7px 20px 0 rgba(255, 255, 255, 1),
+    inset 7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-social i {
+    position: absolute;
+    color: rgb(73, 192, 192);
+    font-size: 35px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: 0.2s;
+}
+
+.btn-social:hover i {
+    font-size: 30px;
+    color : var(--darkred-color) !important;
+}
+
+.footer-column {
+    /* Vous pouvez ajouter ici des styles pour .footer-column si nécessaire. */
+}
+
+.social-icons {
+    display: flex; /* Active Flexbox */
+    flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'espace est insuffisant */
+    align-items: center; /* Centre les boutons verticalement */
+    justify-content: space-around; /* Espacement autour de chaque bouton */
+    list-style: none; /* Enlève les puces de la liste */
+    padding: 40px; /* Enlève le padding de la liste */
+    margin: 0; /* Enlève la marge de la liste */
+}
+
+.social-icons a {
+
+    padding : 30px;
+}
+
+/* Modification pour les écrans de moins de 768px de large */
+@media (max-width: 1180px) {
+    .btn-social {
+        height: 80px;
+        width: 80px;
+    }
+    
+    .btn-social i {
+        font-size: 28px;
+    }
+    
+    .social-icons a {
+        padding: 20px;
+    }
+}
+
+/* Modification pour les écrans de moins de 480px de large */
+@media (max-width: 940px) {
+    .btn-social {
+        height: 60px;
+        width: 60px;
+    }
+    
+    .btn-social i {
+        font-size: 20px;
+    }
+    
+    .social-icons a {
+        padding: 25px;
+    }
+}
+
+
+
+
     </style>
 <body data-theme="light-mode">
 <nav id="navbar">
@@ -247,39 +360,34 @@ input:checked + .slider:before {
 				</div>
 
 				<!-- 2. Colonne Réseaux sociaux -->
-				<div class="footer-column">
-					<h5>Réseaux sociaux</h5>
-					<ul class="social-icons">
-						<li>
-							<a href="#">
-								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
-									...
-								</svg>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
-									...
-								</svg>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
-									...
-								</svg>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewbox="0 0 24 24" fill="#black">
-									...
-								</svg>
-							</a>
-						</li>
-					</ul>
-				</div>
+
+
+<div class="footer-column">
+    <h5>Réseaux sociaux</h5>
+    <ul class="social-icons">
+        <li>
+            <a href="#" class="btn-social">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="btn-social">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="btn-social">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="btn-social">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
 
 				<!-- 3. Colonne Formulaire de contact -->
                 
