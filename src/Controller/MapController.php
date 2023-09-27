@@ -224,7 +224,7 @@ class MapController extends AbstractController
                                         if ($expectedDepartureTime > new \DateTime()) {
                                             $stopTimes[] = [
                                                 'stopPointName' => $stopPointName,
-                                                'expectedDepartureTime' => $expectedDepartureTime->format('H:i:s'),
+                                                'expectedDepartureTime' => $expectedDepartureTime->format('H:i'),
                                                 'destinationName' => $destinationName,
                                             ];
                                         }
