@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Alertes{% endblock %}
+{% block stylesheet %}<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">{% endblock %}
+
+
+{% block body %}
+    <h1>Liste des Alertes</h1>
+    <a href="{{ path('statistiques_alertes') }}">Voir les Statistiques des Alertes</a>
+    <div class="container">
+        <div class="row">
+            {% for alerte in alertes %}
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header bg-primary text-white">
+                            Ligne: {{ alerte.ligne }}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Date:</strong> {{ alerte.alerteDate|date('d-m-Y H:i') }}<br>
+                                <strong>Sens:</strong> {{ alerte.sens|default('N/A') }}<br>
+                                <strong>Utilisateur:</strong> {{ alerte.user.pseudo|default('Anonyme') }}
+                                {% if alerte.user.imagesUsers %}
+                                    <img src="{{ vich_uploader_asset(alerte.user.imagesUsers, 'imageFile') }}" alt="Image de profil">
+                                {% endif %}
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col">
+                    <p class="alert alert-warning">Pas d'alertes trouvées.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -254,4 +254,31 @@ class AlerteController extends AbstractController
         return new JsonResponse($data);
     }
 
+    #[Route('/alertes', name: 'list_alertes', methods: ['GET'])]
+    public function list(AlerteRepository $alerteRepository): Response
+    {
+        $alertes = $alerteRepository->findBy([], ['alerteDate' => 'DESC']);
+        
+        return $this->render('alerte/alertes.html.twig', [
+            'alertes' => $alertes,
+        ]);
+        
+    }
+
+    #[Route('/statistiques', name: 'statistiques_alertes', methods: ['GET'])]
+    public function statistiques(AlerteRepository $alerteRepository): Response
+    {
+        $statistiques = $alerteRepository->getAlerteStatistics();
+        
+        // Supposez que vous avez une méthode pour obtenir toutes les lignes distinctes
+        $lignes = $alerteRepository->getAllDistinctLignes();
+        
+        return $this->render('alerte/statistiques.html.twig', [
+            'statistiques' => $statistiques,
+            'lignes' => $lignes, // Passez la variable lignes à la vue
+        ]);
+    }
+    
+    
+
 }

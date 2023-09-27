@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Plan;
+use App\Entity\Post;
+use App\Entity\Topic;
 use App\Entity\User;
 use App\Entity\Subscription;
 use App\Repository\UserRepository;
@@ -49,5 +51,25 @@ class AccountController extends AbstractController
     
         return $this->json(['pseudo' => $user->getPseudo()]);
     }
+
+    #[Route('/mes-posts', name: 'mes_posts')]
+    public function mesPosts(ManagerRegistry $doctrine): Response
+    {
+        $user = $this->getUser(); // Obtenez l'utilisateur actuellement connecté
+        // Trouvez tous les posts de cet utilisateur
+        $posts = $doctrine->getRepository(Post::class)->findBy(['user' => $user]);
+        return $this->render('account/mes_posts.html.twig', ['posts' => $posts]);
+    }
+    
+    #[Route('/mes-topics', name: 'mes_topics')]
+    public function mesTopics(ManagerRegistry $doctrine): Response
+    {
+        $user = $this->getUser(); // Obtenez l'utilisateur actuellement connecté
+        // Trouvez tous les topics de cet utilisateur
+        $topics = $doctrine->getRepository(Topic::class)->findBy(['user' => $user]);
+        return $this->render('account/mes_topics.html.twig', ['topics' => $topics]);
+    }
+    
+
     
 }

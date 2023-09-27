@@ -2,6 +2,72 @@
 
 {% block title %}Mon Compte{% endblock %}
 
+{% block stylesheet %}
+<style>
+body {
+  background-color: var(--background-color);
+  font-family: 'Arial', sans-serif;
+}
+
+.card {
+  background-color: var(--background-color);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  width: 300px;
+  box-shadow: var(--card-shadow-neumorphism);
+  position: relative;
+  text-align: center;
+}
+
+.card p {
+  margin: 10px 0;
+  color: var(--black-color);
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--black-color);
+  background-color: var(--background-color);
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
+}
+
+.btn-primary {
+  color: var(--white-color);
+  background-color: var(--red-color);
+}
+
+.btn:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+.btn-primary:hover {
+  background-color: var(--darkred-color);
+}
+
+#ImgProfile {
+  max-width: 100%;
+  border-radius: 50%;
+}
+
+a[target="_blank"] {
+  color: var(--red-color);
+  text-decoration: none;
+}
+
+a[target="_blank"]:hover {
+  text-decoration: underline;
+}
+
+
+
+<style>
+{% endblock %}
+
 {% block body %}
 
 {% if app.user is defined %}
@@ -17,32 +83,40 @@
 		<p>Votre adresse e-mail n'est pas vérifiée.</p>
 	{% endif %}
 
-	{% if app.user.roles is defined %}
-		<p>Rôles : {{ app.user.roles|join(', ') }}</p></br>
-	{% endif %}
+{% if app.user.roles is defined %}
+    <p>Rôles :
+        {% for role in app.user.roles %}
+            {% if role == 'ROLE_USER' %}
+                Utilisateur
+            {% elseif role == 'ROLE_ADMIN' %}
+                Administrateur
+            {% elseif role == 'ROLE_SECU' %}
+                Agent de sécurité
+            {% endif %}
+            {% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </p></br>
+{% endif %}
 
-	{# {% if app.user.Post is defined %}
-		<p>Nombre de publications : {{ app.user.Post|length }}</p>
-	{% endif %} #}
 
-	{# {% if app.user.Topic is defined %}
+	{% if app.user.Topic is defined %}
 		<p>Nombre de sujets : {{ app.user.Topic|length }}</p>
-	{% endif %} #}
+		<a href="{{ path('mes_topics') }}" class="btn btn-primary">Voir mes Sujets</a>
+	{% endif %}</br>
 
-	{# {% if app.user.markers is defined %}
-		<p>Nombre de marqueurs : {{ app.user.markers|length }}</p>
-	{% endif %} #}
+	{% if app.user.Post is defined %}
+		<p>Nombre de publications : {{ app.user.Post|length }}</p>
+		<a href="{{ path('mes_posts') }}" class="btn btn-primary">Voir mes Publications</a>
+	{% endif %}</br>
+
 
 	
-		{% if 'ROLE_ADMIN' in app.user.roles %}
-			<a href="{{ path('admin') }}" class="btn btn-primary">Administration</a></br>
-		{% endif %}
+{% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_SECU' in app.user.roles) %}
+    <a href="{{ path('admin') }}" class="btn btn-primary">Interface d'Administration</a></br>
+    <a href="{{ path('list_alertes') }}" class="btn btn-primary">Voir la liste des Alertes</a>
+{% endif %}</br>
 
-		{% if app.user.imagesUsers and app.user.imagesUsers.imageName %}
-			<img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil"></br>
-		{% else %}
-			<p>Pas d'image de profil</p>
-		{% endif %}
+
 
 		{% if activeSub %}
 			{% if activeSub.isIsActive() %}
@@ -54,9 +128,14 @@
 			{% endif %}
 		{% else %}
 			{% for plan in plans %}
-				<a target="_blank" href="{{ plan.paymentLink }}">Passer à l'abonnement premium</a>
+				<a target="_blank" href="{{ plan.paymentLink }}" class="btn btn-primary">Passer à l'abonnement premium</a>
 			{% endfor %}
 		{% endif %}
+		{% if app.user.imagesUsers and app.user.imagesUsers.imageName %}
+			<img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil"></br>
+		{% else %}
+			<p>Pas d'image de profil</p>
+		{% endif %}</br>
 	</div>
 {% else %}
 	<p>L'utilisateur n'est pas connecté.</p>

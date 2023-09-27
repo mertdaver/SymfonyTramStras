@@ -196,12 +196,15 @@ header, #navbar {
 
 /* Image de profile user */
 #ImgProfile {
-  width: 100px; /* ou la dimension que vous voulez */
-  height: 100px;
-  border-radius: 50%; /* ceci crée le cercle */
-  object-fit: cover; /* pour s'assurer que l'image couvre tout l'espace */
-  overflow: hidden; /* au cas où l'image serait plus grande que les dimensions définies */
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: auto;
+  padding-top: 5%;
 }
+
 
 
 /* Icône utilisateur pour états connecté et déconnecté */
@@ -774,6 +777,8 @@ textarea#post_text:focus::placeholder {
   cursor: pointer;
   transition: all var(--transition-speed);
   box-shadow: var(--btn-shadow-neumorphism);
+  display: block;
+  text-align: center;
 }
 
 .btn.btn-primary:after {

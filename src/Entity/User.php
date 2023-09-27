@@ -58,6 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $stripeId = null;
     
     #[ORM\OneToOne(inversedBy: 'user', targetEntity: ImagesUsers::class, cascade: ['persist', 'remove'])]
+    #[Groups(['alerte_read'])]
     private ?ImagesUsers $imagesUsers = null;
 
     public function __construct()

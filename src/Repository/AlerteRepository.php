@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Entity\Alerte;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -75,5 +76,39 @@ public function findUnreadByUser($user)
         ->getQuery()
         ->getResult();
 }
+
+public function getAlerteStatistics()
+{
+    $rsm = new ResultSetMapping();
+    $rsm->addScalarResult('ligne', 'ligne');
+    $rsm->addScalarResult('heure', 'heure');
+    $rsm->addScalarResult('nbAlertes', 'nbAlertes');
+
+    $sql = "SELECT a.ligne, DATE_FORMAT(a.alerte_date, '%H') as heure, COUNT(a.id) as nbAlertes 
+            FROM alerte a 
+            GROUP BY a.ligne, heure 
+            ORDER BY nbAlertes DESC";
+
+    $query = $this->_em->createNativeQuery($sql, $rsm);
+
+    return $query->getResult();
+}
+
+public function getAllDistinctLignes()
+{
+    $queryBuilder = $this->createQueryBuilder('a')
+        ->select('DISTINCT a.ligne');
+    
+    $results = $queryBuilder->getQuery()->getResult();
+    
+    // Transformez les résultats en un tableau simple si nécessaire
+    $lignes = array_map(function($row) {
+        return $row['ligne'];
+    }, $results);
+    
+    return $lignes;
+}
+
+
 
 }
