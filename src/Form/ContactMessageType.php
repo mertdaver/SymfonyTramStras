@@ -48,6 +48,9 @@ class ContactMessageType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ContactMessage::class,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'form_intention',
         ]);
     }
 }

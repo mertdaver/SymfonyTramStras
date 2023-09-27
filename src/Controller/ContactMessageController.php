@@ -8,10 +8,18 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ContactMessageController extends AbstractController
 {
+    private $tokenManager;
+
+    public function __construct(csrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[Route('/contact_message', name: 'contact_message')]
     public function new(Request $request, ManagerRegistry $doctrine ): Response
     {
@@ -32,6 +40,10 @@ class ContactMessageController extends AbstractController
 
         // Si le formulaire est soumis et valide...
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            //bloque la double soumition du post
+            $this->csrfTokenManager->refreshToken("form_intention");
+
             $entityManager->persist($contactMessage);
             $entityManager->flush();
 

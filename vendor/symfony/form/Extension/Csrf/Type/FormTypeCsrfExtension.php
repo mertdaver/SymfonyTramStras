@@ -91,7 +91,7 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
         $resolver->setDefaults([
             'csrf_protection' => $this->defaultEnabled,
             'csrf_field_name' => $this->defaultFieldName,
-            'csrf_message' => 'The CSRF token is invalid. Please try to resubmit the form.',
+            'csrf_message' => 'Le token CSRF est invalide. Vous pouvez réessayer.',
             'csrf_token_manager' => $this->defaultTokenManager,
             'csrf_token_id' => null,
         ]);

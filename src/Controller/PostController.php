@@ -7,16 +7,24 @@ use App\Entity\Topic;
 use App\Form\PostType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 class PostController extends AbstractController
 {
+    private $tokenManager;
+
+    public function __construct(csrfTokenManagerInterface $csrfTokenManager)
+    {
+        $this->csrfTokenManager = $csrfTokenManager;
+    }
+
     #[Route('/post', name: 'app_post')]
     public function index(ManagerRegistry $doctrine): Response
     {
@@ -32,12 +40,13 @@ class PostController extends AbstractController
     #[Route('/post/topic/{id}', name: 'app_topic_show')]
     public function show(Request $request, Topic $topic = null, ManagerRegistry $doctrine): Response
     {
-        $categorie = $topic->getCategorie();
-
+        
         // Si le topic n'est pas trouvé, redirection vers la page des catégories.
         if (!$topic) {
             return $this->redirectToRoute('app_categorie');
         }
+
+        $categorie = $topic->getCategorie();
     
         // Récupération des posts associés au topic depuis la base de données.
         $posts = $doctrine->getRepository(Post::class)->findBy(['topic' => $topic]);
@@ -53,6 +62,9 @@ class PostController extends AbstractController
 
         // Si le formulaire est soumis et ses données sont valides :
         if ($form->isSubmitted() && $form->isValid()) {
+            //bloque la double soumition du post
+            $this->csrfTokenManager->refreshToken("form_intention");
+
             // Associe le post au topic courant et à l'utilisateur connecté, puis défini la date actuelle comme date de publication.
             $post->setTopic($topic);
             $post->setUser($this->getUser());
