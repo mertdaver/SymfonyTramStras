@@ -124,9 +124,11 @@ class AccountController extends AbstractController
         $entityManager->flush();
             
         // Déconnexion de l'utilisateur
-        $security->logout();
+        // $security->logout();
+
+        $request->getSession()->invalidate();
+        return $this->redirectToRoute('app_home');
             
-        return $this->redirectToRoute('homepage');
     }
     
     

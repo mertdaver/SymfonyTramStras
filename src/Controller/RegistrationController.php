@@ -131,7 +131,7 @@ class RegistrationController extends AbstractController
         // ou de gérer/supprimer ce message flash dans vos templates.
         $this->addFlash('success', 'Votre email est maintenant vérifié.');
     
-        // Redirige l'utilisateur vers la page d'inscription après la vérification réussie.
-        return $this->redirectToRoute('app_register');
+        // Redirige l'utilisateur vers la page de connexion après la vérification réussie.
+        return $this->redirectToRoute('app_login');
     }
 }
