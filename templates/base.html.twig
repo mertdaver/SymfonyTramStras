@@ -200,10 +200,6 @@ input:checked + .slider:before {
     color : var(--darkred-color) !important;
 }
 
-.footer-column {
-    /* Vous pouvez ajouter ici des styles pour .footer-column si nécessaire. */
-}
-
 .social-icons {
     display: flex; /* Active Flexbox */
     flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'espace est insuffisant */
@@ -529,23 +525,52 @@ attachCloseHandlers();
 
 
 
+// modal Connexion / Inscription
 
-// Vérifie que l'user est connecté pour poser un marqueur sinon modale de connexion/inscription
-if (document.getElementById("mapContainer")) {
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Récupération de la modal et du bouton de fermeture
+    var modal = document.getElementById("myModal");
+    var span = modal ? modal.querySelector(".close") : null;
+    
+    // Fermeture de la modale
+    if(span){
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    }
+
+    // Fermer la modale en cliquant en dehors
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Vérification si l'utilisateur est connecté
     {% if not app.user %}
-var modal = document.getElementById("myModal");
-map.on('click', function (e) {
-e.preventDefault();
-if (app.user) {
-var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
-if (isConfirmed) {
-modal.style.display = "block";
+        // Si l'utilisateur n'est pas connecté, afficher la modale directement
+        if(modal) modal.style.display = "block";
+    {% endif %}
+});
+
+// Gestionnaire de clic pour la carte si nécessaire
+if (document.getElementById("mapContainer")) {
+    map.on('click', function (e) {
+        e.preventDefault();
+        {% if app.user %}
+            // Si l'utilisateur est connecté, afficher une confirmation pour ajouter un marqueur
+            var isConfirmed = confirm("Êtes-vous sûr de vouloir ajouter ce marqueur d'alerte ici ?");
+            if (isConfirmed && modal) {
+                modal.style.display = "block";
+            }
+        {% else %}
+            // Si l'utilisateur n'est pas connecté, afficher une alerte standard
+            alert("Vous devez être connecté pour ajouter un marqueur personnalisé.");
+        {% endif %}
+    });
 }
-} else {
-alert("Vous devez être connecté pour ajouter un marqueur personnalisé.");
-}
-});{% endif %}
-}
+
+
 
 // Vérifie régulièrement s'il y a de nouvelles alertes
 function checkForNewAlerts() {

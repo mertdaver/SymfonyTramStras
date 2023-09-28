@@ -34,7 +34,43 @@
 {% endblock %} {% block body %}
 
 <h1>La Carte du Réseau CTS</h1>
-<div id="map"></div>
+{# Condition bloqueuse #}
+{% if app.user %}
+    {% if app.user.isVerified == 1 and app.user.stripeId != null %}
+        <div id="map"></div>
+    {% else %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Information</h5>
+                <p class="card-text">
+                    Pour accéder à cette fonctionnalité, vous devez :
+                </p>
+                {% if app.user.isVerified != 1 %}
+                    <a href="https://accounts.google.com/AccountChooser" class="btn btn-primary">
+                        Vérifier votre adresse mail
+                    </a>
+                {% endif %}
+                {% if app.user.stripeId == null %}
+                    <a href="{{ path('app_account') }}" class="btn btn-primary">
+                        Passer à l'abonnement premium
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% else %}
+    {% if not app.user %}
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        });
+    </script>
+{% endif %}
+
+{% endif %}
+
+
 
 {% endblock %} 
 {% block javascripts %}

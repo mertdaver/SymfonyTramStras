@@ -52,6 +52,8 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+        
+            $user->setRoles(['ROLE_USER']);
     
            // Récupérez le fichier du sous-formulaire
            $imageFile = $form->get('imagesUsers')->get('imageFile')->getData();
