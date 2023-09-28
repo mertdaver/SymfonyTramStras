@@ -375,11 +375,6 @@ function init() {
                     popupContent += markerData.text + '<br>';
                 }
                 customMarkersLayer.addTo(map);
-                if (markerData.isCustom && markerData.text) {
-                    popupContent += markerData.text + '<br>';
-                }
-
-
 
                 for (var j = 0; j < markerData.linesDestinations.length; j++) {
                     popupContent += markerData.linesDestinations[j] + '<br>';
