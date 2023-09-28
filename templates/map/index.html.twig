@@ -570,5 +570,36 @@ if (document.getElementById("mapContainer")) {
     });
 }
 
+// Minifier leaflet routing machine 
+// Fonction pour gérer la minification
+function handleMinification() {
+    if (window.innerWidth < 650) {
+        const routingContainer = document.querySelector('.leaflet-routing-container');
+        if (routingContainer && !routingContainer.classList.contains('leaflet-routing-container-hide')) {
+            routingContainer.classList.add('leaflet-routing-container-hide');
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Minifier au chargement de la page
+    handleMinification();
+
+    // Écouteur d'événement click pour les boutons getDirections
+    document.addEventListener('click', (e) => {
+        if(e.target && e.target.classList.contains('getDirections')) {
+            const routingContainer = document.querySelector('.leaflet-routing-container.leaflet-routing-container-hide');
+            if (routingContainer) {
+                routingContainer.classList.remove('leaflet-routing-container-hide');
+            }
+        }
+    });
+});
+
+// Minifier lors du redimensionnement de la fenêtre
+window.addEventListener('resize', handleMinification);
+
+
+
 </script>
 {% endblock %}
