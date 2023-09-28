@@ -2,30 +2,43 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Plan;
 use App\Entity\Post;
-use App\Entity\Topic;
 use App\Entity\User;
+use App\Entity\Topic;
+use App\Entity\Marker;
 use App\Entity\Subscription;
 use App\Repository\UserRepository;
 use App\Repository\AlerteRepository; 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class AccountController extends AbstractController
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/account', name: 'app_account')]
     public function index(ManagerRegistry $doctrine, AlerteRepository $alerteRepository): Response 
     {
-        $plans = $doctrine->getRepository(Plan::class)->findAll();
-        $activeSub = $doctrine->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());
+
+        $plans = $this->entityManager->getRepository(Plan::class)->findAll();
+        $activeSub = $this->entityManager->getRepository(Subscription::class)->findActiveSub($this->getUser()->getId());        
         $latestAlert = $alerteRepository->findLatestAlert();
         $user = $this->getUser();
         if (!$user) {
@@ -79,46 +92,44 @@ class AccountController extends AbstractController
 
 
     #[Route('/user/delete', name: 'user_delete', methods: ['POST'])]
-    public function deleteAccount(Request $request): Response
+    public function deleteAccount(Request $request, Security $security): Response
     {
         $user = $this->getUser();
-        
+            
         if (!$user) {
             throw new AccessDeniedException('Vous devez être connecté pour supprimer votre compte.');
         }
-        
-        $entityManager = $this->getDoctrine()->getManager();
-        
+            
+        $entityManager = $this->entityManager;
+            
         // Anonymisation des posts
-        foreach ($user->getPosts() as $post) {
+        foreach ($user->getPost() as $post) {
             $post->setUser(null);
-            $post->setContent('Ce contenu a été anonymisé');
             $entityManager->persist($post);
         }
-        
+            
         // Anonymisation des topics
-        foreach ($user->getTopics() as $topic) {
+        foreach ($user->getTopic() as $topic) {
             $topic->setUser(null);
-            $topic->setTitle('Topic anonymisé');
             $entityManager->persist($topic);
         }
-        
-        // Anonymisation des markers
+            
+        // Suppression des markers
         foreach ($user->getMarkers() as $marker) {
-            $marker->setUser(null);
-            $marker->setName('Marker anonymisé');
-            $entityManager->persist($marker);
+            $entityManager->remove($marker);
         }
-        
+            
         // Suppression du compte utilisateur
         $entityManager->remove($user);
         $entityManager->flush();
-        
-        $this->get('security.token_storage')->setToken(null);
-        $request->getSession()->invalidate();
-        
+            
+        // Déconnexion de l'utilisateur
+        $security->logout();
+            
         return $this->redirectToRoute('homepage');
     }
+    
+    
 
     public function profile(): Response
     {
@@ -126,6 +137,9 @@ class AccountController extends AbstractController
             ->setAction($this->generateUrl('user_delete'))
             ->setMethod('POST')
             ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
+            ->add('_token', HiddenType::class, [
+                'data' => $this->get('security.csrf.token_manager')->getToken('delete_account')->getValue(),
+            ])
             ->getForm();
 
         return $this->render('user/account.html.twig', [

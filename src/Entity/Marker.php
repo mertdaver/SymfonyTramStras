@@ -25,7 +25,7 @@ class Marker
 
     #[ORM\ManyToOne(inversedBy: 'markers')]
     #[ORM\JoinColumn(nullable: true)]
-    private ?User $User = null;
+    private ?User $user = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $text = null;
@@ -79,12 +79,12 @@ class Marker
 
     public function getUser(): ?User
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?User $User): self
+    public function setUser(?User $user): self
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }

@@ -25,6 +25,10 @@ class TopicType extends AbstractType
                         'minMessage' => 'Le titre doit comporter au moins {{ limit }} caractères',
                         'maxMessage' => 'Le titre ne peut pas dépasser {{ limit }} caractères',
                     ]),
+                    new Assert\Regex([
+                        'pattern' => '/^[\p{L}\p{N}\s.,!?()\-\']++$/uD', // cela permet les lettres, les chiffres, certains signes de ponctuation
+                        'message' => 'Le topic contient des caractères non valides.'
+                    ]),
                 ],
             ]);
     }
