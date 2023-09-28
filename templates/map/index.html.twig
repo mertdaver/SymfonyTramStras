@@ -266,17 +266,17 @@ var customMarkerIcon = L.icon({
 
 // fonction qui fait disparaître peut a peu le marker perso mais basé que sur celui qu'on cré pas ceux en bdd
 
-// function fadeMarker(marker) {
-//     var opacity = 1;
-//     var timer = setInterval(function () {
-//         if (opacity <= 0) {
-//             clearInterval(timer);
-//             map.removeLayer(marker);
-//         }
-//         marker.setOpacity(opacity);
-//         opacity -= 0.02;
-//     }, 10000);
-// }
+function fadeMarker(marker) {
+    var opacity = 1;
+    var timer = setInterval(function () {
+        if (opacity <= 0) {
+            clearInterval(timer);
+            map.removeLayer(marker);
+        }
+        marker.setOpacity(opacity);
+        opacity -= 0.02;
+    }, 10000);
+}
 
 // ajout de la variable lastMarker
 var lastMarker = null;
