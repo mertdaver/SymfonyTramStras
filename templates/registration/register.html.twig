@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %} 
+{% extends 'base.html.twig' %}
 
 {% block title %}S'inscrire{% endblock %}
 
-{% block body %} 
+{% block body %}
 
 {% for flash_error in app.flashes('verify_email_error') %}
 <div class="custom-alert alert-danger">{{ flash_error }}</div>
@@ -15,17 +15,21 @@
 
   <label for="{{ registrationForm.email.vars.id }}" class="custom-login-label">Email</label>
   {{ form_widget(registrationForm.email, { attr: { class: "custom-login-input form-control" }}) }}
-
-</br>
+  {{ form_errors(registrationForm.email) }}
+  </br>
   <label for="{{ registrationForm.pseudo.vars.id }}" class="custom-login-label">Pseudo</label>
   {{ form_widget(registrationForm.pseudo, { attr: { class: "custom-login-input form-control" }}) }}
+  {{ form_errors(registrationForm.pseudo) }}
 
   <div class="password-container">
     <label for="{{ registrationForm.plainPassword.first.vars.id }}" class="custom-login-label">Mot de Passe</label>
     {{ form_widget(registrationForm.plainPassword.first, { attr: { class: "custom-login-input form-control" }}) }}
+    {{ form_errors(registrationForm.plainPassword.first) }}
+    <small>Le mot de passe doit contenir 8-20 caractères, au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%*?&).</small>
   </br>
     <label for="{{ registrationForm.plainPassword.second.vars.id }}" class="custom-login-label">Répéter le Mot de Passe</label>
     {{ form_widget(registrationForm.plainPassword.second, { attr: { class: "custom-login-input form-control" }}) }}
+    {{ form_errors(registrationForm.plainPassword.second) }}
   </div>
 
   <div class="custom-login-checkbox">
