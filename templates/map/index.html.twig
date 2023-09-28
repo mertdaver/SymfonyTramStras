@@ -30,6 +30,10 @@
     height: 100vh;
     border: 2px solid white;
   }
+
+  .leaflet-marker-icon .leaflet-zoom-animated .leaflet-interactive{
+    opacity : 1;
+  }
 </style>
 {% endblock %} {% block body %}
 
@@ -65,6 +69,27 @@
             var modal = document.getElementById("myModal");
             modal.style.display = "block";
         });
+
+
+function fadeMarker(marker) {
+    var fadeDuration = 2 * 60 * 60 * 1000; // 2h en millisecondes
+    var interval = 1000; // Interval de vérification, ici 1 seconde
+    var steps = fadeDuration / interval;
+    var opacityDecrease = 1 / steps;
+
+    var opacity = 1;
+    var timer = setInterval(function () {
+        if (opacity <= 0) {
+            clearInterval(timer);
+            marker.remove(); // ou map.removeLayer(marker);
+        } else {
+            marker.setOpacity(opacity);
+            opacity -= opacityDecrease;
+        }
+    }, interval);
+}
+
+        
     </script>
 {% endif %}
 
