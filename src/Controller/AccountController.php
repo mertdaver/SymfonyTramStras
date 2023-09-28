@@ -94,60 +94,79 @@ class AccountController extends AbstractController
     #[Route('/user/delete', name: 'user_delete', methods: ['POST'])]
     public function deleteAccount(Request $request, Security $security): Response
     {
+        // Récupérer l'utilisateur actuellement connecté.
         $user = $this->getUser();
             
+        // Si aucun utilisateur n'est connecté, lever une exception d'accès refusé avec un message d'erreur.
         if (!$user) {
             throw new AccessDeniedException('Vous devez être connecté pour supprimer votre compte.');
         }
             
+        // Récupérer l'EntityManager pour effectuer des opérations sur la base de données.
         $entityManager = $this->entityManager;
             
-        // Anonymisation des posts
+        // Parcourir tous les posts de l'utilisateur et les anonymiser en mettant leur utilisateur à null.
         foreach ($user->getPost() as $post) {
             $post->setUser(null);
-            $entityManager->persist($post);
+            $entityManager->persist($post); // Indiquer à Doctrine que cet objet doit être enregistré.
         }
             
-        // Anonymisation des topics
+        // Parcourir tous les topics de l'utilisateur et les anonymiser en mettant leur utilisateur à null.
         foreach ($user->getTopic() as $topic) {
             $topic->setUser(null);
-            $entityManager->persist($topic);
+            $entityManager->persist($topic); // Indiquer à Doctrine que cet objet doit être enregistré.
         }
             
-        // Suppression des markers
+        // Parcourir tous les markers de l'utilisateur et les supprimer.
         foreach ($user->getMarkers() as $marker) {
-            $entityManager->remove($marker);
+            $entityManager->remove($marker); // Indiquer à Doctrine que cet objet doit être supprimé.
         }
             
-        // Suppression du compte utilisateur
+        // Supprimer l'objet utilisateur de la base de données.
         $entityManager->remove($user);
-        $entityManager->flush();
+        $entityManager->flush(); // Exécuter toutes les requêtes en attente (persist et remove).
             
-        // Déconnexion de l'utilisateur
+        // La ligne suivante est commentée, car la méthode logout() n'existe pas dans la classe Security.
         // $security->logout();
-
+        
+        // Invalider la session actuelle pour déconnecter l'utilisateur.
         $request->getSession()->invalidate();
+        
+        // Supprimer le token de sécurité actuel pour déconnecter complètement l'utilisateur.
+        $this->container->get('security.token_storage')->setToken(null);
+        
+        // Rediriger l'utilisateur vers la route 'app_home' après la suppression de son compte.
         return $this->redirectToRoute('app_home');
-            
     }
     
     
 
-    public function profile(): Response
-    {
-        $deleteForm = $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete'))
-            ->setMethod('POST')
-            ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
-            ->add('_token', HiddenType::class, [
-                'data' => $this->get('security.csrf.token_manager')->getToken('delete_account')->getValue(),
-            ])
-            ->getForm();
 
-        return $this->render('user/account.html.twig', [
-            'deleteForm' => $deleteForm->createView(),
-        ]);
-    }
+public function profile(): Response
+{
+    // Création d'un formulaire via le FormBuilder de Symfony.
+    $deleteForm = $this->createFormBuilder()
+        // Définition de l'action du formulaire, c'est-à-dire l'URL vers laquelle les données du formulaire seront envoyées.
+        ->setAction($this->generateUrl('user_delete'))
+        // Définition de la méthode HTTP utilisée pour soumettre le formulaire.
+        ->setMethod('POST')
+        // Ajout d'un bouton de soumission au formulaire avec le label 'Supprimer mon compte'.
+        ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
+        // Ajout d'un champ caché '_token' au formulaire pour stocker le token CSRF.
+        ->add('_token', HiddenType::class, [
+            // Récupération de la valeur du token CSRF pour 'delete_account' et affectation à la propriété 'data' du champ caché '_token'.
+            'data' => $this->get('security.csrf.token_manager')->getToken('delete_account')->getValue(),
+        ])
+        // Construction du formulaire et renvoi d'une instance de Form.
+        ->getForm();
+    
+    // Renvoi d'une réponse HTML rendue par le template 'user/account.html.twig', 
+    // et passage du formulaire créé à la vue afin qu'il puisse être rendu dans le HTML.
+    return $this->render('user/account.html.twig', [
+        'deleteForm' => $deleteForm->createView(),
+    ]);
+}
+
 
     
 }

@@ -75,7 +75,6 @@ class RegistrationController extends AbstractController
                 $imagesUsers = new ImagesUsers();
                 $imagesUsers->setImageName($newFilename);
                 
-                // Utiliser la taille du fichier que nous avons récupérée précédemment
                 $imagesUsers->setImageSize($fileSize);
                 
                 $user->setImagesUsers($imagesUsers); // Associez ImagesUsers à User
@@ -88,7 +87,7 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('symfonytramstras@proton.me', 'TramStras'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Merci de vérifier votre Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
     
