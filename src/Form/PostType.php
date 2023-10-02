@@ -34,7 +34,7 @@ class PostType extends AbstractType
             'data_class' => Post::class,
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'form_intention',
+            'csrf_token_id'   => 'create_post',
         ]);
     }
 }

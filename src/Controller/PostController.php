@@ -63,9 +63,9 @@ class PostController extends AbstractController
         // Si le formulaire est soumis et ses données sont valides :
         if ($form->isSubmitted() && $form->isValid()) {
                 // Vérification si l'utilisateur est vérifié
-            if(!$this->getUser()->getIsVerified()) {
+            if(!$this->getUser()->IsVerified()) {
             //bloque la double soumition du post
-            $this->csrfTokenManager->refreshToken("form_intention");
+            $this->csrfTokenManager->refreshToken("create_post");
 
             // Associe le post au topic courant et à l'utilisateur connecté, puis défini la date actuelle comme date de publication.
             $post->setTopic($topic);

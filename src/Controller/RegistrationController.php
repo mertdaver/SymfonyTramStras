@@ -44,7 +44,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             //bloque la double soumition du post
-            $this->csrfTokenManager->refreshToken("form_intention");
+            $this->csrfTokenManager->refreshToken("create_account");
             
             $user->setPassword(
                 $userPasswordHasher->hashPassword(

@@ -42,7 +42,7 @@ class ContactMessageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             //bloque la double soumition du post
-            $this->csrfTokenManager->refreshToken("form_intention");
+            $this->csrfTokenManager->refreshToken("create_contact");
 
             $entityManager->persist($contactMessage);
             $entityManager->flush();

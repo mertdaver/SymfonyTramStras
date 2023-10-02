@@ -102,7 +102,7 @@ class CategorieController extends AbstractController
             $user = $tokenStorage->getToken()->getUser();
             
             // Vérifie si l'utilisateur est vérifié.
-            if (!$user->getIsVerified()) {
+            if (!$user->IsVerified()) {
                 // Si l'utilisateur n'est pas vérifié, une exception est levée et un message d'accès refusé est affiché.
                 throw new AccessDeniedException('Accès refusé. Votre compte doit être vérifié.');
             }

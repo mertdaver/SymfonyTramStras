@@ -39,7 +39,7 @@ class TopicType extends AbstractType
             'data_class' => Topic::class,
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'form_intention',
+            'csrf_token_id'   => 'create_topic',
         ]);
     }
 }
