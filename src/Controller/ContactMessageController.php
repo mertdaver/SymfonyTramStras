@@ -36,7 +36,7 @@ class ContactMessageController extends AbstractController
         $form->handleRequest($request);
         
         // débogage.
-        // dump($form->getErrors(true, true));
+        dump($form->getErrors(true, true));
 
         // Si le formulaire est soumis et valide...
         if ($form->isSubmitted() && $form->isValid()) {

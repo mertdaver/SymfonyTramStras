@@ -5,15 +5,16 @@ namespace App\Controller;
 
 use App\Entity\ContactMessage;
 use App\Form\ContactMessageType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class ContactFormController extends AbstractController
 {
     #[Route('/contact_form', name: 'contact_form')]
-    public function contactForm(Request $request)
+    public function contactForm(Request $request, EntityManagerInterface $entityManager)
     {
         dump('Début de la méthode contactForm'); // Vérification du début de la méthode
 
@@ -43,14 +44,12 @@ class ContactFormController extends AbstractController
 
         // Vérification de la soumission et de la validité du formulaire.
         if ($form->isSubmitted() && $form->isValid()) {
-            dump('Formulaire soumis et valide'); // Pour vérifier si le formulaire est bien soumis et valide
-            // Enregistrement du message de contact dans la base de données.
-            $entityManager = $this->getDoctrine()->getManager();
+            dump('Formulaire soumis et valide');
+            // Utilisez directement $entityManager qui a été injecté.
             $entityManager->persist($contactMessage);
             $entityManager->flush();
-
-            // Redirection vers la page d'accueil après la soumission réussie du formulaire.
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_home');
+        
         } else if ($form->isSubmitted()) {
             dump('Formulaire soumis mais non valide'); // Pour vérifier si le formulaire est soumis mais non valide
             dump($form->getErrors(true, true), 'Erreurs du formulaire'); // Affiche les erreurs de formulaire
