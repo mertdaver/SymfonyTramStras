@@ -18,6 +18,7 @@ class ContactMessageType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'label' => 'Nom',
                 'constraints' => [
                     new Assert\NotBlank(),
                     new Assert\Length(['max' => 100]),
