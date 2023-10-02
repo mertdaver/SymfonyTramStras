@@ -62,6 +62,8 @@ class PostController extends AbstractController
 
         // Si le formulaire est soumis et ses données sont valides :
         if ($form->isSubmitted() && $form->isValid()) {
+                // Vérification si l'utilisateur est vérifié
+            if(!$this->getUser()->getIsVerified()) {
             //bloque la double soumition du post
             $this->csrfTokenManager->refreshToken("form_intention");
 
@@ -77,7 +79,7 @@ class PostController extends AbstractController
     
             // Rediriger vers la page du même topic, pour afficher le post nouvellement ajouté.
             return $this->redirectToRoute('app_topic_show', ['id' => $topic->getId()]);
-        } 
+        } }
     
         // Renvoie la vue "show.html.twig" du dossier "topic", en passant le topic, ses posts et le formulaire d'ajout de post comme données.
         return $this->render('topic/show.html.twig', [

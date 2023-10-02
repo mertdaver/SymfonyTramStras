@@ -209,7 +209,6 @@ header, #navbar {
 
 /* Icône utilisateur pour états connecté et déconnecté */
 li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"] {
-  background-image: url('path_to_icon.png');
   background-size: 20px 20px;
   background-repeat: no-repeat;
   background-position: left center;
@@ -1202,7 +1201,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/cartereso.png');
+  background-image: url('/cartereso.webp');
   background-size: cover; 
   background-repeat: no-repeat;
   background-position: center; 
@@ -1213,7 +1212,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/2.jpg'); /* Assurez-vous que le chemin est correct par rapport à votre dossier CSS */
+  background-image: url('/Logo Ligne/2.webp'); /* Assurez-vous que le chemin est correct par rapport à votre dossier CSS */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1224,7 +1223,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('\strasbourg_1644_merian.jpg'); 
+  background-image: url('\strasbourg_1644_merian.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -1235,7 +1234,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('\inforeso.jpg'); 
+  background-image: url('\inforeso.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -1246,7 +1245,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('\ticket.png'); 
+  background-image: url('\ticket.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -1259,7 +1258,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/44080662_1881085461986769_6668733005386743808_n.jpg'); 
+  background-image: url('/44080662_1881085461986769_6668733005386743808_n.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1270,7 +1269,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/postaleStrasbourg.jpg'); 
+  background-image: url('/postaleStrasbourg.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1281,7 +1280,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/A.png'); 
+  background-image: url('/Logo Ligne/A.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1292,7 +1291,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/B.png'); 
+  background-image: url('/Logo Ligne/B.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1303,7 +1302,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/C.png'); 
+  background-image: url('/Logo Ligne/C.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1314,7 +1313,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/D.png'); 
+  background-image: url('/Logo Ligne/D.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;
@@ -1325,7 +1324,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/E.png'); 
+  background-image: url('/Logo Ligne/E.webp'); 
 
   background-size: cover;
   background-repeat: no-repeat;
@@ -1338,7 +1337,7 @@ input[type="submit"]:hover::before {
   height: 200px; 
   width: 100%;
   border-radius: 8px;
-  background-image: url('/Logo Ligne/F.png'); 
+  background-image: url('/Logo Ligne/F.webp'); 
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 20% !important;

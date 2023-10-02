@@ -89,24 +89,34 @@ class CategorieController extends AbstractController
         // Gestion de la soumission du formulaire.
         $form->handleRequest($request);
     
-        // Vérification si le formulaire a été soumis et est valide.
+        // Vérifie si le formulaire a été soumis et si les données sont valides.
         if ($form->isSubmitted() && $form->isValid()) {
-    
-            // Vérification de l'authenticité de l'utilisateur actuellement connecté.
+            
+            // Vérifie si l'utilisateur est pleinement authentifié.
             if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                // Si l'utilisateur n'est pas authentifié, une exception est levée et un message d'accès refusé est affiché.
                 throw new AccessDeniedException('Accès refusé. Vous devez être connecté.');
             }
-    
-            // Récupération de l'utilisateur actuellement connecté.
+
+            // Récupère l'utilisateur actuellement connecté.
             $user = $tokenStorage->getToken()->getUser();
+            
+            // Vérifie si l'utilisateur est vérifié.
+            if (!$user->getIsVerified()) {
+                // Si l'utilisateur n'est pas vérifié, une exception est levée et un message d'accès refusé est affiché.
+                throw new AccessDeniedException('Accès refusé. Votre compte doit être vérifié.');
+            }
+            
+            // Associe l'utilisateur récupéré au topic en cours.
             $topic->setUser($user);
-    
-            // Attribution de la date actuelle comme date de création pour le topic.
+            
+            // Crée un objet DateTime représentant la date et l'heure actuelles et l'associe en tant que date de création au topic.
             $creationDate = new \DateTime();
             $topic->setCreationDate($creationDate);
-    
-            // Persistance du nouveau topic dans la base de données.
+            
+            // Prépare le topic à être sauvegardé dans la base de données.
             $entityManager->persist($topic);
+            // Effectue réellement la sauvegarde du topic dans la base de données.
             $entityManager->flush();
         }
     
