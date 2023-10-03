@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
           // Si la largeur de l'écran est inférieure à 850px, désactivez cette fonction.
           if (window.innerWidth <= 850) {
-            console.log("La largeur de l'écran est inférieure à 850px, donc la fonction a été désactivée.");
+            console.log("La largeur de l'écran est inférieure à 850px, donc la fonction sticky-menu a été désactivée.");
             return;
         }
       

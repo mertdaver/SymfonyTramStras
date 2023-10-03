@@ -99,6 +99,7 @@ body {
   }
 }
 
+@media (min-width: 850px) and (max-width: 3840px) {
 /* En-tête et barre de navigation */
 header, #navbar {
   background-color: var(--background-color);
@@ -113,7 +114,7 @@ header, #navbar {
   align-items: center;
   padding: 0 20px;
   position: sticky;
-  top : -6%;
+  top : 0;
   z-index: 10;
   transition: top 1s ease-in-out;
 }
@@ -130,6 +131,9 @@ header, #navbar {
 
 .navbar-right {
   justify-content: flex-end;
+  position: initial;
+  top: 40%;
+  right: 1%;
 }
 
 #navbar ul {
@@ -156,6 +160,7 @@ header, #navbar {
   font-size: 16px;
   text-decoration: none;
   transition: color var(--transition-speed);
+  position: sticky;
 }
 
 #navbar ul li a:hover {
@@ -170,17 +175,39 @@ header, #navbar {
 
 /* Menu déroulant pour l'utilisateur */
 .user-dropdown {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: inline-block;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
 }
+
+.user-dropdown:hover {
+    background-color: #f0f0f0;
+}
+
+.user-dropdown a {
+    color: #333;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.user-dropdown a:hover {
+    background-color: #ddd;
+}
+
 
 .dropdown-content {
   display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
   background-color: var(--background-color);
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 9999;
 }
 
 .dropdown-content a {
@@ -204,7 +231,7 @@ header, #navbar {
   margin: auto;
   padding-top: 5%;
 }
-
+}
 
 
 /* Icône utilisateur pour états connecté et déconnecté */
@@ -216,7 +243,7 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
 }
 
 /* Ajustements pour les vues mobiles */
-@media screen and (max-width: 850px) {
+@media (min-width: 650px) and (max-width: 850px) {
 
 
     #navbar ul {
@@ -241,14 +268,20 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
   background-color: var(--white-color);
 }
 
+.navbar-right {
+  position: fixed;
+  top: 40%;
+  right: 1%;
+}
+
 #navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   position: sticky;
-  top: -16%;
-  z-index: 10;
+  top: 0;
+  z-index: 1001;
   transition: top 1s ease-in-out;
 }
 }
@@ -316,7 +349,7 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
   padding-left: 1%;
   width: 100vh;  /* Si vous souhaitez que cela soit la hauteur, c'est correct. Sinon, changez à 100% pour la largeur. */
   position: fixed;
-  top: 50%;
+  top: 42%;
   left: 50%;  /* le point de départ au centre */
   transform: translateX(-50%);  /* déplace le bloc de 50% de sa largeur vers la gauche pour le centrer */
 }
@@ -363,7 +396,9 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
   }
 
   #menu.open {
-      left: 0;
+      left: 41%;
+      top: 32%;
+      position: fixed;
       visibility: visible;
       opacity: 1;
       width: 100%;  /* prend toute la largeur */
@@ -379,6 +414,52 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
 
 /* Styles pour smartphones (inférieur à 600px) */
 @media (max-width: 600px) {
+
+  #menu-left {
+    background: var(--background-color);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow-neumorphism);
+    padding: 10px;
+}
+
+#menu-left li {
+    margin: 10px 0;
+    border-radius: 10px;
+    padding: 5px 10px;
+    transition: background var(--transition-speed);
+}
+
+#menu-left li:hover {
+    background: var(--white-color);
+    box-shadow: var(--btn-shadow-inset-neumorphism);
+}
+
+#menu-left a {
+    text-decoration: none;
+    color: var(--black-color);
+    transition: color var(--transition-speed);
+}
+
+#menu-left a:hover {
+    color: var(--whiite-color);
+}
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    top: -159%;
+    right: 133%;
+    background-color: var(--background-color);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+li {
+  color: #333;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+}
 
   /* Rembourrage réduit pour la barre de navigation */
   #navbar {
@@ -400,7 +481,9 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
 
   /* Optimiser le menu pour les petits écrans, comme les smartphones */
   #navbar ul {
-    padding: 10px;
+    padding: 0px;
+    display: block;
+    position: sticky;
   }
 
   #navbar ul li {
@@ -431,8 +514,49 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
     top: 90%;
     bottom: auto;
     left: 80%;
+  }
+
+  .dropdown-content a {
+    color: var(--black-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+/* Menu déroulant pour l'utilisateur */
+.user-dropdown {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: inline-block;
+  z-index: 1000;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.user-dropdown:hover {
+    background-color: #f0f0f0;
+}
+
+.user-dropdown a {
+    color: #333;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.user-dropdown a:hover {
+    background-color: #ddd;
+}
+
+.user-dropdown:hover .dropdown-content {
+  display: block;
 }
 }
+
 
 /* Liens de déconnexion et d'inscription */
 .logout-link, .register-link {
@@ -446,6 +570,8 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
 .logout-link:hover, .register-link:hover {
   color: var(--darkred-color);
 }
+
+
 /* Titres de la page */
 h1, h2 {
   margin-top: 5%;
@@ -1133,6 +1259,11 @@ input[type="submit"]:hover::before {
   .footer-column {
     /* Si vous voulez que chaque carte prenne la pleine largeur de l'écran, définissez width à 100%. Sinon, ajustez en conséquence. */
     width: 100%;
+    background: var(--background-color);
+    padding: 0px;
+    border-radius: 15px;
+    box-shadow: var(--card-shadow-neumorphism);
+    flex: 1;
   }
 
   /* Icônes des réseaux sociaux */
