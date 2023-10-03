@@ -1,4 +1,5 @@
-{% extends 'base.html.twig' %} {% block stylesheets %}
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
 {{ parent() }}
 <link
   rel="stylesheet"
@@ -38,22 +39,30 @@
 {% endblock %} {% block body %}
 
 <h1>La Carte du Réseau CTS</h1>
-{# Condition bloqueuse #}
+
+{# vérifie si l'utilisateur est connecté ou non. La variable "app.user" retournera un objet utilisateur si l'utilisateur est connecté et "null" sinon. #}
 {% if app.user %}
+    {# vérifie : 
+    - Si user est vérifié 
+    - Si un ID stripe est associé à son compte #}
     {% if app.user.isVerified == 1 and app.user.stripeId != null %}
+        <!-- Si les deux conditions sont vraies, on affiche la carte -->
         <div id="map"></div>
     {% else %}
+        <!-- Si l'une des conditions (ou les deux) n'est pas satisfaite, affiche un message d'information -->
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Information</h5>
                 <p class="card-text">
                     Pour accéder à cette fonctionnalité, vous devez :
                 </p>
+                {# Si pas vérifié, affiche bouton pour vérifier son adresse mail via Google #}
                 {% if app.user.isVerified != 1 %}
                     <a href="https://accounts.google.com/AccountChooser" class="btn btn-primary">
                         Vérifier votre adresse mail
                     </a>
                 {% endif %}
+                {# Si l'utilisateur n'a pas d'ID stripe associé à son compte, on affiche bouton to premium #}
                 {% if app.user.stripeId == null %}
                     <a href="{{ path('app_account') }}" class="btn btn-primary">
                         Passer à l'abonnement premium
@@ -63,7 +72,9 @@
         </div>
     {% endif %}
 {% else %}
-    {% if not app.user %}
+
+{% if not app.user %}
+
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var modal = document.getElementById("myModal");
@@ -122,7 +133,7 @@ function fadeMarker(marker) {
 
   document.addEventListener('DOMContentLoaded', function () {
 
-  	var mapElement = document.getElementById('map');
+  var mapElement = document.getElementById('map');
 
   if (mapElement && ! mapElement._leaflet_id) {
   var markers = {{ markers | json_encode | raw }};
@@ -138,8 +149,8 @@ function fadeMarker(marker) {
   
 // Initialise le groupement de clusters
 // avec des Settings avencés clusters
+  var markersClusterGroup = L.markerClusterGroup({
 
-var markersClusterGroup = L.markerClusterGroup({
     // Personnalisez la couleur en fonction du nombre de points dans le cluster
     iconCreateFunction: function (cluster) {
         var count = cluster.getChildCount();
@@ -270,10 +281,10 @@ var userLocationIcon = L.icon({
     iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Rond_bleu.png?20140330010413',
     iconSize: [
         32, 32
-    ], // Taille de l'icône. Ajustez selon vos besoins.
+    ], // Taille de l'icône
     iconAnchor: [
         16, 16
-    ], // Position de l'icône par rapport à son emplacement.
+    ], // Position de l'icône par rapport à son emplacement
 });
 
 

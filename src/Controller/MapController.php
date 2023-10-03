@@ -95,7 +95,7 @@ class MapController extends AbstractController
 
                     // Traitement des noms de lignes, suppression du préfixe "Ligne "
                     $lineName = $apiStopPoint['Lines'] ?? '';
-                    $lineName = str_replace('Ligne ', '', $lineName); // Supprimer le préfixe "Ligne "
+                    $lineName = str_replace('Ligne ', '', $lineName); // Supprime le préfixe "Ligne "
 
                     // Groupement des points par nom de ligne
                     if (!isset($lines[$lineName])) {
