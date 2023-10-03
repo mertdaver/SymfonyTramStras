@@ -10,7 +10,7 @@
 				
 				{% for msg in message.Content.Message %}
 					{% for text in msg.MessageText %}
-						<p lang="{{ text.Lang }}">{{ text.Value|raw }}</p>
+						<p lang="{{ text.Lang }}">{{ text.Value }}</p>
 					{% endfor %}
 				{% endfor %}
 			</div>
