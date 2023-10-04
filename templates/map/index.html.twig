@@ -82,24 +82,6 @@
         });
 
 
-function fadeMarker(marker) {
-    var fadeDuration = 2 * 60 * 60 * 1000; // 2h en millisecondes
-    var interval = 1000; // Interval de vérification, ici 1 seconde
-    var steps = fadeDuration / interval;
-    var opacityDecrease = 1 / steps;
-
-    var opacity = 1;
-    var timer = setInterval(function () {
-        if (opacity <= 0) {
-            clearInterval(timer);
-            marker.remove(); // ou map.removeLayer(marker);
-        } else {
-            marker.setOpacity(opacity);
-            opacity -= opacityDecrease;
-        }
-    }, interval);
-}
-
         
     </script>
 {% endif %}
@@ -299,21 +281,6 @@ var customMarkerIcon = L.icon({
     popupAnchor: [-3, -76]
 });
 
-
-// fonction qui fait disparaître peut a peu le marker perso mais basé que sur celui qu'on cré pas ceux en bdd
-
-function fadeMarker(marker) {
-    var opacity = 1;
-    var timer = setInterval(function () {
-        if (opacity <= 0) {
-            clearInterval(timer);
-            map.removeLayer(marker);
-        }
-        marker.setOpacity(opacity);
-        opacity -= 0.02;
-    }, 10000);
-}
-
 // ajout de la variable lastMarker
 var lastMarker = null;
 
@@ -336,12 +303,12 @@ map.on('click', function (e) {
     lastMarker = marker; // mise à jour de la variable lastMarker
 
     var popupContent = `
-                              <form id="textForm">
-                                  <label for="text">Veuillez entrer l'étiquette du marqueur : </label>
-                                  <input type="text" id="text" name="text">
-                                  <input type="submit" value="Poster">
-                              </form>
-                          `;
+                        <form id="textForm">
+                            <label for="text">Veuillez entrer l'étiquette du marqueur : </label>
+                            <input type="text" id="text" name="text">
+                            <input type="submit" value="Poster">
+                        </form>
+                    `;
     marker.bindPopup(popupContent).openPopup();
 
     // Supprime le marqueur seulement si l'utilisateur a fermé la popup sans soumettre
@@ -373,12 +340,11 @@ map.on('click', function (e) {
                 }
                 console.log('Marqueur enregistré avec succès !');
                 marker.bindPopup(text).openPopup();
-                fadeMarker(marker);
                 lastMarker = null; // mise à jour de la variable lastMarker
             }).catch(function (error) {
                 console.error('Erreur lors de l\'enregistrement du marqueur :', error);
             });
-        } else { // Supprimer immédiatement le marqueur si l'utilisateur n'a pas confirmé
+        } else { // Supprime le marqueur si l'utilisateur n'a pas confirmé
             marker.remove();
             lastMarker = null; // réinitialise la variable lastMarker
         }
@@ -405,7 +371,7 @@ function init() {
                     individualMarkers.addLayer(marker);
                 }
 
-					var popupContent = '';
+                var popupContent = '';
 					
                 if (markerData.isCustom && markerData.text) {
                     popupContent += markerData.text + '<br>';
@@ -422,7 +388,6 @@ function init() {
                     popupContent += '<strong>' + markerData.stopName + ' : </strong><br>';
                     popupContent += '<button class="loadStopTimes" data-stop-url="' + stopTimesUrl + '">Voir les horaires</button>';
                     popupContent += '<button class="getDirections" data-lat="' + markerData.latitude + '" data-lng="' + markerData.longitude + '">M\'y rendre</button>';
-
                 }
 
                 //lie marker à popupContent
@@ -493,6 +458,7 @@ function success(userPosition) {
         title: 'Vous êtes ici',
         alt: 'Marqueur "vous êtes ici"'
     }).addTo(map);
+
     // Cercle de précisiion Optionnel
     L.circle([
         userLat, userLng
@@ -506,8 +472,8 @@ function error(err) {
   });
 
 
-document.addEventListener('click', function (event) {
     // Handler pour loadStopTimes
+document.addEventListener('click', function (event) {
     if (event.target && event.target.classList.contains('loadStopTimes')) {
         var stopTimesUrl = event.target.getAttribute('data-stop-url');
 
@@ -518,13 +484,10 @@ document.addEventListener('click', function (event) {
                     var destination = data.stopTimes[0].destinationName;
                     var times = data.stopTimes.map(item => item.expectedDepartureTime);
                     var timesHTML = `<strong>Direction: ${destination}</strong><br>` + times.join('<br>');
-
-                    // Insérez les horaires à l'endroit souhaité, par exemple dans le parent du bouton
                     event.target.parentNode.innerHTML = timesHTML;
                 } else {
-                    console.warn('No stop times available');
+                    console.warn('Aucun horaire disponible');
                 }
-                // désactiver le bouton => event.target.setAttribute('disabled', 'disabled');
             })
             .catch(error => {
                 console.error('Erreur lors de la récupération des horaires:', error);
