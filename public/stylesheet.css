@@ -773,12 +773,12 @@ p, .topic-title, .topic-author, .no-topic, .login-prompt {
   width: fit-content;
   margin: auto;
   margin-top: 5%;
-  margin-bottom: 10%;
+  margin-bottom: 5%;
   color: var(--black-color);
 }
 
 .card h1 {
-  color: white;
+  color: var(--black-color);
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -880,6 +880,7 @@ body.darken {
 
 .btn-delete {
   display: inline-block;
+  margin-top: 15px;
   padding: 10px 20px;
   background-color: var(--red-color);
   color: var(--white-color);
@@ -1614,13 +1615,13 @@ input[type="submit"]:hover::before {
   max-width: 90%;
   margin: 0 auto;
   background-color: transparent;
-  border: 1px solid var(--accent-color);
+  border: 1px solid var(--white-color);
   border-radius: 8px;
   padding: 20px;
 }
 
 .chat-window {
-  border: 1px solid var(--accent-color);
+  border: 2px solid #c7353a41;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -1641,6 +1642,22 @@ input[type="submit"]:hover::before {
 
 .incoming {
   align-items: flex-end;
+}
+
+/* Couleur de fond pour les messages sortants */
+.chat-message.outgoing .message-bubble {
+  background: var(--darkred-color);
+}
+
+/* Couleur de texte pour le nom d'utilisateur dans les messages sortants */
+.chat-message.outgoing .username {
+  color: var(--white-color);
+}
+
+/* Couleur de texte pour le contenu du message et la date dans les messages sortants */
+.chat-message.outgoing .message-text, 
+.chat-message.outgoing .message-date {
+  color: var(--white-color);
 }
 
 .message-bubble {
@@ -1669,9 +1686,8 @@ input[type="submit"]:hover::before {
 }
 
 p.message-text {
-  color: var(--accent-color) !important;
-  margin: 0;
   color: var(--black-color);
+  margin: 0;
   text-align: left;
 }
 
@@ -1701,7 +1717,7 @@ p.message-text {
 }
 
 .message-actions .btn.btn-delete::before {
-  color: red;
+  color: var(--darkred-color);
 }
 
 .message-actions .btn.btn-delete:hover {
@@ -1745,7 +1761,7 @@ p.message-text {
 /* Position du bouton "X" à gauche et à l'intérieur de la bulle */
 .message-actions .btn.btn-delete {
   position: absolute;
-  bottom: -15px;
+  bottom: -24px;
   left: -40px; /* Pour le décaler à gauche de la bulle */
   background-color: rgba(255, 0, 0, 0);
   border: none;
@@ -1909,6 +1925,70 @@ iframe {
   font-weight: bold;
 }
 
+
+/* Liste des Alertes */
+
+.alerte-container {
+  background-color: var(--background-color);
+}
+
+.alerte-card {
+  background-color: var(--background-color);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow-neumorphism);
+  transition: var(--transition-speed);
+}
+
+.alerte-card:hover {
+  box-shadow: var(--card-shadow-inset-neumorphism);
+}
+
+.alerte-card-header {
+  background-color: var(--red-color);
+  color: var(--white-color);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-left: 5%;
+}
+
+.alerte-card-text {
+  color: var(--black-color);
+}
+
+.alerte-card-text strong {
+  color: var(--black-color);
+}
+
+.alerte-link {
+  color: var(--red-color);
+  text-decoration: none;
+  transition: var(--transition-speed);
+  box-shadow: var(--btn-shadow-neumorphism);
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.alerte-link:hover {
+  box-shadow: var(--btn-shadow-inset-neumorphism);
+  text-decoration: none;
+  background-color: var(--darkred-color);
+  color: var(--white-color);
+}
+
+.alerte-user-image {
+  border-radius: 50%; /* Pour rendre l'image circulaire */
+  box-shadow: var(--card-shadow-neumorphism);
+  transition: var(--transition-speed);
+  border: 2px solid var(--background-color); /* Pour éviter que les ombres ne coupent l'image */
+  overflow: hidden; /* Important pour le border-radius avec l'image */
+  width: 250px; /* Ajustez la taille selon vos besoins */
+  height: 250px; /* Assurez-vous que la hauteur soit la même que la largeur pour maintenir l'image circulaire */
+}
+
+.alerte-user-image:hover {
+  box-shadow: var(--card-shadow-inset-neumorphism);
+}
 
 
 /* Leaflet */

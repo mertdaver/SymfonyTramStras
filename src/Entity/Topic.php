@@ -111,7 +111,7 @@ class Topic
 
     public function __toString()
     {
-        return $this->titre . " Posté le " . $this->creationDate->format('Y-m-d');
+        return $this->titre . " (sujet créé le " . $this->creationDate->format('Y-m-d'). ")";
     }
 
     public function getUser(): ?User
