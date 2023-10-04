@@ -593,6 +593,87 @@ p {
 
 /* Liens généraux de la page avec un effet Neumorphisme */
 
+/* TOPIC PARTIE */
+
+a {
+  color: var( --black-color ); /* Utilisez une variable, ou à défaut, une couleur bleue standard */
+  cursor: pointer;
+  text-decoration: none;  /* Supprimer le soulignement par défaut pour un look plus moderne */
+  transition: color 0.3s ease; /* Animation fluide lors du changement de couleur */
+}
+
+a:hover, a:focus {
+  color: var( --darkred-color ); /* Une couleur bleue légèrement plus foncée pour le survol et le focus */
+  text-decoration: underline;  /* Soulignez au survol pour indiquer qu'il s'agit d'un lien cliquable */
+}
+
+a:active {
+  color: var( --black-color );
+}
+
+#neumorphic-container {
+  background-color: var(--background-color);
+  padding: 2% 5%;
+}
+
+.page-title, .page-subtitle {
+  margin-top: 5%;
+  color: var(--black-color);
+  text-align: center;
+  text-shadow: 2px 2px 4px var(--grey-color);
+}
+
+.page-title { font-size: 42px; }
+.page-subtitle { font-size: 22px; }
+
+p, .topic-title, .topic-author, .no-topic, .login-prompt {
+  margin-bottom: 1em;
+  color: var(--black-color);
+  text-align: center;
+}
+
+.neumorphism-card {
+  background-color: var(--white-color);
+  border-radius: 10px;
+  padding: 2% 4%;
+  margin-bottom: 2em;
+  box-shadow: var(--card-shadow-neumorphism);
+}
+
+.neumorphism-btn {
+  display: inline-block;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  background-color: var(--background-color);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow-neumorphism);
+  transition: var(--transition-speed);
+}
+
+.neumorphism-btn:hover {
+  text-decoration: none;
+}
+
+.neumorphism-btn:active {
+  transform: translateY(2px); 
+  box-shadow: inset 6px 6px 10px 0 rgba(0, 0, 0, 0.2), inset -6px -6px 10px 0 rgba(255, 255, 255, 0.5);
+}
+
+.auth-links {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+.auth-links li {
+  margin-bottom: 1em;
+}
+
+.divider {
+  margin: 3em 0;
+  border-color: var(--grey-color);
+}
 
 /* Survol : Effet d'enfoncement avec ombre interne */
 .topic-link:hover, a:hover {
@@ -689,7 +770,7 @@ p {
   border-radius: 8px;
   /* Style Neumorphique standard pour les cards */
   box-shadow: 10px 10px 15px #d1cdc7, -10px -10px 15px #ffffff;
-  width: 400px;
+  width: fit-content;
   margin: auto;
   margin-top: 5%;
   margin-bottom: 10%;
@@ -803,22 +884,23 @@ body.darken {
   background-color: var(--red-color);
   color: var(--white-color);
   text-decoration: none;
-  border-radius: 8px; /* Augmentation légère du rayon pour un rendu plus doux */
+  border-radius: 8px;
   /* Ombres Neumorphiques */
-  box-shadow: 4px 4px 6px #d1cdc7, -4px -4px 6px #ffffff;
+  box-shadow: 4px 4px 6px #d1cdc7, 2px -4px 5px #ffffff;
   transition: background-color 0.3s, transform 0.2s; /* Ajout d'une transition pour l'effet d'enfoncement */
 }
 
 .btn-delete:hover {
   background-color: var(--darkred-color);
-  transform: scale(1.02); /* Léger effet de zoom au survol */
+  color: var(--white-color);
 }
 
 .btn-delete:active {
-  background-color: var(--red-color);
-  /* Ombres internes pour un effet d'enfoncement Neumorphique */
-  box-shadow: inset 6px 6px 8px #d1cdc7, inset -6px -6px 8px #ffffff;
+  background-color: var(--darkred-color);
+  /* Ombres internes pour un effet d'enfoncement Neumorphique plus prononcé */
+  box-shadow: inset 4px 4px 6px rgba(0, 0, 0, 0.2), inset -4px -4px 6px rgba(255, 255, 255, 0.8);
 }
+
 
 #ImgProfileMess {
   width: 40px; /* ou la dimension que vous voulez */
