@@ -18,7 +18,7 @@ class ImagesUsersType extends AbstractType
     {
         $builder
             ->add('imageFile', VichImageType::class, [
-                'label' => 'Image (fichier PNG ou JPEG)',
+                'label' => 'Image (fichier PNG ou JPEG) *',
                 'required' => false,
                 'constraints' => [
                     new File([

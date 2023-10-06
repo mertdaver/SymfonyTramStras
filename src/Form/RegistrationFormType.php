@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -69,12 +70,23 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
 
+            ->add('imagesUsers', ImagesUsersType::class, [
+                'label' => '*'
+            ])
+
             ->add('captcha', Recaptcha3Type::class, [
                 'constraints' => new Recaptcha3(),
                 'action_name' => 'register',
             ])
+
+            ->add('submit', SubmitType::class, [
+                'label' => 'S\'inscrire',
+                'attr' => [
+                    'class' => 'custom-login-button btn btn-lg btn-primary'
+                ]
+            ])
             
-            ->add('imagesUsers', ImagesUsersType::class);
+            
         ;
     }
 

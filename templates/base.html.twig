@@ -78,68 +78,6 @@
 		{% endblock %}
 	</head>
     <style>
-    /* Style du switch - boîte */
-
-    body[data-theme='dark'] {
-    background-color: black;
-    color: white;
-}
-
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-}
-
-/* Cacher la checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-/* Style du curseur */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-}
-
-/* Couleur de fond du switch lorsque activé */
-input:checked + .slider {
-    background-color: #2196F3;
-}
-
-/* Déplacement du curseur lors de l'activation */
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-/* Style arrondi */
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
 
 /* social */
 
@@ -291,14 +229,6 @@ input:checked + .slider:before {
                         </div>
                     {% endif %}
                 </li>
-                {# <li>
-                    <div class="switch-container">
-                        <label class="switch">
-                            <input type="checkbox" id="mode">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
-                </li> #}
             </ul>
         </div>
     </ul>
@@ -329,9 +259,7 @@ input:checked + .slider:before {
 			{% endif %}
 		</div>
 
-
 		{% block body %}
-		
 
 		{% endblock %}
 		<footer class="footer parallax-footer">
@@ -404,49 +332,10 @@ input:checked + .slider:before {
 
 		{% block javascripts %}
 
-			<script>
+    <script>
 
 
-
-
-// SWITCH DARKMODE
-
-// document.getElementById("mode").addEventListener("change", function () {
-//     console.log("Changement détecté sur le switch du dark mode");
-    
-//     // Toggle dark mode class
-//     if (document.body.getAttribute('data-theme') === 'dark') {
-//         console.log("Dark mode désactivé");
-//         document.body.removeAttribute('data-theme');
-//     } else {
-//         console.log("Dark mode activé");
-//         document.body.setAttribute('data-theme', 'dark');
-//     }
-// });
-
-// document.addEventListener("DOMContentLoaded", function () {
-//     // Initialiser le switch en fonction de la valeur dans localStorage
-//     if (localStorage.getItem('theme') === 'dark') {
-//         document.body.setAttribute('data-theme', 'dark');
-//         document.getElementById("mode").checked = true;
-//     }
-
-//     // Ajouter un événement sur le switch pour gérer le changement de thème
-//     document.getElementById("mode").addEventListener("change", function () {
-//         if (document.body.getAttribute('data-theme') === 'dark') {
-//             document.body.removeAttribute('data-theme');
-//             localStorage.removeItem('theme');
-//         } else {
-//             document.body.setAttribute('data-theme', 'dark');
-//             localStorage.setItem('theme', 'dark');
-//         }
-//     });
-// });
-
-
-
-
-				// Ouverture de la fenêtre modale
+// Ouverture de la fenêtre modale
 function openModal(alerte) {
 var modal = document.getElementById("myModalAlerte");
 if (modal) {
@@ -505,7 +394,7 @@ overlay.style.display = "none";
 }
 });
 
-// En option : Fermer la fenêtre modale d'alerte en cliquant en dehors
+// Fermer la fenêtre modale d'alerte en cliquant en dehors
 var overlay = document.querySelector(".overlay");
 if (overlay) {
 overlay.addEventListener("click", function () {
