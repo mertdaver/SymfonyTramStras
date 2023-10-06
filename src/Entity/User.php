@@ -287,7 +287,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeSubscription(Subscription $subscription): self
     {
         if ($this->subscriptions->removeElement($subscription)) {
-            // set the owning side to null (unless already changed)
+
             if ($subscription->getUser() === $this) {
                 $subscription->setUser(null);
             }

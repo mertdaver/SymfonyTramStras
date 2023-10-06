@@ -142,30 +142,30 @@ class AccountController extends AbstractController
     
 
 
-public function profile(): Response
-{
-    // Création d'un formulaire via le FormBuilder de Symfony.
-    $deleteForm = $this->createFormBuilder()
-        // Définition de l'action du formulaire, c'est-à-dire l'URL vers laquelle les données du formulaire seront envoyées.
-        ->setAction($this->generateUrl('user_delete'))
-        // Définition de la méthode HTTP utilisée pour soumettre le formulaire.
-        ->setMethod('POST')
-        // Ajout d'un bouton de soumission au formulaire avec le label 'Supprimer mon compte'.
-        ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
-        // Ajout d'un champ caché '_token' au formulaire pour stocker le token CSRF.
-        ->add('_token', HiddenType::class, [
-            // Récupération de la valeur du token CSRF pour 'delete_account' et affectation à la propriété 'data' du champ caché '_token'.
-            'data' => $this->get('security.csrf.token_manager')->getToken('delete_account')->getValue(),
-        ])
-        // Construction du formulaire et renvoi d'une instance de Form.
-        ->getForm();
-    
-    // Renvoi d'une réponse HTML rendue par le template 'user/account.html.twig', 
-    // et passage du formulaire créé à la vue afin qu'il puisse être rendu dans le HTML.
-    return $this->render('user/account.html.twig', [
-        'deleteForm' => $deleteForm->createView(),
-    ]);
-}
+    public function profile(): Response
+    {
+        // Création d'un formulaire via le FormBuilder de Symfony.
+        $deleteForm = $this->createFormBuilder()
+            // Définition de l'action du formulaire, c'est-à-dire l'URL vers laquelle les données du formulaire seront envoyées.
+            ->setAction($this->generateUrl('user_delete'))
+            // Définition de la méthode HTTP utilisée pour soumettre le formulaire.
+            ->setMethod('POST')
+            // Ajout d'un bouton de soumission au formulaire avec le label 'Supprimer mon compte'.
+            ->add('submit', SubmitType::class, ['label' => 'Supprimer mon compte'])
+            // Ajout d'un champ caché '_token' au formulaire pour stocker le token CSRF.
+            ->add('_token', HiddenType::class, [
+                // Récupération de la valeur du token CSRF pour 'delete_account' et affectation à la propriété 'data' du champ caché '_token'.
+                'data' => $this->get('security.csrf.token_manager')->getToken('delete_account')->getValue(),
+            ])
+            // Construction du formulaire et renvoi d'une instance de Form.
+            ->getForm();
+        
+        // Renvoi d'une réponse HTML rendue par le template 'user/account.html.twig', 
+        // et passage du formulaire créé à la vue afin qu'il puisse être rendu dans le HTML.
+        return $this->render('user/account.html.twig', [
+            'deleteForm' => $deleteForm->createView(),
+        ]);
+    }
 
 
     
