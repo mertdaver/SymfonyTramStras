@@ -1960,20 +1960,24 @@ iframe {
 }
 
 .alerte-link {
-  color: var(--red-color);
-  text-decoration: none;
-  transition: var(--transition-speed);
+  font-size: 1.2rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--background-color);
+  width: 300px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   box-shadow: var(--btn-shadow-neumorphism);
-  padding: 5px 10px;
-  border-radius: 5px;
-  display: inline-block;
+  transition: var(--transition-speed);
+  color: var(--black-color);
 }
 
 .alerte-link:hover {
+  outline: none;
   box-shadow: var(--btn-shadow-inset-neumorphism);
-  text-decoration: none;
-  background-color: var(--darkred-color);
-  color: var(--white-color);
 }
 
 .alerte-user-image {
@@ -2005,11 +2009,12 @@ iframe {
 
 .center-wrapper {
   width: 100%;
-  max-width: 300px;
+  max-width: 90%;
   text-align: center; 
 }
 
 #ligneSelect {
+  outline: none;
   font-size: 1.2rem;
   padding: 1rem;
   border: none;
@@ -2023,6 +2028,10 @@ iframe {
   box-shadow: var(--btn-shadow-neumorphism);
   transition: var(--transition-speed);
   color: var(--black-color);
+  text-align: center;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #ligneSelect:focus {
