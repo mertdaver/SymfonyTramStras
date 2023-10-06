@@ -139,7 +139,7 @@ a[target="_blank"]:hover {
 
     {# Ajout de votre lien sécurisé #}
     {% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_SECU' in app.user.roles) %}
-    <a href="{{ path('le_nom_de_votre_route') }}" class="btn btn-primary">Texte du Bouton</a></br>
+    <a href="{{ path('account_update') }}" class="btn btn-primary">Modifier vos informations personnelles</a></br>
     {% endif %}
 
 

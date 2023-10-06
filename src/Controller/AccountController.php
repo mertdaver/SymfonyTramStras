@@ -9,8 +9,10 @@ use App\Entity\User;
 use App\Entity\Topic;
 use App\Entity\Marker;
 use App\Entity\Subscription;
+use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use App\Repository\AlerteRepository; 
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +23,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AccountController extends AbstractController
 {
@@ -165,7 +168,7 @@ class AccountController extends AbstractController
     }
 
     #[Route('/account/update', name: 'account_update')]
-    public function update(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function update(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = $this->getUser();
         if (!$user) {
@@ -176,13 +179,21 @@ class AccountController extends AbstractController
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Si le mot de passe a été modifié, le chiffrer avant de le sauvegarder.
-            $plainPassword = $form->get('password')->getData();
-            if ($plainPassword) {
-                $encodedPassword = $passwordEncoder->encodePassword($user, $plainPassword);
-                $user->setPassword($encodedPassword);
+            // Vérification de la modification du mot de passe si l'utilisateur le souhaite
+            $oldPassword = $form->get('oldPassword')->getData();
+            $newPassword = $form->get('newPassword')->getData();
+            
+            if (!empty($newPassword)) {
+                // Vérifiez que l'ancien mot de passe est correct
+                if (!$passwordHasher->isPasswordValid($user, $oldPassword)) {
+                    $form->get('oldPassword')->addError(new FormError('L\'ancien mot de passe est incorrect.'));
+                } else {
+                    $encodedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                    $user->setPassword($encodedPassword);
+                }
             }
-    
+            
+            // Continuez à sauvegarder les autres informations de l'utilisateur
             $this->entityManager->persist($user);
             $this->entityManager->flush();
     

@@ -7,8 +7,13 @@
 {% block body %}
 <h2>Mise à jour du profil</h2>
 
-<form method="post" {{ form_start(form) }}>
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Mettre à jour</button>
-</form>
+<card>
+{{ form_row(form.pseudo) }}
+{{ form_row(form.email) }} 
+{{ form_row(form.oldPassword) }}
+{{ form_row(form.newPassword.first) }}
+{{ form_row(form.newPassword.second) }}
+
+{{ form_end(form) }} 
+</card>
 {% endblock %}

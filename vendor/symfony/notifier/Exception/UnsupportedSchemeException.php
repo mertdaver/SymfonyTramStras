@@ -104,6 +104,10 @@ class UnsupportedSchemeException extends LogicException
             'class' => Bridge\Mattermost\MattermostTransportFactory::class,
             'package' => 'symfony/mattermost-notifier',
         ],
+        'mercure' => [
+            'class' => Bridge\Mercure\MercureTransportFactory::class,
+            'package' => 'symfony/mercure-notifier',
+        ],
         'messagebird' => [
             'class' => Bridge\MessageBird\MessageBirdTransportFactory::class,
             'package' => 'symfony/message-bird-notifier',

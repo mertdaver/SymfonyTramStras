@@ -21,6 +21,6 @@ class BadCredentialsException extends AuthenticationException
 {
     public function getMessageKey(): string
     {
-        return 'Mot de passe ou email invalide';
+        return 'Invalid credentials.';
     }
 }

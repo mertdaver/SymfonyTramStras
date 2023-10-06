@@ -41,10 +41,10 @@ class Length extends Constraint
      */
     protected static $errorNames = self::ERROR_NAMES;
 
-    public $maxMessage = 'Cette valeur est trop longue. Elle doit avoir {{ limit }} caractère ou moins.|Cette valeur est trop longue. Elle doit avoir {{ limit }} caractères ou moins.';
-    public $minMessage = 'Cette valeur est trop courte. Elle doit avoir {{ limit }} caractère ou plus.|Cette valeur est trop courte. Elle doit avoir {{ limit }} caractères ou plus.';
-    public $exactMessage = 'Cette valeur doit avoir exactement {{ limit }} caractère.|Cette valeur doit avoir exactement {{ limit }} caractères.';
-    public $charsetMessage = 'Cette valeur ne correspond pas à l’encodage de caractères {{ charset }} attendu.';    
+    public $maxMessage = 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.';
+    public $minMessage = 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.';
+    public $exactMessage = 'This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.';
+    public $charsetMessage = 'This value does not match the expected {{ charset }} charset.';
     public $max;
     public $min;
     public $charset = 'UTF-8';
