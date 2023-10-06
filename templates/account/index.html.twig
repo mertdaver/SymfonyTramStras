@@ -136,6 +136,13 @@ a[target="_blank"]:hover {
 		{% else %}
 			<p>Pas d'image de profil</p>
 		{% endif %}</br>
+
+    {# Ajout de votre lien sécurisé #}
+    {% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_SECU' in app.user.roles) %}
+    <a href="{{ path('le_nom_de_votre_route') }}" class="btn btn-primary">Texte du Bouton</a></br>
+    {% endif %}
+
+
 		{{ form_start(deleteForm, {'attr': {'onsubmit': "return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');"}}) }}
 		{{ form_widget(deleteForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
 		{{ form_end(deleteForm) }}

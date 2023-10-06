@@ -88,8 +88,6 @@ class AccountController extends AbstractController
         $topics = $doctrine->getRepository(Topic::class)->findBy(['user' => $user]);
         return $this->render('account/mes_topics.html.twig', ['topics' => $topics]);
     }
-    
-
 
     #[Route('/user/delete', name: 'user_delete', methods: ['POST'])]
     public function deleteAccount(Request $request, Security $security): Response
@@ -141,7 +139,6 @@ class AccountController extends AbstractController
     
     
 
-
     public function profile(): Response
     {
         // Création d'un formulaire via le FormBuilder de Symfony.
@@ -167,6 +164,36 @@ class AccountController extends AbstractController
         ]);
     }
 
-
+    #[Route('/account/update', name: 'account_update')]
+    public function update(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
     
+        $form = $this->createForm(UserUpdateType::class, $user);
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Si le mot de passe a été modifié, le chiffrer avant de le sauvegarder.
+            $plainPassword = $form->get('password')->getData();
+            if ($plainPassword) {
+                $encodedPassword = $passwordEncoder->encodePassword($user, $plainPassword);
+                $user->setPassword($encodedPassword);
+            }
+    
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+    
+            $this->addFlash('success', 'Vos informations ont été mises à jour avec succès !');
+            return $this->redirectToRoute('app_account');
+        }
+    
+        return $this->render('account/update.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
 }
