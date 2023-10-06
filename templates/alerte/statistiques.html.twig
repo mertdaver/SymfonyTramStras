@@ -20,7 +20,8 @@
 
 {% block body %}
     <h1>Statistiques des Alertes</h1>
-    <div class="container">
+    <main class="content-container">
+    <div class="center-wrapper">
         <select id="ligneSelect">
             <option value="">Sélectionnez une ligne</option>
             {% for ligne in lignes %}
@@ -28,11 +29,22 @@
             {% endfor %}
         </select>
 
-        <canvas id="myChart" width="400" height="200"></canvas>
+        <canvas id="myChart" width="800" height="400"></canvas>
+
     </div>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        var colorMapping = {
+            'Ligne A': '#e10d19',
+            'Ligne B': '#009ee0',
+            'Ligne C': '#f29400',
+            'Ligne D': '#009933',
+            'Ligne E': '#9085ba',
+            'Ligne F': '#97bf0d'
+        };
+
         var statistiques = {{ statistiques|json_encode|raw }};
         var currentChart;
 
@@ -62,11 +74,12 @@
                     datasets: [{
                         label: 'Nombre d’alertes',
                         data: dataArray,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: colorMapping[ligne] ? colorMapping[ligne] + '66' : 'rgba(75, 192, 192, 0.2)',  // Utilisez la couleur avec une opacité de 0.4 (66 en hexadécimal) si disponible sinon une couleur par défaut
+                        borderColor: colorMapping[ligne] || 'rgba(75, 192, 192, 1)', // Utilisez la couleur si disponible sinon une couleur par défaut
                         borderWidth: 1
                     }]
                 };
+
 
                 currentChart = new Chart(ctx, {
                     type: 'bar',

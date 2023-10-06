@@ -270,12 +270,11 @@ class AlerteController extends AbstractController
     {
         $statistiques = $alerteRepository->getAlerteStatistics();
         
-        // Supposez que vous avez une méthode pour obtenir toutes les lignes distinctes
         $lignes = $alerteRepository->getAllDistinctLignes();
         
         return $this->render('alerte/statistiques.html.twig', [
             'statistiques' => $statistiques,
-            'lignes' => $lignes, // Passez la variable lignes à la vue
+            'lignes' => $lignes, // Passe la variable lignes à la vue
         ]);
     }
     
