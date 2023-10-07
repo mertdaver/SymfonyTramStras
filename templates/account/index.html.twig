@@ -139,7 +139,7 @@ a[target="_blank"]:hover {
 
     {# Ajout de votre lien sécurisé #}
     {% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_SECU' in app.user.roles) %}
-    <a href="{{ path('account_update') }}" class="btn btn-primary">Modifier vos informations personnelles</a></br>
+  <a href="{{ path('user.edit', {'id': app.user.id}) }}" class="btn btn-primary">Modifier vos informations personnelles</a>
     {% endif %}
 
 
@@ -150,5 +150,12 @@ a[target="_blank"]:hover {
 {% else %}
 	<p>L'utilisateur n'est pas connecté.</p>
 {% endif %}
+
+{% for message in app.flashes('success') %}
+  <div class="alert">
+    {{ message }}
+  </div>
+{% endfor %}
+
 
 {% endblock %}

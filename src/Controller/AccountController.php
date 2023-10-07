@@ -7,9 +7,9 @@ use App\Entity\Plan;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Topic;
+use App\Form\UserType;
 use App\Entity\Marker;
 use App\Entity\Subscription;
-use App\Form\UserUpdateType;
 use App\Repository\UserRepository;
 use App\Repository\AlerteRepository; 
 use Symfony\Component\Form\FormError;
@@ -25,6 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AccountController extends AbstractController
@@ -167,41 +168,35 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/account/update', name: 'account_update')]
-    public function update(Request $request, UserPasswordHasherInterface $passwordHasher): Response
+    #[Route('/account/edition/{id}', name: 'user.edit', methods: ['GET', 'POST'])]
+    public function edit(User $user, Request $request, EntityManagerInterface $manager): Response
     {
-        $user = $this->getUser();
-        if (!$user) {
+
+        if(!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-    
-        $form = $this->createForm(UserUpdateType::class, $user);
+
+        if($this->getUser() !== $user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $form = $this->createForm(UserType::class, $user);
+
         $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Vérification de la modification du mot de passe si l'utilisateur le souhaite
-            $oldPassword = $form->get('oldPassword')->getData();
-            $newPassword = $form->get('newPassword')->getData();
-            
-            if (!empty($newPassword)) {
-                // Vérifiez que l'ancien mot de passe est correct
-                if (!$passwordHasher->isPasswordValid($user, $oldPassword)) {
-                    $form->get('oldPassword')->addError(new FormError('L\'ancien mot de passe est incorrect.'));
-                } else {
-                    $encodedPassword = $passwordHasher->hashPassword($user, $newPassword);
-                    $user->setPassword($encodedPassword);
-                }
-            }
-            
-            // Continuez à sauvegarder les autres informations de l'utilisateur
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-    
-            $this->addFlash('success', 'Vos informations ont été mises à jour avec succès !');
+        if($form->isSubmitted() && $form->isValid()) {
+            $suer = $form->getData();
+            $manager->persist($suer);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Les informations le votre compte ont bien été modifiés'
+            );
+
             return $this->redirectToRoute('app_account');
         }
     
-        return $this->render('account/update.html.twig', [
+        return $this->render('account/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
