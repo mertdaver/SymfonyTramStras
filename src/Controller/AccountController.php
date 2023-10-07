@@ -8,11 +8,9 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Topic;
 use App\Form\UserType;
-use App\Entity\Marker;
 use App\Entity\Subscription;
-use App\Repository\UserRepository;
+use App\Form\UserPasswordType;
 use App\Repository\AlerteRepository; 
-use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +18,13 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class AccountController extends AbstractController
 {
@@ -169,7 +167,7 @@ class AccountController extends AbstractController
     }
 
     #[Route('/account/edition/{id}', name: 'user.edit', methods: ['GET', 'POST'])]
-    public function edit(User $user, Request $request, EntityManagerInterface $manager): Response
+    public function edit(User $user, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
 
         if(!$this->getUser()) {
@@ -184,8 +182,12 @@ class AccountController extends AbstractController
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $suer = $form->getData();
-            $manager->persist($suer);
+
+            if($hasher->isPasswordValid($user, $form->get('plainPassword')->getData()   )) {
+
+
+            $user = $form->getData();
+            $manager->persist($user);
             $manager->flush();
 
             $this->addFlash(
@@ -194,12 +196,47 @@ class AccountController extends AbstractController
             );
 
             return $this->redirectToRoute('app_account');
+        }else {
+            $this->addFlash(
+                'warning',
+                'Le mot de passe renseigné est incorrecte'
+            );
         }
+
+    }
     
         return $this->render('account/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-
+    #[Route('/account/edition-mot-de-passe/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
+    public function editPassword(User $user, Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(UserPasswordType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($hasher->isPasswordValid($user, $form->get('plainPassword')->getData())) {
+                $user->setPassword(
+                    $hasher->hashPassword($user, $form->get('newPassword')->getData())
+                );
+    
+                $entityManager->persist($user);
+                $entityManager->flush();
+    
+                $this->addFlash('success', 'Le mot de passe de votre compte a bien été modifié. Pas besoin de vous reconnecter. Mais pensez à stocker votre mot de passe en lieu sûr');
+    
+    
+                // Redirect to login page
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash('warning', 'Le mot de passe renseigné est incorrect');
+            }
+        }
+    
+        return $this->render('account/edit_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+    
 }

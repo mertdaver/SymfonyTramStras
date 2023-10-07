@@ -71,6 +71,12 @@ a[target="_blank"]:hover {
 {% block body %}
 
 {% if app.user is defined %}
+
+{% for message in app.flashes('success') %}
+  <div class="card">
+    {{ message }}
+  </div>
+{% endfor %}
 	<h1>Bienvenue sur votre compte, {{ app.user.pseudo }} !</h1>
 
 	<div class="card">
@@ -137,10 +143,8 @@ a[target="_blank"]:hover {
 			<p>Pas d'image de profil</p>
 		{% endif %}</br>
 
-    {# Ajout de votre lien sécurisé #}
-    {% if app.user and ('ROLE_ADMIN' in app.user.roles or 'ROLE_SECU' in app.user.roles) %}
   <a href="{{ path('user.edit', {'id': app.user.id}) }}" class="btn btn-primary">Modifier vos informations personnelles</a>
-    {% endif %}
+  <a href="{{ path('user.edit.password', {'id': app.user.id}) }}" class="btn btn-primary">Modifier le mot de passe</a>
 
 
 		{{ form_start(deleteForm, {'attr': {'onsubmit': "return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');"}}) }}
@@ -151,11 +155,7 @@ a[target="_blank"]:hover {
 	<p>L'utilisateur n'est pas connecté.</p>
 {% endif %}
 
-{% for message in app.flashes('success') %}
-  <div class="alert">
-    {{ message }}
-  </div>
-{% endfor %}
+
 
 
 {% endblock %}

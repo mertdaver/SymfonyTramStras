@@ -5,6 +5,13 @@
 
 <h1>Bienvenue sur TramStras</h1>
 <h2> Le site par et pour les Strasbourgeois ! </h2>
+
+    {% for message in app.flashes('warning') %}
+    <div class="alert">
+        {{ message}}
+    </div>
+    {% endfor %}
+
 <div class="card-wrapper">
 
 <a href="{{ path('points_map') }}" class="card-menu">
