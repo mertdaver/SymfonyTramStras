@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Entity\Topic;
 use App\Form\UserType;
 use App\Entity\Subscription;
+use App\Form\ImagesUsersType;
 use App\Form\UserPasswordType;
 use App\Repository\AlerteRepository; 
 use Doctrine\ORM\EntityManagerInterface;
@@ -238,5 +239,28 @@ class AccountController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    #[Route('/edit-profile-picture', name: 'edit_profile_picture', methods: ['GET', 'POST'])]
+    public function editProfilePicture(Request $request): Response
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(ImagesUsersType::class, $user->getImagesUsers());
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
+            $user->getImagesUsers()->setImageFile(null);
+    
+            $this->addFlash('success', 'Photo de profil mise à jour avec succès !');
+    
+            return $this->redirectToRoute('app_account');
+        }
+    
+        return $this->render('account/edit_profile_picture.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    
     
 }

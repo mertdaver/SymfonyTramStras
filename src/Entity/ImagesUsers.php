@@ -48,6 +48,12 @@ class ImagesUsers
 
     }
 
+    public function __sleep()
+    {
+        return ['id', 'imageName', 'imageSize', 'updatedAt', 'createdAt'];
+    }
+    
+
     #[ORM\PreUpdate]
     public function preUpdate()
     {

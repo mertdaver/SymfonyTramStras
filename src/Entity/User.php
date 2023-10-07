@@ -320,5 +320,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // Evite le Problème de serialization avec VichUploadBundle lors de la moidification de l'image de profile
+        public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->pseudo,
+            $this->isVerified,
+            $this->roles
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->pseudo,
+            $this->isVerified,
+            $this->roles
+        ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+
 }
 
