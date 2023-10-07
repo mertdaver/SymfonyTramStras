@@ -177,9 +177,8 @@ header, #navbar {
 .user-dropdown {
   position: relative;
   top: 0;
-  z-index: 1000;
+  z-index: 9999;
   display: inline-block;
-  z-index: 1000;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
@@ -187,7 +186,7 @@ header, #navbar {
   transition: all 0.3s ease;
 }
 
-.user-dropdown:hover {
+.user-dropdown:active {
     background-color: #f0f0f0;
 }
 
@@ -198,7 +197,7 @@ header, #navbar {
     display: block;
 }
 
-.user-dropdown a:hover {
+.user-dropdown a:active {
     background-color: #ddd;
 }
 
