@@ -6,9 +6,11 @@ framework:
     handle_all_throwables: true
 
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
-    # Remove or comment this section to explicitly disable session support.
     session:
-        handler_id: null
+        handler_id: session.handler.native_file
+        save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
+        gc_maxlifetime: 3600
+        cookie_lifetime: 3600
         cookie_secure: auto
         cookie_samesite: lax
         storage_factory_id: session.storage.factory.native
@@ -18,7 +20,6 @@ framework:
     php_errors:
         log: true
 
-    
     rate_limiter:
         login:
             policy: 'fixed_window'

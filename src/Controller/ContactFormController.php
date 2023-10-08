@@ -36,7 +36,7 @@ class ContactFormController extends AbstractController
         // Si le honeypot est rempli (ce qui ne devrait jamais être le cas pour un utilisateur réel),
         // alors on considère la soumission comme étant effectuée par un bot.
         if (!empty($honeypot)) {
-            dump('Soumission détectée comme étant un bot'); // Pour vérifier si la soumission est détectée comme un bot
+            // dump('Soumission détectée comme étant un bot'); // Pour vérifier si la soumission est détectée comme un bot
             return $this->render('contact_form/contact_form.html.twig', [
                 'contact_form' => $form->createView(),
             ]);

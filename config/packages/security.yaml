@@ -37,6 +37,32 @@ security:
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/account/update, roles: ROLE_USER }
+        - { path: ^/_profiler, roles: ROLE_ADMIN }  
+        - { path: ^/account, roles: ROLE_USER }
+        - { path: ^/getPseudo, roles: ROLE_USER }
+        - { path: ^/mes-posts, roles: ROLE_USER }
+        - { path: ^/mes-topics, roles: ROLE_USER }
+        - { path: ^/user/delete, roles: ROLE_USER }
+        - { path: ^/user\.edit, roles: ROLE_USER }
+        - { path: ^/edit-profile-picture, roles: ROLE_USER }
+        - { path: ^/alerte, roles: PUBLIC_ACCESS }
+        - { path: ^/confirmation, roles: PUBLIC_ACCESS } 
+        - { path: ^/getAlertDetails, roles: ROLE_USER }
+        - { path: ^/alertes, roles: ROLE_SECU }
+        - { path: ^/statistiques, roles: ROLE_SECU }
+        - { path: ^/categorie, roles: ROLE_USER }
+        - { path: ^/contact_form, roles: PUBLIC_ACCESS }
+        - { path: ^/contact_message, roles: PUBLIC_ACCESS }
+        - { path: ^/map, roles: ROLE_USER }
+        - { path: ^/horaires, roles: ROLE_USER }
+        - { path: ^/post, roles: ROLE_USER }
+        - { path: ^/verify/email, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
+        - { path: ^/logout, roles: ROLE_USER }
+        - { path: ^/topic, roles: ROLE_USER }
+        - { path: ^/webhook/stripe, roles: ROLE_USER }
+        # Route par défaut pour assurer que tout ce qui n'est pas explicitement listé soit sécurisé
+        - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:
@@ -54,4 +80,4 @@ when@test:
         firewalls:
                 # configuring the maximum login attempts (per minute)
                 login_throttling:
-                    max_attempts: 2
+                    max_attempts: 5
