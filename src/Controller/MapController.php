@@ -106,7 +106,7 @@ class MapController extends AbstractController
                 }
 
                 // Récupérer les points ajoutés par les utilisateurs depuis la base de données
-                $userMarkers = $markerRepository->findAll();
+                $userMarkers = $markerRepository->findRecentMarkers();
 
                 // Convertir les marqueurs personnalisés en format compatible
                 foreach ($userMarkers as $userMarker) {

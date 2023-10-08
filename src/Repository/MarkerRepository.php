@@ -39,6 +39,21 @@ class MarkerRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Marker[]
+     */
+    public function findRecentMarkers(): array
+    {
+        $yesterday = new \DateTime('-24 hours');
+
+        return $this->createQueryBuilder('m')
+            ->where('m.creationDate > :yesterday')
+            ->setParameter('yesterday', $yesterday)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return Marker[] Returns an array of Marker objects
 //     */
