@@ -496,9 +496,14 @@ li {
 
   /* Réduire l'image de profil pour les smartphones */
   #ImgProfile {
-    width: 70px;
-    height: 70px;
-  }
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    padding-top: 5%;
+}
 
   /* Réduire les liens de déconnexion et d'inscription */
   .logout-link, .register-link {
