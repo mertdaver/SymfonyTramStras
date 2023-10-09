@@ -262,7 +262,6 @@ class AlerteController extends AbstractController
         return $this->render('alerte/alertes.html.twig', [
             'alertes' => $alertes,
         ]);
-        
     }
 
     #[Route('/statistiques', name: 'statistiques_alertes', methods: ['GET'])]

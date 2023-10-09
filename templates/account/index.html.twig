@@ -104,6 +104,13 @@ a[target="_blank"]:hover {
     </p></br>
 {% endif %}
 
+    {% if app.user.imagesUsers and app.user.imagesUsers.imageName %}
+        <img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil"></br>
+        <a href="{{ path('edit_profile_picture') }}" class="btn btn-primary">Modifier la photo de profil</a>
+    {% else %}
+        <p>Pas d'image de profil</p>
+        <a href="{{ path('edit_profile_picture') }}" class="btn btn-primary">Ajouter une photo de profil</a>
+    {% endif %}
 
 	{% if app.user.Topic is defined %}
 		<p>Nombre de sujets : {{ app.user.Topic|length }}</p>
@@ -124,38 +131,31 @@ a[target="_blank"]:hover {
 
 
 
-		{% if activeSub %}
-			{% if activeSub.isIsActive() %}
-				<p>Votre abonnement est actif jusqu'au {{ activeSub.getCurrentPeriodEnd|date('d/m/Y') }}.</p>
-				<p>Votre abonnement sera renouvelé le {{ activeSub.getCurrentPeriodEnd|date('d F Y') }}.</p>
-			{% else %}
-				<p>Votre abonnement a expiré, veuillez renouveler pour continuer à profiter des avantages.</p>
-				<a href="{{ path('route_pour_payer_abonnement') }}" class="btn btn-primary">Renouveler l'abonnement</a>
-			{% endif %}
-		{% else %}
-			{% for plan in plans %}
-				<a target="_blank" href="{{ plan.paymentLink }}" class="btn btn-primary">Passer à l'abonnement premium</a>
-			{% endfor %}
-		{% endif %}
-    {% if app.user.imagesUsers and app.user.imagesUsers.imageName %}
-        <img id="ImgProfile" src="{{ vich_uploader_asset(app.user.imagesUsers, 'imageFile') }}" alt="Image de profil"></br>
-        <a href="{{ path('edit_profile_picture') }}" class="btn btn-primary">Modifier la photo de profil</a>
-    {% else %}
-        <p>Pas d'image de profil</p>
-        <a href="{{ path('edit_profile_picture') }}" class="btn btn-primary">Ajouter une photo de profil</a>
-    {% endif %}
+{% if activeSub %}
+	{% if activeSub.isIsActive() %}
+		<p>Votre abonnement est actif jusqu'au {{ activeSub.getCurrentPeriodEnd|date('d/m/Y') }}.</p>
+		<p>Votre abonnement sera renouvelé le {{ activeSub.getCurrentPeriodEnd|date('d F Y') }}.</p>
+	{% else %}
+		<p>Votre abonnement a expiré, veuillez renouveler pour continuer à profiter des avantages.</p>
+		<a id="btnRenewSubscription" href="{{ path('route_pour_payer_abonnement') }}" class="btn btn-primary">Renouveler l'abonnement</a>
+	{% endif %}
+{% else %}
+	{% for plan in plans %}
+		<a id="btnPremiumSubscription_{{ loop.index }}" target="_blank" href="{{ plan.paymentLink }}" class="btn btn-primary">Passer à l'abonnement premium</a>
+	{% endfor %}
+{% endif %}
 
-  <a href="{{ path('user.edit', {'id': app.user.id}) }}" class="btn btn-primary">Modifier vos informations personnelles</a>
-  <a href="{{ path('user.edit.password', {'id': app.user.id}) }}" class="btn btn-primary">Modifier le mot de passe</a>
+<a id="btnEditPersonalInfo" href="{{ path('user.edit', {'id': app.user.id}) }}" class="btn btn-primary">Modifier vos informations personnelles</a>
+<a id="btnEditPassword" href="{{ path('user.edit.password', {'id': app.user.id}) }}" class="btn btn-primary">Modifier le mot de passe</a>
 
-
-		{{ form_start(deleteForm, {'attr': {'onsubmit': "return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');"}}) }}
-		{{ form_widget(deleteForm.submit, {'attr': {'class': 'btn btn-danger'}}) }}
-		{{ form_end(deleteForm) }}
-	</div>
+{{ form_start(deleteForm, {'attr': {'onsubmit': "return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');"}}) }}
+{{ form_widget(deleteForm.submit, {'attr': {'class': 'btn btn-primary', 'id': 'btnDeleteAccount'}}) }}
+{{ form_end(deleteForm) }}
+</div>
 {% else %}
 	<p>L'utilisateur n'est pas connecté.</p>
 {% endif %}
+
 
 
 

@@ -1003,6 +1003,24 @@ textarea#post_text:focus::placeholder {
   transform: translateX(8px);
 }
 
+/* Boutons qui merdent acount */
+#btnRenewSubscription,
+#btnEditPersonalInfo,
+#btnEditPassword,
+#btnDeleteAccount,
+[id^="btnPremiumSubscription_"] {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+#form_submit {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
 /* Pop-up MARKER perso */
 
 .leaflet-popup-content-wrapper {
