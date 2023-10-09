@@ -42,16 +42,15 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
-                'label' => 'J\'accepte les <a href="/conditions/CGV TramStras.pdf" target="_blank">Conditions Générales de Vente</a>',
+                'label' => 'J\'ai lu et j\'accepte les <a href="/conditions/CGV TramStras.pdf" target="_blank">Conditions Générales d\'Utilisation</a> ainsi que la <a href="/conditions/PolitiqueConfidentialite.pdf" target="_blank">Politique de Confidentialité</a> et comprends comment mes données seront utilisées.',
                 'label_html' => true,
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => "Vous devez accepter les termes et conditions d'utilisation.",
+                        'message' => "Vous devez accepter les Conditions Générales d'utilisation ainsi que la Politique de Confidentialité.",
                     ]),
                 ],
-            ])
-            
+            ])            
             ->add('plainPassword', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,

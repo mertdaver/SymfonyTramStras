@@ -1287,7 +1287,31 @@ input[type="submit"]:hover::before {
 
 /* Icônes des réseaux sociaux */
 
+@media (max-width: 850px) {
+  .footer-column {
+      width: 100%;
+      background: var(--background-color);
+      padding: 1%;
+      margin: 1%;
+      border-radius: 15px;
+      box-shadow: var(--card-shadow-neumorphism);
+      flex: 1;
+  }
+  
+  /* Pour agencer les icônes des réseaux sociaux deux à deux */
+  .social-icons li {
+      float: left;
+      width: 50%;
+      box-sizing: border-box;
+  }
 
+  /* Réinitialiser le flottement après les icônes */
+  .social-icons:after {
+      content: "";
+      display: table;
+      clear: both;
+  }
+}
 
 
 /* Styles pour le formulaire de contact */
@@ -1309,7 +1333,8 @@ input[type="submit"]:hover::before {
 .card-form-footer textarea {
   box-sizing: border-box;
   padding: 15px;
-  width: 100%;
+  margin: 1%;
+  width: 97%;
   border: none;
   background: var(--background-color);
   box-shadow: var(--btn-shadow-neumorphism);
@@ -1376,7 +1401,7 @@ input[type="submit"]:hover::before {
     /* Cela permettra aux icônes de s'étaler en colonne plutôt qu'en ligne */
     display: block;
     margin-right: 0; 
-    margin-bottom: 10px;
+    margin-bottom: 10%;
   }
 
 }
