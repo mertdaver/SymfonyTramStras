@@ -18,7 +18,7 @@ class PostType extends AbstractType
                 'label' => ' ',
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Length(['max' => 2000]), // par exemple, limitez à 2000 caractères
+                    new Assert\Length(['max' => 2000]), // limité à 2000 caractères
                     new Assert\Regex([
                         'pattern' => '/^[\p{L}\p{N}\s.,!?()\-\']++$/uD', // cela permet les lettres, les chiffres, certains signes de ponctuation
                         'message' => 'Le post contient des caractères non valides.'
