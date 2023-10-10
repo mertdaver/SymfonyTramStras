@@ -52,7 +52,7 @@ class AlerteController extends AbstractController
     }
 
 
-    // Définit une route pour le chemin '/alerte', accessible uniquement via la méthode HTTP POST.
+    // Définit une route pour le chemin '/alerte', via la méthode HTTP POST.
     #[Route('/alerte', name: 'alerte', methods: ["POST"])]
     public function sendAlerte(
         // Injection de dépendances : ces services sont automatiquement fournis par Symfony.
@@ -110,11 +110,11 @@ class AlerteController extends AbstractController
         ]);
     }
 
-
+// Affichage dernière Alerte Postée
     #[Route('/get-latest-alert', name: 'get_latest_alert', methods: ['GET'])]
     public function latestAlert(
         // Injection de dépendance: L'objet AlerteRepository est automatiquement instancié et injecté 
-        // par Symfony. Il est utilisé pour effectuer des requêtes liées à l'entité Alerte.
+        // par Symfony. Il est utilisé pour effectuer les requêtes liées à l'entité Alerte.
         AlerteRepository $alerteRepository
     ): Response {
         // Utilise la méthode `findLatestAlert()` de l'objet `$alerteRepository` pour 

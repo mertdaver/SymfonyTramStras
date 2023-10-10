@@ -43,6 +43,7 @@ class AlerteRepository extends ServiceEntityRepository
         }
     }
 
+    //dernière aletre
     public function findLatestAlert(): ?Alerte
     {
         return $this->createQueryBuilder('a')
