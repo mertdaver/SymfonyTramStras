@@ -20,7 +20,7 @@ class ImagesUsersType extends AbstractType
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Image (fichier PNG ou JPEG) *',
                 'required' => false,
-                'allow_delete' => false, // <-- Ajoutez cette ligne
+                'allow_delete' => false,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

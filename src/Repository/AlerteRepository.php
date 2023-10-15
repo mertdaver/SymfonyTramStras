@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
 use App\Entity\Alerte;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
@@ -53,7 +52,7 @@ class AlerteRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    // src/Repository/AlerteRepository.php
+
 
 public function findLatestAlertId(): ?array
 {

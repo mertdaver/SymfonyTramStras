@@ -25,7 +25,7 @@
     <label for="{{ registrationForm.plainPassword.first.vars.id }}" class="custom-login-label">Mot de Passe<span style="color:var(--red-color);">*</span></label>
     {{ form_widget(registrationForm.plainPassword.first, { attr: { class: "custom-login-input form-control" }}) }}
     {{ form_errors(registrationForm.plainPassword.first) }}
-    <small>Le mot de passe doit contenir 8-20 caractères, au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%?&).<span style="color:var(--red-color);">*</span></small>
+    <small>Le mot de passe doit contenir entre 12 et 30 caractères, au moins une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial (@$!%?&).<span style="color:var(--red-color);">*</span></small>
   </br>
     <label for="{{ registrationForm.plainPassword.second.vars.id }}" class="custom-login-label">Répéter le Mot de Passe<span style="color:var(--red-color);">*</span></label>
     {{ form_widget(registrationForm.plainPassword.second, { attr: { class: "custom-login-input form-control" }}) }}

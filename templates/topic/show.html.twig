@@ -42,7 +42,7 @@
                     {% if post.user and post.user == app.user %}
                         <div class="message-actions">
                             <a class="btn btn-delete" href="{{ path('delete_post', {'id': post.id}) }}">
-                                Supprimer <i class="fas fa-trash-alt"></i>
+                                Supprimer
                             </a>
                         </div>
                     {% endif %}

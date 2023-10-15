@@ -112,11 +112,7 @@ class AlerteController extends AbstractController
 
 // Affichage dernière Alerte Postée
     #[Route('/get-latest-alert', name: 'get_latest_alert', methods: ['GET'])]
-    public function latestAlert(
-        // Injection de dépendance: L'objet AlerteRepository est automatiquement instancié et injecté 
-        // par Symfony. Il est utilisé pour effectuer les requêtes liées à l'entité Alerte.
-        AlerteRepository $alerteRepository
-    ): Response {
+    public function latestAlert( AlerteRepository $alerteRepository ): Response {
         // Utilise la méthode `findLatestAlert()` de l'objet `$alerteRepository` pour 
         // récupérer la dernière alerte enregistrée dans la base de données.
         $latestAlert = $alerteRepository->findLatestAlert();

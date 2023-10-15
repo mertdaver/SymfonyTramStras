@@ -35,7 +35,7 @@ class NotBlank extends Constraint
      */
     protected static $errorNames = self::ERROR_NAMES;
 
-    public $message = 'This value should not be blank.';
+    public $message = 'Le message ne peut pas être vide';
     public $allowNull = false;
     public $normalizer;
 

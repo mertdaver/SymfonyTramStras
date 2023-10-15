@@ -26,11 +26,17 @@
                                     <strong>Sens:</strong> {{ alerte.sens|default('N/A') }}<br>
                                     <strong>Date:</strong> {{ alerte.alerteDate|date('d-m-Y H:i') }}<br>
                                     <strong>Utilisateur:</strong> {{ alerte.user.pseudo|default('Anonyme') }}</br>
-                                    {% if alerte.user.imagesUsers %}
-                                            <div class="alerte-user-image">
-                                                <img src="{{ vich_uploader_asset(alerte.user.imagesUsers, 'imageFile') }}" alt="Image de profil" style="width: 100%; height: 100%; object-fit: cover;">
-                                            </div>
+                                    {% if alerte.user and alerte.user.imagesUsers %}
+                                        <div class="alerte-user-image">
+                                            <img src="{{ vich_uploader_asset(alerte.user.imagesUsers, 'imageFile') }}" alt="Image de profil" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                    {% else %}
+                                        <div class="alerte-user-image">
+                                            <img src="/logoUser.png" alt="Image par défaut" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
                                     {% endif %}
+
+
                                 </p>
                             </div>
                         </div>
