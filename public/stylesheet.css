@@ -163,7 +163,7 @@ header, #navbar {
   position: sticky;
 }
 
-#navbar ul li a:hover {
+#navbar ul li a:active {
   color: var(--darkred-color);
 }
 
@@ -216,7 +216,7 @@ header, #navbar {
   display: block;
 }
 
-.user-dropdown:hover .dropdown-content {
+.user-dropdown:active .dropdown-content {
   display: block;
 }
 
@@ -262,7 +262,7 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
         border-radius: 0;
     }
 
-#navbar ul li a:hover {
+#navbar ul li a:active {
   color : none;
   background-color: var(--white-color);
 }
@@ -348,7 +348,7 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
   padding-left: 1%;
   width: 100vh;  /* Si vous souhaitez que cela soit la hauteur, c'est correct. Sinon, changez à 100% pour la largeur. */
   position: fixed;
-  top: 42%;
+  top: 35%;
   left: 50%;  /* le point de départ au centre */
   transform: translateX(-50%);  /* déplace le bloc de 50% de sa largeur vers la gauche pour le centrer */
 }
@@ -2167,3 +2167,109 @@ input:checked + .form-check-label:before {
 
 
 /* FIN DU SWITCH DARKMODE */
+
+
+
+/* social */
+
+.btn-social {
+  position: relative;
+  height: 100px; 
+  width: 100px; 
+  background: rgb(214, 214, 214);
+  border-radius: 40%;
+  box-shadow: -7px -7px 20px 0 rgba(255, 255, 255, 0.9),
+  7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+  transition: 0.2s;
+}
+
+.btn-social i{
+  color: var(--black-color) !important;
+}
+
+.btn-social a {
+  padding: 30px;
+}
+
+.btn-social:hover {
+  transform: scale(1.1);
+}
+
+.btn-social::before {
+  content: "";
+  position: absolute;
+  height: 80%;
+  width: 80%;
+  background: rgb(214, 214, 214);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-social:hover::before {
+  box-shadow: inset -7px -7px 20px 0 rgba(255, 255, 255, 1),
+  inset 7px 7px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-social i {
+  position: absolute;
+  color: rgb(73, 192, 192);
+  font-size: 35px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: 0.2s;
+}
+
+.btn-social:hover i {
+  font-size: 30px;
+  color : var(--darkred-color) !important;
+}
+
+.social-icons {
+  display: flex; /* Active Flexbox */
+  flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'espace est insuffisant */
+  align-items: center; /* Centre les boutons verticalement */
+  justify-content: space-around; /* Espacement autour de chaque bouton */
+  list-style: none; /* Enlève les puces de la liste */
+  padding: 40px; /* Enlève le padding de la liste */
+  margin: 0; /* Enlève la marge de la liste */
+}
+
+.social-icons a {
+
+  padding : 30px;
+}
+
+/* Modification pour les écrans de moins de 768px de large */
+@media (max-width: 1180px) {
+  .btn-social {
+      height: 80px;
+      width: 80px;
+  }
+  
+  .btn-social i {
+      font-size: 28px;
+  }
+  
+  .social-icons a {
+      padding: 20px;
+  }
+}
+
+/* Modification pour les écrans de moins de 480px de large */
+@media (max-width: 940px) {
+  .btn-social {
+      height: 60px;
+      width: 60px;
+  }
+  
+  .btn-social i {
+      font-size: 20px;
+  }
+  
+  .social-icons a {
+      padding: 25px;
+  }
+}

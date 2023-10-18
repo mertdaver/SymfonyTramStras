@@ -14,6 +14,7 @@
 		<script src="{{ asset('jquery-3.7.0.min.js') }}"></script>
 		<script src="{{ asset('notif.js') }}"></script>
 		<script src="\tarteaucitron.js-1.14.0\tarteaucitron.js"></script>
+        <script src="{{ asset('scriptAlerte.js') }}"></script>
 
         <script type="text/javascript">
         tarteaucitron.init({
@@ -77,117 +78,8 @@
 			<style></style>
 		{% endblock %}
 	</head>
-    <style>
 
-/* social */
-
-.btn-social {
-    position: relative;
-    height: 100px; 
-    width: 100px; 
-    background: rgb(214, 214, 214);
-    border-radius: 40%;
-    box-shadow: -7px -7px 20px 0 rgba(255, 255, 255, 0.9),
-    7px 7px 20px 0 rgba(0, 0, 0, 0.3);
-    transition: 0.2s;
-}
-
-.btn-social i{
-    color: var(--black-color) !important;
-}
-
-.btn-social a {
-    padding: 30px;
-}
-
-.btn-social:hover {
-    transform: scale(1.1);
-}
-
-.btn-social::before {
-    content: "";
-    position: absolute;
-    height: 80%;
-    width: 80%;
-    background: rgb(214, 214, 214);
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.btn-social:hover::before {
-    box-shadow: inset -7px -7px 20px 0 rgba(255, 255, 255, 1),
-    inset 7px 7px 20px 0 rgba(0, 0, 0, 0.3);
-}
-
-.btn-social i {
-    position: absolute;
-    color: rgb(73, 192, 192);
-    font-size: 35px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: 0.2s;
-}
-
-.btn-social:hover i {
-    font-size: 30px;
-    color : var(--darkred-color) !important;
-}
-
-.social-icons {
-    display: flex; /* Active Flexbox */
-    flex-wrap: wrap; /* Permet aux éléments d'aller à la ligne si l'espace est insuffisant */
-    align-items: center; /* Centre les boutons verticalement */
-    justify-content: space-around; /* Espacement autour de chaque bouton */
-    list-style: none; /* Enlève les puces de la liste */
-    padding: 40px; /* Enlève le padding de la liste */
-    margin: 0; /* Enlève la marge de la liste */
-}
-
-.social-icons a {
-
-    padding : 30px;
-}
-
-/* Modification pour les écrans de moins de 768px de large */
-@media (max-width: 1180px) {
-    .btn-social {
-        height: 80px;
-        width: 80px;
-    }
-    
-    .btn-social i {
-        font-size: 28px;
-    }
-    
-    .social-icons a {
-        padding: 20px;
-    }
-}
-
-/* Modification pour les écrans de moins de 480px de large */
-@media (max-width: 940px) {
-    .btn-social {
-        height: 60px;
-        width: 60px;
-    }
-    
-    .btn-social i {
-        font-size: 20px;
-    }
-    
-    .social-icons a {
-        padding: 25px;
-    }
-}
-
-
-
-
-    </style>
-<body data-theme="light-mode">
+<body>
 <nav id="navbar">
 <div id="background-blur"></div>
 
@@ -206,12 +98,9 @@
                 <li><a href="{{ path('points_map') }}">Carte</a></li>
                 <li><a href="{{ path('get_alerte') }}">Demander de l'aide</a></li>
                 <li><a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <ul id="menu-right" aria-hidden="true">
-                <li class="user-dropdown">
-                    {% if app.user %}
+                <!-- Icône utilisateur pour les écrans <850px -->
+                {% if app.user %}
+                    <li class="user-dropdown mobile">
                         <a href="#" id="user-icon">
                             <img src="\utilisateur (1).png" alt="User">
                         </a>
@@ -219,7 +108,9 @@
                             <a href="{{ path('app_account') }}">Profil</a>
                             <a href="{{ path('app_logout') }}">Se déconnecter</a>
                         </div>
-                    {% else %}
+                    </li>
+                {% else %}
+                    <li class="user-dropdown mobile">
                         <a href="#" id="user-icon">
                             <img src="\utilisateur (1).png" alt="User">
                         </a>
@@ -227,7 +118,16 @@
                             <a href="{{ path('app_login') }}">Se connecter</a>
                             <a href="{{ path('app_register') }}">S'inscrire</a>
                         </div>
-                    {% endif %}
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Icône utilisateur pour les écrans >850px -->
+        <div class="navbar-right">
+            <ul id="menu-right" aria-hidden="true">
+                <li class="user-dropdown desktop">
+                    <!-- Le même code que précédemment pour afficher l'icône utilisateur -->
                 </li>
             </ul>
         </div>
@@ -328,154 +228,5 @@
 				<p>Copyright © 2023 TramStras
 			</div>
 		</footer>
-
-
-		{% block javascripts %}
-
-    <script>
-
-
-// Ouverture de la fenêtre modale
-function openModal(alerte) {
-var modal = document.getElementById("myModalAlerte");
-if (modal) {
-var modalContent = modal.querySelector(".modal-content");
-modalContent.querySelector('.ligne').textContent = alerte.ligne;
-modalContent.querySelector('.sens').textContent = alerte.sens;
-modalContent.querySelector('.user').textContent = alerte.user;
-modalContent.querySelector('.alerteDate').textContent = alerte.alerteDate;
-modal.style.display = "block";
-}
-}
-
-// Fonction pour créer un cookie
-function setCookie(name, value, days) {
-var expires = "";
-if (days) {
-var date = new Date();
-date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-expires = "; expires=" + date.toUTCString();
-}
-document.cookie = name + "=" + (
-value || ""
-) + expires + "; path=/";
-}
-
-// Fonction pour obtenir la valeur d'un cookie
-function getCookie(name) {
-var nameEQ = name + "=";
-var ca = document.cookie.split(';');
-for (var i = 0; i < ca.length; i++) {
-var c = ca[i];
-while (c.charAt(0) === ' ') 
-c = c.substring(1, c.length);
-
-
-
-if (c.indexOf(nameEQ) === 0) 
-return c.substring(nameEQ.length, c.length);
-
-
-
-}
-return null;
-}
-
-// Gestionnaire d'événement pour fermer la fenêtre modale d'alerte
-function attachCloseHandlers() {
-var cardAlerte = document.querySelector(".card-alerte");
-if (cardAlerte) {
-var closeButton = cardAlerte.querySelector(".close-alerte");
-closeButton.addEventListener("click", function () {
-cardAlerte.style.display = "none";
-var overlay = document.querySelector(".overlay");
-if (overlay) {
-overlay.style.display = "none";
-}
-});
-
-// Fermer la fenêtre modale d'alerte en cliquant en dehors
-var overlay = document.querySelector(".overlay");
-if (overlay) {
-overlay.addEventListener("click", function () {
-cardAlerte.style.display = "none";
-overlay.style.display = "none";
-});
-}
-}
-}
-
-
-
-attachCloseHandlers();
-    
-
-
-
-
-
-
-
-// Vérifie régulièrement s'il y a de nouvelles alertes
-function checkForNewAlerts() {
-$.ajax({
-url: '/getLatestAlertId',
-method: 'GET',
-dataType: 'json',
-success: function (response) {
-const alertId = response.id;
-if (alertId) {
-getAlertDetails(alertId);
-}
-}
-});
-}
-
-function getAlertDetails(alertId) {
-if (! alertId) 
-return;
-
-
-
-$.ajax({
-url: '/getAlertDetails/' + alertId,
-method: 'GET',
-dataType: 'json',
-success: function (response) {
-if (response.alertId) {
-openModal(response);
-}
-}
-});
-}
-
-// Vérifie si l'alerte a déjà été montrée
-var alerteCookie = getCookie("alerteShown");
-if (! alerteCookie) {
-setCookie("alerteShown", "true", 1);
-setInterval(checkForNewAlerts, 5000);
-}
-
-// Ferme la fenêtre modale d'alerte
-var modalAlerte = document.getElementById("myModalAlerte");
-if (modalAlerte) {
-var closeButton = modalAlerte.querySelector(".close");
-closeButton.addEventListener("click", function () {
-modalAlerte.style.display = "none";
-});
-
-window.addEventListener("click", function (event) {
-if (event.target === modalAlerte) {
-modalAlerte.style.display = "none";
-}
-});
-}
-
-
-
-
-;
-
-</script>
-
-		{% endblock %}</body> </html>
+    </body>
+</html>
