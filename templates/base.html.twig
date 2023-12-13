@@ -100,24 +100,18 @@
                 <li><a href="{{ path('app_menu_tarif') }}">Tarifs CTS</a></li>
                 <!-- Icône utilisateur pour les écrans <850px -->
                 {% if app.user %}
-                    <li class="user-dropdown mobile">
-                        <a href="#" id="user-icon">
-                            <img src="\utilisateur (1).png" alt="User">
-                        </a>
-                        <div class="dropdown-content">
+                    <li>
                             <a href="{{ path('app_account') }}">Profil</a>
+                    </li>
+                    <li class="user-dropdown mobile">
                             <a href="{{ path('app_logout') }}">Se déconnecter</a>
-                        </div>
                     </li>
                 {% else %}
-                    <li class="user-dropdown mobile">
-                        <a href="#" id="user-icon">
-                            <img src="\utilisateur (1).png" alt="User">
-                        </a>
-                        <div class="dropdown-content">
+                    <li>
                             <a href="{{ path('app_login') }}">Se connecter</a>
+                    </li>
+                    <li class="user-dropdown mobile">
                             <a href="{{ path('app_register') }}">S'inscrire</a>
-                        </div>
                     </li>
                 {% endif %}
             </ul>

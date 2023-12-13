@@ -348,7 +348,7 @@ li > a[href="{{ path('app_account') }}"], li > a[href="{{ path('app_login') }}"]
   padding-left: 1%;
   width: 100vh;  /* Si vous souhaitez que cela soit la hauteur, c'est correct. Sinon, changez à 100% pour la largeur. */
   position: fixed;
-  top: 35%;
+  top: 20%;
   left: 50%;  /* le point de départ au centre */
   transform: translateX(-50%);  /* déplace le bloc de 50% de sa largeur vers la gauche pour le centrer */
 }
@@ -560,6 +560,19 @@ li {
   display: block;
 }
 }
+
+/* Cacher les liens utilisateur spécifiques au mobile dans le menu de gauche sur les écrans plus grands */
+.mobile-only {
+  display: none;
+}
+
+/* Afficher les liens utilisateur spécifiques au mobile dans le menu de gauche uniquement sur les smartphones */
+@media (max-width: 850px) {
+  .mobile-only {
+      display: block;
+  }
+}
+
 
 
 /* Liens de déconnexion et d'inscription */
